@@ -1,0 +1,116 @@
+/* 新增*/
+.icon_add {
+	background-image:url(/resources/icons/add.png) !important;
+}
+/* 圆圈新增*/
+.icon_add-circular {
+	background-image:url(/resources/icons/add-circular.png) !important;
+}
+/* 删除*/
+.icon_delete {
+	background-image:url(/resources/icons/delete.png) !important;
+}
+/* 圆圈删除*/
+.icon_delete-circular {
+	background-image:url(/resources/icons/delete-circular.png) !important;
+}
+/* 编辑*/
+.icon_edit {
+	background-image:url(/resources/icons/pencil.png) !important;
+}
+/* 保存*/
+.icon_save {
+	background-image:url(/resources/icons/save.png) !important;
+}
+/* 查询*/
+.icon_query {
+	background-image:url(/resources/icons/query.png) !important;
+}
+/* 搜索*/
+.icon_search {
+	background-image:url(/resources/icons/query.png) !important;
+}
+/* 刷新*/
+.icon_refresh {
+	background-image:url(/resources/icons/refresh.png) !important;
+}
+/* 开始*/
+.icon_start {
+	background-image:url(/resources/icons/play.png) !important;
+}
+/* 暂停*/
+.icon_pause {
+	background-image:url(/resources/icons/pause.png) !important;
+}
+/* 停止*/
+.icon_stop {
+	background-image:url(/resources/icons/stop.png) !important;
+}
+/* 下一页|快进*/
+.icon_forward {
+	background-image:url(/resources/icons/forward.png) !important;
+}
+/* 上一页|快退*/
+.icon_rewind {
+	background-image:url(/resources/icons/rewind.png) !important;
+}
+/* 首页*/
+.icon_previous {
+	background-image:url(/resources/icons/previous.png) !important;
+}
+/* 尾页*/
+.icon_next {
+	background-image:url(/resources/icons/next.png) !important;
+}
+/* 上*/
+.icon_up {
+	background-image:url(/resources/icons/up.png) !important;
+}
+/* 下*/
+.icon_down {
+	background-image:url(/resources/icons/down.png) !important;
+}
+/* 左*/
+.icon_left {
+	background-image:url(/resources/icons/left.png) !important;
+}
+/* 右*/
+.icon_right {
+	background-image:url(/resources/icons/right.png) !important;
+}
+/* 下载*/
+.icon_download {
+	background-image: url(/resources/icons/download.png) !important;
+}
+/* 上传*/
+.icon_upload {
+	background-image: url(/resources/icons/upload.png) !important;
+}
+/* 详细信息*/
+.icon_detail {
+	background-image:url(/resources/icons/detail.png) !important;
+}
+/* 用户*/
+.icon_user {
+	background-image:url(/resources/icons/user.png) !important;
+}
+/* 用户组*/
+.icon_users {
+	background-image:url(/resources/icons/users.png) !important;
+}
+/* 文件*/
+.icon_document {
+	background-image:url(/resources/icons/document.png) !important;
+}
+/* 喜欢*/
+.icon_love {
+	background-image:url(/resources/icons/love.png) !important;
+}
+/* 收藏*/
+.icon_star {
+	background-image:url(/resources/icons/star.png) !important;
+}
+/* 邮件*/
+.icon_mail {
+	background-image:url(/resources/icons/mail.png) !important;
+}

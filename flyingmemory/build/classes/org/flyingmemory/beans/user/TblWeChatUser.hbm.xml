@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding='UTF-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+                            "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+                            "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd" >
+
+<hibernate-mapping package="org.flyingmemory.beans.user">
+	<class name="TblWeChatUser" table="TBL_WECHAT_USER">
+		<id 
+			name="userId"
+			type="string"
+			column="USERID"
+		>
+			<generator class="assigned" />
+		</id>
+		
+		<property 
+			name="userName" 
+			column="USERNAME" 
+			type="java.lang.String"
+			not-null="false" 
+			length="128" />
+		
+		<property 
+			name="passWord" 
+			column="PASSWORD" 
+			type="java.lang.String"
+			not-null="false" 
+			length="64" />
+			
+		<property 
+			name="gender" 
+			column="GENDER" 
+			type="java.lang.String"
+			not-null="false"
+			length="1" />
+	</class>
+</hibernate-mapping>
