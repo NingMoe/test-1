@@ -1,0 +1,88 @@
+
+/* body,div,ul,li {
+	overflow: hidden;
+	background: #4F94CD;
+	margin: 0px;
+	padding: 0px; 
+	border:0; 
+	list-style:none;
+	font-family: "微软雅黑", arial;
+	font-size: 18px;
+	font-weight: bold;
+	line-height: 1.5;
+	color: #6B6B6B;
+}
+.inputCss {
+	font-size: 16px;
+	font-weight: bold;
+	width: 155px;
+}
+.inputErrorCss {
+	margin-left: 10px;
+	font-size: 13px;
+	color: yellow;
+	font-weight: bold;
+	width: 250px;
+}
+.register_view {
+	z-index: 99;
+	position:absolute;
+	background: #87CEFF;
+	left: -100%;
+	width: 100%;
+	height: 100%;
+}
+form {
+	background:transparent; 
+	margin:200px auto; 
+	padding:10px;
+}
+.login_view {
+	z-index: 99;
+	position:absolute;
+	background: #87CEFF;
+	right: -100%;
+	width: 100%;
+	height: 100%;
+}
+.main_view {
+	position:absolute;
+	width: 100%;
+	height: 100%;
+    top:-100%;
+}
+.main_view ul {
+	width:420px; 
+	height: auto;
+	margin:100px auto; 
+	padding:10px 0 0 10px;
+}
+li {
+	width:200px; 
+	height:120px; 
+	float:left; 
+	background: #87CEFF;
+	margin-right:10px; 
+	margin-bottom:10px; 
+	cursor:pointer;
+	text-align: center;
+	line-height: 120px;
+}
+#rewind, #forward {
+	background:transparent; 
+	position:absolute;
+	width: 32px;
+	height: 32px;
+	top:45%;
+	right:10px;
+	cursor: point;
+}
+#forward {
+	background:transparent; 
+	position:absolute;
+	width: 32px;
+	height: 32px;
+	top:45%;
+	left:10px;
+	cursor: point;
+} */
