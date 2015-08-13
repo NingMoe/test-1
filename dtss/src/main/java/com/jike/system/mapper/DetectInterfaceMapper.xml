@@ -1,0 +1,508 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jike.system.dao.DetectInterfaceMapper" >
+  <resultMap id="BaseResultMap" type="com.jike.system.bean.DetectInterface" >
+    <id column="ITF_ID" property="itfId" jdbcType="VARCHAR" />
+    <result column="BELONG_TO" property="belongTo" jdbcType="VARCHAR" />
+    <result column="ITF_URL" property="itfUrl" jdbcType="VARCHAR" />
+    <result column="ITF_PARAMS" property="itfParams" jdbcType="VARCHAR" />
+    <result column="REQUEST_METHOD" property="requestMethod" jdbcType="VARCHAR" />
+    <result column="CHECK_KEY" property="checkKey" jdbcType="VARCHAR" />
+    <result column="CHECK_VALUE" property="checkValue" jdbcType="VARCHAR" />
+    <result column="DETECT_FREQUENCY" property="detectFrequency" jdbcType="DECIMAL" />
+    <result column="THRESHOLD_VALUE" property="thresholdValue" jdbcType="DECIMAL" />
+    <result column="CURRENT_FAILURE_NUM" property="currentFailureNum" jdbcType="DECIMAL" />
+    <result column="NOTICE_LVL" property="noticeLvl" jdbcType="CHAR" />
+    <result column="NOTICE_OBJECT" property="noticeObject" jdbcType="VARCHAR" />
+    <result column="BY_PROXY" property="byProxy" jdbcType="NUMERIC" />
+    <result column="PROXY_IP" property="proxyIp" jdbcType="VARCHAR" />
+    <result column="PROXY_PORT" property="proxyPort" jdbcType="DECIMAL" />
+    <result column="PROXY_USERNAME" property="proxyUsername" jdbcType="VARCHAR" />
+    <result column="PROXY_PASSWORD" property="proxyPassword" jdbcType="VARCHAR" />
+    <result column="STATE" property="state" jdbcType="CHAR" />
+    <result column="TOTAL_NOTICE_NUM" property="totalNoticeNum" jdbcType="DECIMAL" />
+    <result column="CREATE_USER" property="createUser" jdbcType="VARCHAR" />
+    <result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="UPDATE_USER" property="updateUser" jdbcType="VARCHAR" />
+    <result column="UPDATE_TIME" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    ITF_ID, BELONG_TO, ITF_URL, ITF_PARAMS, REQUEST_METHOD, CHECK_KEY, CHECK_VALUE, DETECT_FREQUENCY, 
+    THRESHOLD_VALUE, CURRENT_FAILURE_NUM, NOTICE_LVL, NOTICE_OBJECT, BY_PROXY, PROXY_IP, 
+    PROXY_PORT, PROXY_USERNAME, PROXY_PASSWORD, STATE, TOTAL_NOTICE_NUM, CREATE_USER, 
+    CREATE_TIME, UPDATE_USER, UPDATE_TIME
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.jike.system.bean.DetectInterfaceExample" >
+    <include refid="OracleDialectPrefix" />
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from T_SYSTEM_DETECT_INTERFACE
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+    <include refid="OracleDialectSuffix" />
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from T_SYSTEM_DETECT_INTERFACE
+    where ITF_ID = #{itfId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from T_SYSTEM_DETECT_INTERFACE
+    where ITF_ID = #{itfId,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.jike.system.bean.DetectInterfaceExample" >
+    delete from T_SYSTEM_DETECT_INTERFACE
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.jike.system.bean.DetectInterface" >
+    insert into T_SYSTEM_DETECT_INTERFACE (ITF_ID, BELONG_TO, ITF_URL, 
+      ITF_PARAMS, REQUEST_METHOD, CHECK_KEY, 
+      CHECK_VALUE, DETECT_FREQUENCY, THRESHOLD_VALUE, 
+      CURRENT_FAILURE_NUM, NOTICE_LVL, NOTICE_OBJECT, 
+      BY_PROXY, PROXY_IP, PROXY_PORT, 
+      PROXY_USERNAME, PROXY_PASSWORD, STATE, 
+      TOTAL_NOTICE_NUM, CREATE_USER, CREATE_TIME, 
+      UPDATE_USER, UPDATE_TIME)
+    values (#{itfId,jdbcType=VARCHAR}, #{belongTo,jdbcType=VARCHAR}, #{itfUrl,jdbcType=VARCHAR}, 
+      #{itfParams,jdbcType=VARCHAR}, #{requestMethod,jdbcType=VARCHAR}, #{checkKey,jdbcType=VARCHAR}, 
+      #{checkValue,jdbcType=VARCHAR}, #{detectFrequency,jdbcType=DECIMAL}, #{thresholdValue,jdbcType=DECIMAL}, 
+      #{currentFailureNum,jdbcType=DECIMAL}, #{noticeLvl,jdbcType=CHAR}, #{noticeObject,jdbcType=VARCHAR}, 
+      #{byProxy,jdbcType=NUMERIC}, #{proxyIp,jdbcType=VARCHAR}, #{proxyPort,jdbcType=DECIMAL}, 
+      #{proxyUsername,jdbcType=VARCHAR}, #{proxyPassword,jdbcType=VARCHAR}, #{state,jdbcType=CHAR}, 
+      #{totalNoticeNum,jdbcType=DECIMAL}, #{createUser,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updateUser,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.jike.system.bean.DetectInterface" >
+    insert into T_SYSTEM_DETECT_INTERFACE
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="itfId != null" >
+        ITF_ID,
+      </if>
+      <if test="belongTo != null" >
+        BELONG_TO,
+      </if>
+      <if test="itfUrl != null" >
+        ITF_URL,
+      </if>
+      <if test="itfParams != null" >
+        ITF_PARAMS,
+      </if>
+      <if test="requestMethod != null" >
+        REQUEST_METHOD,
+      </if>
+      <if test="checkKey != null" >
+        CHECK_KEY,
+      </if>
+      <if test="checkValue != null" >
+        CHECK_VALUE,
+      </if>
+      <if test="detectFrequency != null" >
+        DETECT_FREQUENCY,
+      </if>
+      <if test="thresholdValue != null" >
+        THRESHOLD_VALUE,
+      </if>
+      <if test="currentFailureNum != null" >
+        CURRENT_FAILURE_NUM,
+      </if>
+      <if test="noticeLvl != null" >
+        NOTICE_LVL,
+      </if>
+      <if test="noticeObject != null" >
+        NOTICE_OBJECT,
+      </if>
+      <if test="byProxy != null" >
+        BY_PROXY,
+      </if>
+      <if test="proxyIp != null" >
+        PROXY_IP,
+      </if>
+      <if test="proxyPort != null" >
+        PROXY_PORT,
+      </if>
+      <if test="proxyUsername != null" >
+        PROXY_USERNAME,
+      </if>
+      <if test="proxyPassword != null" >
+        PROXY_PASSWORD,
+      </if>
+      <if test="state != null" >
+        STATE,
+      </if>
+      <if test="totalNoticeNum != null" >
+        TOTAL_NOTICE_NUM,
+      </if>
+      <if test="createUser != null" >
+        CREATE_USER,
+      </if>
+      <if test="createTime != null" >
+        CREATE_TIME,
+      </if>
+      <if test="updateUser != null" >
+        UPDATE_USER,
+      </if>
+      <if test="updateTime != null" >
+        UPDATE_TIME,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="itfId != null" >
+        #{itfId,jdbcType=VARCHAR},
+      </if>
+      <if test="belongTo != null" >
+        #{belongTo,jdbcType=VARCHAR},
+      </if>
+      <if test="itfUrl != null" >
+        #{itfUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="itfParams != null" >
+        #{itfParams,jdbcType=VARCHAR},
+      </if>
+      <if test="requestMethod != null" >
+        #{requestMethod,jdbcType=VARCHAR},
+      </if>
+      <if test="checkKey != null" >
+        #{checkKey,jdbcType=VARCHAR},
+      </if>
+      <if test="checkValue != null" >
+        #{checkValue,jdbcType=VARCHAR},
+      </if>
+      <if test="detectFrequency != null" >
+        #{detectFrequency,jdbcType=DECIMAL},
+      </if>
+      <if test="thresholdValue != null" >
+        #{thresholdValue,jdbcType=DECIMAL},
+      </if>
+      <if test="currentFailureNum != null" >
+        #{currentFailureNum,jdbcType=DECIMAL},
+      </if>
+      <if test="noticeLvl != null" >
+        #{noticeLvl,jdbcType=CHAR},
+      </if>
+      <if test="noticeObject != null" >
+        #{noticeObject,jdbcType=VARCHAR},
+      </if>
+      <if test="byProxy != null" >
+        #{byProxy,jdbcType=NUMERIC},
+      </if>
+      <if test="proxyIp != null" >
+        #{proxyIp,jdbcType=VARCHAR},
+      </if>
+      <if test="proxyPort != null" >
+        #{proxyPort,jdbcType=DECIMAL},
+      </if>
+      <if test="proxyUsername != null" >
+        #{proxyUsername,jdbcType=VARCHAR},
+      </if>
+      <if test="proxyPassword != null" >
+        #{proxyPassword,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null" >
+        #{state,jdbcType=CHAR},
+      </if>
+      <if test="totalNoticeNum != null" >
+        #{totalNoticeNum,jdbcType=DECIMAL},
+      </if>
+      <if test="createUser != null" >
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.jike.system.bean.DetectInterfaceExample" resultType="java.lang.Integer" >
+    select count(*) from T_SYSTEM_DETECT_INTERFACE
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update T_SYSTEM_DETECT_INTERFACE
+    <set >
+      <if test="record.itfId != null" >
+        ITF_ID = #{record.itfId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.belongTo != null" >
+        BELONG_TO = #{record.belongTo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.itfUrl != null" >
+        ITF_URL = #{record.itfUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="record.itfParams != null" >
+        ITF_PARAMS = #{record.itfParams,jdbcType=VARCHAR},
+      </if>
+      <if test="record.requestMethod != null" >
+        REQUEST_METHOD = #{record.requestMethod,jdbcType=VARCHAR},
+      </if>
+      <if test="record.checkKey != null" >
+        CHECK_KEY = #{record.checkKey,jdbcType=VARCHAR},
+      </if>
+      <if test="record.checkValue != null" >
+        CHECK_VALUE = #{record.checkValue,jdbcType=VARCHAR},
+      </if>
+      <if test="record.detectFrequency != null" >
+        DETECT_FREQUENCY = #{record.detectFrequency,jdbcType=DECIMAL},
+      </if>
+      <if test="record.thresholdValue != null" >
+        THRESHOLD_VALUE = #{record.thresholdValue,jdbcType=DECIMAL},
+      </if>
+      <if test="record.currentFailureNum != null" >
+        CURRENT_FAILURE_NUM = #{record.currentFailureNum,jdbcType=DECIMAL},
+      </if>
+      <if test="record.noticeLvl != null" >
+        NOTICE_LVL = #{record.noticeLvl,jdbcType=CHAR},
+      </if>
+      <if test="record.noticeObject != null" >
+        NOTICE_OBJECT = #{record.noticeObject,jdbcType=VARCHAR},
+      </if>
+      <if test="record.byProxy != null" >
+        BY_PROXY = #{record.byProxy,jdbcType=NUMERIC},
+      </if>
+      <if test="record.proxyIp != null" >
+        PROXY_IP = #{record.proxyIp,jdbcType=VARCHAR},
+      </if>
+      <if test="record.proxyPort != null" >
+        PROXY_PORT = #{record.proxyPort,jdbcType=DECIMAL},
+      </if>
+      <if test="record.proxyUsername != null" >
+        PROXY_USERNAME = #{record.proxyUsername,jdbcType=VARCHAR},
+      </if>
+      <if test="record.proxyPassword != null" >
+        PROXY_PASSWORD = #{record.proxyPassword,jdbcType=VARCHAR},
+      </if>
+      <if test="record.state != null" >
+        STATE = #{record.state,jdbcType=CHAR},
+      </if>
+      <if test="record.totalNoticeNum != null" >
+        TOTAL_NOTICE_NUM = #{record.totalNoticeNum,jdbcType=DECIMAL},
+      </if>
+      <if test="record.createUser != null" >
+        CREATE_USER = #{record.createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null" >
+        CREATE_TIME = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateUser != null" >
+        UPDATE_USER = #{record.updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="record.updateTime != null" >
+        UPDATE_TIME = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update T_SYSTEM_DETECT_INTERFACE
+    set ITF_ID = #{record.itfId,jdbcType=VARCHAR},
+      BELONG_TO = #{record.belongTo,jdbcType=VARCHAR},
+      ITF_URL = #{record.itfUrl,jdbcType=VARCHAR},
+      ITF_PARAMS = #{record.itfParams,jdbcType=VARCHAR},
+      REQUEST_METHOD = #{record.requestMethod,jdbcType=VARCHAR},
+      CHECK_KEY = #{record.checkKey,jdbcType=VARCHAR},
+      CHECK_VALUE = #{record.checkValue,jdbcType=VARCHAR},
+      DETECT_FREQUENCY = #{record.detectFrequency,jdbcType=DECIMAL},
+      THRESHOLD_VALUE = #{record.thresholdValue,jdbcType=DECIMAL},
+      CURRENT_FAILURE_NUM = #{record.currentFailureNum,jdbcType=DECIMAL},
+      NOTICE_LVL = #{record.noticeLvl,jdbcType=CHAR},
+      NOTICE_OBJECT = #{record.noticeObject,jdbcType=VARCHAR},
+      BY_PROXY = #{record.byProxy,jdbcType=NUMERIC},
+      PROXY_IP = #{record.proxyIp,jdbcType=VARCHAR},
+      PROXY_PORT = #{record.proxyPort,jdbcType=DECIMAL},
+      PROXY_USERNAME = #{record.proxyUsername,jdbcType=VARCHAR},
+      PROXY_PASSWORD = #{record.proxyPassword,jdbcType=VARCHAR},
+      STATE = #{record.state,jdbcType=CHAR},
+      TOTAL_NOTICE_NUM = #{record.totalNoticeNum,jdbcType=DECIMAL},
+      CREATE_USER = #{record.createUser,jdbcType=VARCHAR},
+      CREATE_TIME = #{record.createTime,jdbcType=TIMESTAMP},
+      UPDATE_USER = #{record.updateUser,jdbcType=VARCHAR},
+      UPDATE_TIME = #{record.updateTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jike.system.bean.DetectInterface" >
+    update T_SYSTEM_DETECT_INTERFACE
+    <set >
+      <if test="belongTo != null" >
+        BELONG_TO = #{belongTo,jdbcType=VARCHAR},
+      </if>
+      <if test="itfUrl != null" >
+        ITF_URL = #{itfUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="itfParams != null" >
+        ITF_PARAMS = #{itfParams,jdbcType=VARCHAR},
+      </if>
+      <if test="requestMethod != null" >
+        REQUEST_METHOD = #{requestMethod,jdbcType=VARCHAR},
+      </if>
+      <if test="checkKey != null" >
+        CHECK_KEY = #{checkKey,jdbcType=VARCHAR},
+      </if>
+      <if test="checkValue != null" >
+        CHECK_VALUE = #{checkValue,jdbcType=VARCHAR},
+      </if>
+      <if test="detectFrequency != null" >
+        DETECT_FREQUENCY = #{detectFrequency,jdbcType=DECIMAL},
+      </if>
+      <if test="thresholdValue != null" >
+        THRESHOLD_VALUE = #{thresholdValue,jdbcType=DECIMAL},
+      </if>
+      <if test="currentFailureNum != null" >
+        CURRENT_FAILURE_NUM = #{currentFailureNum,jdbcType=DECIMAL},
+      </if>
+      <if test="noticeLvl != null" >
+        NOTICE_LVL = #{noticeLvl,jdbcType=CHAR},
+      </if>
+      <if test="noticeObject != null" >
+        NOTICE_OBJECT = #{noticeObject,jdbcType=VARCHAR},
+      </if>
+      <if test="byProxy != null" >
+        BY_PROXY = #{byProxy,jdbcType=NUMERIC},
+      </if>
+      <if test="proxyIp != null" >
+        PROXY_IP = #{proxyIp,jdbcType=VARCHAR},
+      </if>
+      <if test="proxyPort != null" >
+        PROXY_PORT = #{proxyPort,jdbcType=DECIMAL},
+      </if>
+      <if test="proxyUsername != null" >
+        PROXY_USERNAME = #{proxyUsername,jdbcType=VARCHAR},
+      </if>
+      <if test="proxyPassword != null" >
+        PROXY_PASSWORD = #{proxyPassword,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null" >
+        STATE = #{state,jdbcType=CHAR},
+      </if>
+      <if test="totalNoticeNum != null" >
+        TOTAL_NOTICE_NUM = #{totalNoticeNum,jdbcType=DECIMAL},
+      </if>
+      <if test="createUser != null" >
+        CREATE_USER = #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        UPDATE_USER = #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where ITF_ID = #{itfId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jike.system.bean.DetectInterface" >
+    update T_SYSTEM_DETECT_INTERFACE
+    set BELONG_TO = #{belongTo,jdbcType=VARCHAR},
+      ITF_URL = #{itfUrl,jdbcType=VARCHAR},
+      ITF_PARAMS = #{itfParams,jdbcType=VARCHAR},
+      REQUEST_METHOD = #{requestMethod,jdbcType=VARCHAR},
+      CHECK_KEY = #{checkKey,jdbcType=VARCHAR},
+      CHECK_VALUE = #{checkValue,jdbcType=VARCHAR},
+      DETECT_FREQUENCY = #{detectFrequency,jdbcType=DECIMAL},
+      THRESHOLD_VALUE = #{thresholdValue,jdbcType=DECIMAL},
+      CURRENT_FAILURE_NUM = #{currentFailureNum,jdbcType=DECIMAL},
+      NOTICE_LVL = #{noticeLvl,jdbcType=CHAR},
+      NOTICE_OBJECT = #{noticeObject,jdbcType=VARCHAR},
+      BY_PROXY = #{byProxy,jdbcType=NUMERIC},
+      PROXY_IP = #{proxyIp,jdbcType=VARCHAR},
+      PROXY_PORT = #{proxyPort,jdbcType=DECIMAL},
+      PROXY_USERNAME = #{proxyUsername,jdbcType=VARCHAR},
+      PROXY_PASSWORD = #{proxyPassword,jdbcType=VARCHAR},
+      STATE = #{state,jdbcType=CHAR},
+      TOTAL_NOTICE_NUM = #{totalNoticeNum,jdbcType=DECIMAL},
+      CREATE_USER = #{createUser,jdbcType=VARCHAR},
+      CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      UPDATE_USER = #{updateUser,jdbcType=VARCHAR},
+      UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP}
+    where ITF_ID = #{itfId,jdbcType=VARCHAR}
+  </update>
+  <sql id="OracleDialectPrefix" >
+    <if test="page != null" >
+      select * from ( select row_.*, rownum rownum_ from ( 
+    </if>
+  </sql>
+  <sql id="OracleDialectSuffix" >
+    <if test="page != null" >
+      <![CDATA[ ) row_ ) where rownum_ > #{page.begin} and rownum_ <= #{page.end} ]]>
+    </if>
+  </sql>
+</mapper>

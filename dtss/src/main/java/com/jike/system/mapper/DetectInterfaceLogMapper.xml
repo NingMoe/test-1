@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jike.system.dao.DetectInterfaceLogMapper" >
+  <resultMap id="BaseResultMap" type="com.jike.system.bean.DetectInterfaceLog" >
+    <id column="ITF_LOG_ID" property="itfLogId" jdbcType="VARCHAR" />
+    <result column="DETECT_TIME" property="detectTime" jdbcType="TIMESTAMP" />
+    <result column="ITF_ID" property="itfId" jdbcType="VARCHAR" />
+    <result column="INPUT_PARAMS" property="inputParams" jdbcType="VARCHAR" />
+    <result column="DETECT_RESULT" property="detectResult" jdbcType="VARCHAR" />
+    <result column="ERROR_INFO" property="errorInfo" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    ITF_LOG_ID, DETECT_TIME, ITF_ID, INPUT_PARAMS, DETECT_RESULT, ERROR_INFO
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.jike.system.bean.DetectInterfaceLogExample" >
+    <include refid="OracleDialectPrefix" />
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from T_SYSTEM_DETECT_INTERFACE_LOG
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+    <include refid="OracleDialectSuffix" />
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from T_SYSTEM_DETECT_INTERFACE_LOG
+    where ITF_LOG_ID = #{itfLogId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from T_SYSTEM_DETECT_INTERFACE_LOG
+    where ITF_LOG_ID = #{itfLogId,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.jike.system.bean.DetectInterfaceLogExample" >
+    delete from T_SYSTEM_DETECT_INTERFACE_LOG
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.jike.system.bean.DetectInterfaceLog" >
+    insert into T_SYSTEM_DETECT_INTERFACE_LOG (ITF_LOG_ID, DETECT_TIME, ITF_ID, 
+      INPUT_PARAMS, DETECT_RESULT, ERROR_INFO
+      )
+    values (#{itfLogId,jdbcType=VARCHAR}, #{detectTime,jdbcType=TIMESTAMP}, #{itfId,jdbcType=VARCHAR}, 
+      #{inputParams,jdbcType=VARCHAR}, #{detectResult,jdbcType=VARCHAR}, #{errorInfo,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.jike.system.bean.DetectInterfaceLog" >
+    insert into T_SYSTEM_DETECT_INTERFACE_LOG
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="itfLogId != null" >
+        ITF_LOG_ID,
+      </if>
+      <if test="detectTime != null" >
+        DETECT_TIME,
+      </if>
+      <if test="itfId != null" >
+        ITF_ID,
+      </if>
+      <if test="inputParams != null" >
+        INPUT_PARAMS,
+      </if>
+      <if test="detectResult != null" >
+        DETECT_RESULT,
+      </if>
+      <if test="errorInfo != null" >
+        ERROR_INFO,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="itfLogId != null" >
+        #{itfLogId,jdbcType=VARCHAR},
+      </if>
+      <if test="detectTime != null" >
+        #{detectTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="itfId != null" >
+        #{itfId,jdbcType=VARCHAR},
+      </if>
+      <if test="inputParams != null" >
+        #{inputParams,jdbcType=VARCHAR},
+      </if>
+      <if test="detectResult != null" >
+        #{detectResult,jdbcType=VARCHAR},
+      </if>
+      <if test="errorInfo != null" >
+        #{errorInfo,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.jike.system.bean.DetectInterfaceLogExample" resultType="java.lang.Integer" >
+    select count(*) from T_SYSTEM_DETECT_INTERFACE_LOG
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update T_SYSTEM_DETECT_INTERFACE_LOG
+    <set >
+      <if test="record.itfLogId != null" >
+        ITF_LOG_ID = #{record.itfLogId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.detectTime != null" >
+        DETECT_TIME = #{record.detectTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.itfId != null" >
+        ITF_ID = #{record.itfId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.inputParams != null" >
+        INPUT_PARAMS = #{record.inputParams,jdbcType=VARCHAR},
+      </if>
+      <if test="record.detectResult != null" >
+        DETECT_RESULT = #{record.detectResult,jdbcType=VARCHAR},
+      </if>
+      <if test="record.errorInfo != null" >
+        ERROR_INFO = #{record.errorInfo,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update T_SYSTEM_DETECT_INTERFACE_LOG
+    set ITF_LOG_ID = #{record.itfLogId,jdbcType=VARCHAR},
+      DETECT_TIME = #{record.detectTime,jdbcType=TIMESTAMP},
+      ITF_ID = #{record.itfId,jdbcType=VARCHAR},
+      INPUT_PARAMS = #{record.inputParams,jdbcType=VARCHAR},
+      DETECT_RESULT = #{record.detectResult,jdbcType=VARCHAR},
+      ERROR_INFO = #{record.errorInfo,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jike.system.bean.DetectInterfaceLog" >
+    update T_SYSTEM_DETECT_INTERFACE_LOG
+    <set >
+      <if test="detectTime != null" >
+        DETECT_TIME = #{detectTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="itfId != null" >
+        ITF_ID = #{itfId,jdbcType=VARCHAR},
+      </if>
+      <if test="inputParams != null" >
+        INPUT_PARAMS = #{inputParams,jdbcType=VARCHAR},
+      </if>
+      <if test="detectResult != null" >
+        DETECT_RESULT = #{detectResult,jdbcType=VARCHAR},
+      </if>
+      <if test="errorInfo != null" >
+        ERROR_INFO = #{errorInfo,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ITF_LOG_ID = #{itfLogId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jike.system.bean.DetectInterfaceLog" >
+    update T_SYSTEM_DETECT_INTERFACE_LOG
+    set DETECT_TIME = #{detectTime,jdbcType=TIMESTAMP},
+      ITF_ID = #{itfId,jdbcType=VARCHAR},
+      INPUT_PARAMS = #{inputParams,jdbcType=VARCHAR},
+      DETECT_RESULT = #{detectResult,jdbcType=VARCHAR},
+      ERROR_INFO = #{errorInfo,jdbcType=VARCHAR}
+    where ITF_LOG_ID = #{itfLogId,jdbcType=VARCHAR}
+  </update>
+  <sql id="OracleDialectPrefix" >
+    <if test="page != null" >
+      select * from ( select row_.*, rownum rownum_ from ( 
+    </if>
+  </sql>
+  <sql id="OracleDialectSuffix" >
+    <if test="page != null" >
+      <![CDATA[ ) row_ ) where rownum_ > #{page.begin} and rownum_ <= #{page.end} ]]>
+    </if>
+  </sql>
+</mapper>
