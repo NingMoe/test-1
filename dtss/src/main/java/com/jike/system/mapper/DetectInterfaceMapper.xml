@@ -3,6 +3,7 @@
 <mapper namespace="com.jike.system.dao.DetectInterfaceMapper" >
   <resultMap id="BaseResultMap" type="com.jike.system.bean.DetectInterface" >
     <id column="ITF_ID" property="itfId" jdbcType="VARCHAR" />
+    <result column="TASK_GROUP_ID" property="taskGroupId" jdbcType="VARCHAR" />
     <result column="BELONG_TO" property="belongTo" jdbcType="VARCHAR" />
     <result column="ITF_URL" property="itfUrl" jdbcType="VARCHAR" />
     <result column="ITF_PARAMS" property="itfParams" jdbcType="VARCHAR" />
@@ -25,6 +26,7 @@
     <result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP" />
     <result column="UPDATE_USER" property="updateUser" jdbcType="VARCHAR" />
     <result column="UPDATE_TIME" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="GUID" property="guid" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -85,10 +87,10 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    ITF_ID, BELONG_TO, ITF_URL, ITF_PARAMS, REQUEST_METHOD, CHECK_KEY, CHECK_VALUE, DETECT_FREQUENCY, 
-    THRESHOLD_VALUE, CURRENT_FAILURE_NUM, NOTICE_LVL, NOTICE_OBJECT, BY_PROXY, PROXY_IP, 
-    PROXY_PORT, PROXY_USERNAME, PROXY_PASSWORD, STATE, TOTAL_NOTICE_NUM, CREATE_USER, 
-    CREATE_TIME, UPDATE_USER, UPDATE_TIME
+    ITF_ID, TASK_GROUP_ID, BELONG_TO, ITF_URL, ITF_PARAMS, REQUEST_METHOD, CHECK_KEY, 
+    CHECK_VALUE, DETECT_FREQUENCY, THRESHOLD_VALUE, CURRENT_FAILURE_NUM, NOTICE_LVL, 
+    NOTICE_OBJECT, BY_PROXY, PROXY_IP, PROXY_PORT, PROXY_USERNAME, PROXY_PASSWORD, STATE, 
+    TOTAL_NOTICE_NUM, CREATE_USER, CREATE_TIME, UPDATE_USER, UPDATE_TIME, GUID
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.jike.system.bean.DetectInterfaceExample" >
     <include refid="OracleDialectPrefix" />
@@ -123,28 +125,33 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.jike.system.bean.DetectInterface" >
-    insert into T_SYSTEM_DETECT_INTERFACE (ITF_ID, BELONG_TO, ITF_URL, 
-      ITF_PARAMS, REQUEST_METHOD, CHECK_KEY, 
-      CHECK_VALUE, DETECT_FREQUENCY, THRESHOLD_VALUE, 
-      CURRENT_FAILURE_NUM, NOTICE_LVL, NOTICE_OBJECT, 
-      BY_PROXY, PROXY_IP, PROXY_PORT, 
-      PROXY_USERNAME, PROXY_PASSWORD, STATE, 
-      TOTAL_NOTICE_NUM, CREATE_USER, CREATE_TIME, 
-      UPDATE_USER, UPDATE_TIME)
-    values (#{itfId,jdbcType=VARCHAR}, #{belongTo,jdbcType=VARCHAR}, #{itfUrl,jdbcType=VARCHAR}, 
-      #{itfParams,jdbcType=VARCHAR}, #{requestMethod,jdbcType=VARCHAR}, #{checkKey,jdbcType=VARCHAR}, 
-      #{checkValue,jdbcType=VARCHAR}, #{detectFrequency,jdbcType=DECIMAL}, #{thresholdValue,jdbcType=DECIMAL}, 
-      #{currentFailureNum,jdbcType=DECIMAL}, #{noticeLvl,jdbcType=CHAR}, #{noticeObject,jdbcType=VARCHAR}, 
-      #{byProxy,jdbcType=NUMERIC}, #{proxyIp,jdbcType=VARCHAR}, #{proxyPort,jdbcType=DECIMAL}, 
-      #{proxyUsername,jdbcType=VARCHAR}, #{proxyPassword,jdbcType=VARCHAR}, #{state,jdbcType=CHAR}, 
-      #{totalNoticeNum,jdbcType=DECIMAL}, #{createUser,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{updateUser,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP})
+    insert into T_SYSTEM_DETECT_INTERFACE (ITF_ID, TASK_GROUP_ID, BELONG_TO, 
+      ITF_URL, ITF_PARAMS, REQUEST_METHOD, 
+      CHECK_KEY, CHECK_VALUE, DETECT_FREQUENCY, 
+      THRESHOLD_VALUE, CURRENT_FAILURE_NUM, NOTICE_LVL, 
+      NOTICE_OBJECT, BY_PROXY, PROXY_IP, 
+      PROXY_PORT, PROXY_USERNAME, PROXY_PASSWORD, 
+      STATE, TOTAL_NOTICE_NUM, CREATE_USER, 
+      CREATE_TIME, UPDATE_USER, UPDATE_TIME, 
+      GUID)
+    values (#{itfId,jdbcType=VARCHAR}, #{taskGroupId,jdbcType=VARCHAR}, #{belongTo,jdbcType=VARCHAR}, 
+      #{itfUrl,jdbcType=VARCHAR}, #{itfParams,jdbcType=VARCHAR}, #{requestMethod,jdbcType=VARCHAR}, 
+      #{checkKey,jdbcType=VARCHAR}, #{checkValue,jdbcType=VARCHAR}, #{detectFrequency,jdbcType=DECIMAL}, 
+      #{thresholdValue,jdbcType=DECIMAL}, #{currentFailureNum,jdbcType=DECIMAL}, #{noticeLvl,jdbcType=CHAR}, 
+      #{noticeObject,jdbcType=VARCHAR}, #{byProxy,jdbcType=NUMERIC}, #{proxyIp,jdbcType=VARCHAR}, 
+      #{proxyPort,jdbcType=DECIMAL}, #{proxyUsername,jdbcType=VARCHAR}, #{proxyPassword,jdbcType=VARCHAR}, 
+      #{state,jdbcType=CHAR}, #{totalNoticeNum,jdbcType=DECIMAL}, #{createUser,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateUser,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{guid,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.jike.system.bean.DetectInterface" >
     insert into T_SYSTEM_DETECT_INTERFACE
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="itfId != null" >
         ITF_ID,
+      </if>
+      <if test="taskGroupId != null" >
+        TASK_GROUP_ID,
       </if>
       <if test="belongTo != null" >
         BELONG_TO,
@@ -212,10 +219,16 @@
       <if test="updateTime != null" >
         UPDATE_TIME,
       </if>
+      <if test="guid != null" >
+        GUID,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="itfId != null" >
         #{itfId,jdbcType=VARCHAR},
+      </if>
+      <if test="taskGroupId != null" >
+        #{taskGroupId,jdbcType=VARCHAR},
       </if>
       <if test="belongTo != null" >
         #{belongTo,jdbcType=VARCHAR},
@@ -283,6 +296,9 @@
       <if test="updateTime != null" >
         #{updateTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="guid != null" >
+        #{guid,jdbcType=VARCHAR},
+      </if>
     </trim>
   </insert>
   <select id="countByExample" parameterType="com.jike.system.bean.DetectInterfaceExample" resultType="java.lang.Integer" >
@@ -296,6 +312,9 @@
     <set >
       <if test="record.itfId != null" >
         ITF_ID = #{record.itfId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.taskGroupId != null" >
+        TASK_GROUP_ID = #{record.taskGroupId,jdbcType=VARCHAR},
       </if>
       <if test="record.belongTo != null" >
         BELONG_TO = #{record.belongTo,jdbcType=VARCHAR},
@@ -363,6 +382,9 @@
       <if test="record.updateTime != null" >
         UPDATE_TIME = #{record.updateTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="record.guid != null" >
+        GUID = #{record.guid,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -371,6 +393,7 @@
   <update id="updateByExample" parameterType="map" >
     update T_SYSTEM_DETECT_INTERFACE
     set ITF_ID = #{record.itfId,jdbcType=VARCHAR},
+      TASK_GROUP_ID = #{record.taskGroupId,jdbcType=VARCHAR},
       BELONG_TO = #{record.belongTo,jdbcType=VARCHAR},
       ITF_URL = #{record.itfUrl,jdbcType=VARCHAR},
       ITF_PARAMS = #{record.itfParams,jdbcType=VARCHAR},
@@ -392,7 +415,8 @@
       CREATE_USER = #{record.createUser,jdbcType=VARCHAR},
       CREATE_TIME = #{record.createTime,jdbcType=TIMESTAMP},
       UPDATE_USER = #{record.updateUser,jdbcType=VARCHAR},
-      UPDATE_TIME = #{record.updateTime,jdbcType=TIMESTAMP}
+      UPDATE_TIME = #{record.updateTime,jdbcType=TIMESTAMP},
+      GUID = #{record.guid,jdbcType=VARCHAR}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -400,6 +424,9 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.jike.system.bean.DetectInterface" >
     update T_SYSTEM_DETECT_INTERFACE
     <set >
+      <if test="taskGroupId != null" >
+        TASK_GROUP_ID = #{taskGroupId,jdbcType=VARCHAR},
+      </if>
       <if test="belongTo != null" >
         BELONG_TO = #{belongTo,jdbcType=VARCHAR},
       </if>
@@ -466,12 +493,16 @@
       <if test="updateTime != null" >
         UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="guid != null" >
+        GUID = #{guid,jdbcType=VARCHAR},
+      </if>
     </set>
     where ITF_ID = #{itfId,jdbcType=VARCHAR}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.jike.system.bean.DetectInterface" >
     update T_SYSTEM_DETECT_INTERFACE
-    set BELONG_TO = #{belongTo,jdbcType=VARCHAR},
+    set TASK_GROUP_ID = #{taskGroupId,jdbcType=VARCHAR},
+      BELONG_TO = #{belongTo,jdbcType=VARCHAR},
       ITF_URL = #{itfUrl,jdbcType=VARCHAR},
       ITF_PARAMS = #{itfParams,jdbcType=VARCHAR},
       REQUEST_METHOD = #{requestMethod,jdbcType=VARCHAR},
@@ -492,7 +523,8 @@
       CREATE_USER = #{createUser,jdbcType=VARCHAR},
       CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
       UPDATE_USER = #{updateUser,jdbcType=VARCHAR},
-      UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP}
+      UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP},
+      GUID = #{guid,jdbcType=VARCHAR}
     where ITF_ID = #{itfId,jdbcType=VARCHAR}
   </update>
   <sql id="OracleDialectPrefix" >

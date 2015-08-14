@@ -59,7 +59,6 @@
 
 		<table tableName="T_SYSTEM_DETECT_INTERFACE" domainObjectName="DetectInterface" > 
 			<columnOverride column="BY_PROXY" jdbcType="NUMERIC" javaType="java.lang.Boolean" />
-			<columnOverride column="IS_ENABLE" jdbcType="NUMERIC" javaType="java.lang.Boolean" />
 		</table>
  		<!-- <table tableName="T_SYSTEM_DETECT_INTERFACE_LOG" domainObjectName="DetectInterfaceLog" > 
 		</table> -->

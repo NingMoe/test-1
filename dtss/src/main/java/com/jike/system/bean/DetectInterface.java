@@ -6,6 +6,8 @@ import java.util.Date;
 public class DetectInterface implements Serializable {
     private String itfId;
 
+    private String taskGroupId;
+
     private String belongTo;
 
     private String itfUrl;
@@ -50,6 +52,8 @@ public class DetectInterface implements Serializable {
 
     private Date updateTime;
 
+    private String guid;
+
     private static final long serialVersionUID = 1L;
 
     public String getItfId() {
@@ -58,6 +62,14 @@ public class DetectInterface implements Serializable {
 
     public void setItfId(String itfId) {
         this.itfId = itfId == null ? null : itfId.trim();
+    }
+
+    public String getTaskGroupId() {
+        return taskGroupId;
+    }
+
+    public void setTaskGroupId(String taskGroupId) {
+        this.taskGroupId = taskGroupId == null ? null : taskGroupId.trim();
     }
 
     public String getBelongTo() {
@@ -234,5 +246,13 @@ public class DetectInterface implements Serializable {
 
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
+    }
+
+    public String getGuid() {
+        return guid;
+    }
+
+    public void setGuid(String guid) {
+        this.guid = guid == null ? null : guid.trim();
     }
 }

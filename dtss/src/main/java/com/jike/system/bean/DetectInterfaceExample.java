@@ -185,6 +185,76 @@ public class DetectInterfaceExample {
             return (Criteria) this;
         }
 
+        public Criteria andTaskGroupIdIsNull() {
+            addCriterion("TASK_GROUP_ID is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaskGroupIdIsNotNull() {
+            addCriterion("TASK_GROUP_ID is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaskGroupIdEqualTo(String value) {
+            addCriterion("TASK_GROUP_ID =", value, "taskGroupId");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaskGroupIdNotEqualTo(String value) {
+            addCriterion("TASK_GROUP_ID <>", value, "taskGroupId");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaskGroupIdGreaterThan(String value) {
+            addCriterion("TASK_GROUP_ID >", value, "taskGroupId");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaskGroupIdGreaterThanOrEqualTo(String value) {
+            addCriterion("TASK_GROUP_ID >=", value, "taskGroupId");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaskGroupIdLessThan(String value) {
+            addCriterion("TASK_GROUP_ID <", value, "taskGroupId");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaskGroupIdLessThanOrEqualTo(String value) {
+            addCriterion("TASK_GROUP_ID <=", value, "taskGroupId");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaskGroupIdLike(String value) {
+            addCriterion("TASK_GROUP_ID like", value, "taskGroupId");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaskGroupIdNotLike(String value) {
+            addCriterion("TASK_GROUP_ID not like", value, "taskGroupId");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaskGroupIdIn(List<String> values) {
+            addCriterion("TASK_GROUP_ID in", values, "taskGroupId");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaskGroupIdNotIn(List<String> values) {
+            addCriterion("TASK_GROUP_ID not in", values, "taskGroupId");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaskGroupIdBetween(String value1, String value2) {
+            addCriterion("TASK_GROUP_ID between", value1, value2, "taskGroupId");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaskGroupIdNotBetween(String value1, String value2) {
+            addCriterion("TASK_GROUP_ID not between", value1, value2, "taskGroupId");
+            return (Criteria) this;
+        }
+
         public Criteria andBelongToIsNull() {
             addCriterion("BELONG_TO is null");
             return (Criteria) this;
@@ -1655,8 +1725,83 @@ public class DetectInterfaceExample {
             return (Criteria) this;
         }
 
+        public Criteria andGuidIsNull() {
+            addCriterion("GUID is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andGuidIsNotNull() {
+            addCriterion("GUID is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andGuidEqualTo(String value) {
+            addCriterion("GUID =", value, "guid");
+            return (Criteria) this;
+        }
+
+        public Criteria andGuidNotEqualTo(String value) {
+            addCriterion("GUID <>", value, "guid");
+            return (Criteria) this;
+        }
+
+        public Criteria andGuidGreaterThan(String value) {
+            addCriterion("GUID >", value, "guid");
+            return (Criteria) this;
+        }
+
+        public Criteria andGuidGreaterThanOrEqualTo(String value) {
+            addCriterion("GUID >=", value, "guid");
+            return (Criteria) this;
+        }
+
+        public Criteria andGuidLessThan(String value) {
+            addCriterion("GUID <", value, "guid");
+            return (Criteria) this;
+        }
+
+        public Criteria andGuidLessThanOrEqualTo(String value) {
+            addCriterion("GUID <=", value, "guid");
+            return (Criteria) this;
+        }
+
+        public Criteria andGuidLike(String value) {
+            addCriterion("GUID like", value, "guid");
+            return (Criteria) this;
+        }
+
+        public Criteria andGuidNotLike(String value) {
+            addCriterion("GUID not like", value, "guid");
+            return (Criteria) this;
+        }
+
+        public Criteria andGuidIn(List<String> values) {
+            addCriterion("GUID in", values, "guid");
+            return (Criteria) this;
+        }
+
+        public Criteria andGuidNotIn(List<String> values) {
+            addCriterion("GUID not in", values, "guid");
+            return (Criteria) this;
+        }
+
+        public Criteria andGuidBetween(String value1, String value2) {
+            addCriterion("GUID between", value1, value2, "guid");
+            return (Criteria) this;
+        }
+
+        public Criteria andGuidNotBetween(String value1, String value2) {
+            addCriterion("GUID not between", value1, value2, "guid");
+            return (Criteria) this;
+        }
+
         public Criteria andItfIdLikeInsensitive(String value) {
             addCriterion("upper(ITF_ID) like", value.toUpperCase(), "itfId");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaskGroupIdLikeInsensitive(String value) {
+            addCriterion("upper(TASK_GROUP_ID) like", value.toUpperCase(), "taskGroupId");
             return (Criteria) this;
         }
 
@@ -1727,6 +1872,11 @@ public class DetectInterfaceExample {
 
         public Criteria andUpdateUserLikeInsensitive(String value) {
             addCriterion("upper(UPDATE_USER) like", value.toUpperCase(), "updateUser");
+            return (Criteria) this;
+        }
+
+        public Criteria andGuidLikeInsensitive(String value) {
+            addCriterion("upper(GUID) like", value.toUpperCase(), "guid");
             return (Criteria) this;
         }
     }

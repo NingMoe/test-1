@@ -81,8 +81,8 @@ public class HttpClientUtil {
 	
     private HttpClientUtil(){}
     
-    private static final String RESPONSE_CONTENT = "respContent";
-    private static final String RESPONSE_COOKIESTORE = "cookieStore";
+    public static final String RESPONSE_CONTENT = "respContent";
+    public static final String RESPONSE_COOKIESTORE = "cookieStore";
       
     /** 
      * 发送HTTP_GET请求 

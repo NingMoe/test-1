@@ -4,15 +4,13 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 
-import com.alibaba.fastjson.JSON;
 import com.jike.system.bean.DetectInterface;
+import com.jike.system.consts.InterfaceConsts;
 import com.jike.system.core.QuartzManager;
-import com.jike.system.model.DetectInterfaceModel;
 import com.jike.system.quartz.InterfaceDetectJob;
 import com.jike.system.service.itf.IDetectInterfaceService;
 import com.jike.system.util.ContextUtil;
@@ -47,13 +45,21 @@ public class ApplicationInit implements ApplicationContextAware {
 			List<DetectInterface> dis = ifs.selectAll();
 			if(!dis.isEmpty()){
 				for(DetectInterface di: dis){
-					// 执行频率
+					// 获取执行频率
 					int df = di.getDetectFrequency();
 					String detectFrequency = "*/"+df+" * * * * ?";
-					// 任务名称
-					String job_name = di.getItfId();
+					// 获取任务名称
+					String jobName = di.getItfId();
+					// 获取任务组名称
+					String jobGroupName = di.getTaskGroupId();
+					// 获取此接口是否需要启用检测
+					boolean state = InterfaceConsts.ITF_DETECT_STATE_RUN.equals(di.getState());
 					System.out.println("【添加定时任务】开始(每"+df+"秒输出一次)...");
-			        QuartzManager.addJob(job_name, InterfaceDetectJob.class, detectFrequency);
+					// 如果启用，加入定时任务
+					if(state){
+						// 添加定时任务
+						QuartzManager.addJob(jobName, jobGroupName, jobName, null, InterfaceDetectJob.class, detectFrequency);
+					}
 				}
 			}
 		} catch (Exception e) {
