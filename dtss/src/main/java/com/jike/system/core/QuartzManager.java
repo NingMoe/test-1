@@ -2,6 +2,7 @@ package com.jike.system.core;
 import org.quartz.CronTrigger;  
 import org.quartz.JobDetail;  
 import org.quartz.Scheduler;  
+import org.quartz.SchedulerException;
 import org.quartz.SchedulerFactory;  
 import org.quartz.impl.StdSchedulerFactory;  
  
@@ -20,8 +21,36 @@ import org.quartz.impl.StdSchedulerFactory;
  */
 public class QuartzManager {  
    private static SchedulerFactory gSchedulerFactory = new StdSchedulerFactory();  
-   private static String JOB_GROUP_NAME = "EXTJWEB_JOBGROUP_NAME";  
-   private static String TRIGGER_GROUP_NAME = "EXTJWEB_TRIGGERGROUP_NAME";  
+   private static String JOB_GROUP_NAME = "SYSTEM_FEFAULT_JOB_GROUP";  
+   private static String TRIGGER_GROUP_NAME = "SYSTEM_FEFAULT_TRIGGER_GROUP";    
+ 
+   /** 
+    * @Description: 验证一个任务是否存在(使用默认的任务组名，触发器名，触发器组名) 
+    *  
+    * @param jobName 
+    * @param time 
+    *  
+    * @Title: QuartzManager.java 
+    * @Copyright: Copyright (c) 2014 
+    *  
+    * @author Comsys-LZP 
+    * @date 2014-6-26 下午03:49:21 
+    * @version V2.0 
+    */  
+   public static boolean vaildateJobExist(String jobName) {
+	   boolean isExist = false;
+	   try {
+		   Scheduler sched = gSchedulerFactory.getScheduler();
+           CronTrigger trigger = (CronTrigger) sched.getTrigger(jobName,TRIGGER_GROUP_NAME);  
+           if (trigger != null) {
+        	   isExist = true;
+           }
+		} catch (SchedulerException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}  
+        return isExist;  
+   }
  
    /** 
     * @Description: 添加一个定时任务，使用默认的任务组名，触发器名，触发器组名 
@@ -108,7 +137,7 @@ public class QuartzManager {
     * @date 2014-6-26 下午03:49:21 
     * @version V2.0 
     */  
-   public static void modifyJobTime(String jobName, String time) {  
+   public static void modifyJobTime(String jobName, String time) {
        try {  
            Scheduler sched = gSchedulerFactory.getScheduler();  
            CronTrigger trigger = (CronTrigger) sched.getTrigger(jobName,TRIGGER_GROUP_NAME);  
@@ -125,7 +154,7 @@ public class QuartzManager {
        } catch (Exception e) {  
            throw new RuntimeException(e);  
        }  
-   }  
+   }
  
    /** 
     * @Description: 修改一个任务的触发时间 
@@ -142,7 +171,7 @@ public class QuartzManager {
     * @version V2.0 
     */  
    public static void modifyJobTime(String triggerName,  
-           String triggerGroupName, String time) {  
+           String triggerGroupName, String time) {
        try {  
            Scheduler sched = gSchedulerFactory.getScheduler();  
            CronTrigger trigger = (CronTrigger) sched.getTrigger(triggerName,triggerGroupName);  

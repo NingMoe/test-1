@@ -1,43 +1,65 @@
 package com.jike.system.service;
 
+import java.util.Date;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.jike.system.bean.DetectInterface;
+import com.jike.system.consts.InterfaceConsts;
+import com.jike.system.model.DetectInterfaceModel;
+import com.jike.system.util.DateUtils;
+import com.jike.system.util.StringUtil;
 
 public class InterfaceDetectHandler {
 
-	private static final Logger log = LoggerFactory.getLogger(InterfaceDetectHandler.class);
+	private static Logger log = LoggerFactory.getLogger(InterfaceDetectHandler.class);
 	
-	private DetectInterface detectInterface;
+	private DetectInterfaceModel detectInterfaceModel;
 	
-	private InterfaceDetectHandler(DetectInterface detectInterface){
+	public static void execute(DetectInterfaceModel detectInterfaceModel){
+		
+		String newParams = analyzeParams(detectInterfaceModel.getItfParams());
+	}
+	
+	// 解析通知对象
+	public static String[] analyzeNoticeObject(String noticeObject) {
+		if(StringUtil.isNotEmpty(noticeObject)){
+			return noticeObject.split(InterfaceConsts.NOTICE_OBJECT_SPLIT);
+		}
+		return null;
+	}
+	
+	// 解析接口参数
+	private static String analyzeParams(String params) {
+		if(StringUtil.isNotEmpty(params)){
+			Date newDate = new Date();
+			String date = DateUtils.formatDayDate(newDate);
+			String time = DateUtils.formatFullDate(newDate);
+			params = params.replaceAll(InterfaceConsts.ITF_PARAMS_DATE, date);
+			params = params.replaceAll(InterfaceConsts.ITF_PARAMS_TIME, time);
+			return params;
+		}
+		return null;
+	}
+
+	
+	// 解析接口参数
+	public void setModel(DetectInterfaceModel detectInterfaceModel) {
 		
 	}
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	public DetectInterface getDetectInterface() {
-		return detectInterface;
+
+	public DetectInterfaceModel getDetectInterfaceModel() {
+		return detectInterfaceModel;
 	}
 
-	public void setDetectInterface(DetectInterface detectInterface) {
-		this.detectInterface = detectInterface;
+	public void setDetectInterfaceModel(DetectInterfaceModel detectInterfaceModel) {
+		this.detectInterfaceModel = detectInterfaceModel;
 	}
+	
 
 
 
-
-
-
-	public static void main(String[] args) {
-	}
 	
 }
 

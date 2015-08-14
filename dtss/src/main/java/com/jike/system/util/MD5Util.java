@@ -77,7 +77,11 @@ public class MD5Util {
         long end =System.currentTimeMillis();
         System.out.println("time:"+((end-begin)/1000)+"s");*/
         
-        System.out.println(md5("1232131551515151512131320150813").toUpperCase());
+    	String a = "http://10.0.1.4:8009/api/employees/login";
+    	String b = "POST";
+    	String c = "{\"employeename\": \"1\",\"password\": \"1\"}";
+    	
+        System.out.println(md5(a+b+c).toUpperCase());
     }
 
 }

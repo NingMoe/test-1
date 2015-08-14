@@ -6,6 +6,8 @@ import java.util.Set;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
 
+import com.alibaba.fastjson.JSON;
+
 /**
  * Title:POJO工具
  * 
@@ -43,6 +45,26 @@ public class BeanUtils extends org.springframework.beans.BeanUtils {
         }
         String[] result = new String[emptyNames.size()];
         return emptyNames.toArray(result);
+    }
+
+    /**
+     * 
+     * 将待发送的数据转换为json格式
+     * @param obj 待处理对象
+     * @return json格式数据
+     */
+	public static String bean2Json(Object obj){
+    	return JSON.toJSONString(obj);
+    }
+    
+    /**
+     * 将接受的json格式数据转换为对象
+     * @param msg 待处理信息
+     * @param targetObj 目标对象
+     * @return 返回信息对象
+     */
+	public static Object json2Bean(String msg, Class<?> targetClass){
+    	return JSON.toJavaObject(JSON.parseObject(msg), targetClass);
     }
 	
 }

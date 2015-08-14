@@ -1,46 +1,45 @@
 package com.jike.system.util;
 
-import java.io.IOException;  
-import java.net.SocketTimeoutException;  
-import java.nio.charset.Charset;  
-import java.security.cert.CertificateException;  
-import java.security.cert.X509Certificate;  
-import java.util.ArrayList;  
-import java.util.List;  
-import java.util.Map;  
-  
+import java.io.IOException;
+import java.net.SocketTimeoutException;
+import java.nio.charset.Charset;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLException;
+import javax.net.ssl.SSLSession;
+import javax.net.ssl.SSLSocket;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 
-import javax.net.ssl.SSLContext;  
-import javax.net.ssl.SSLException;  
-import javax.net.ssl.SSLSession;  
-import javax.net.ssl.SSLSocket;  
-import javax.net.ssl.TrustManager;  
-import javax.net.ssl.X509TrustManager;  
-  
-
-
-import org.apache.http.Header;  
-import org.apache.http.HttpEntity;  
-import org.apache.http.HttpResponse;  
-import org.apache.http.NameValuePair;  
-import org.apache.http.ParseException;  
-import org.apache.http.client.ClientProtocolException;  
-import org.apache.http.client.HttpClient;  
-import org.apache.http.client.entity.UrlEncodedFormEntity;  
-import org.apache.http.client.methods.HttpGet;  
-import org.apache.http.client.methods.HttpPost;  
-import org.apache.http.conn.ConnectTimeoutException;  
-import org.apache.http.conn.scheme.Scheme;  
-import org.apache.http.conn.ssl.SSLSocketFactory;  
-import org.apache.http.conn.ssl.X509HostnameVerifier;  
+import org.apache.http.Header;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.ParseException;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.CookieStore;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.conn.ConnectTimeoutException;
+import org.apache.http.conn.scheme.Scheme;
+import org.apache.http.conn.ssl.SSLSocketFactory;
+import org.apache.http.conn.ssl.X509HostnameVerifier;
+import org.apache.http.cookie.Cookie;
 import org.apache.http.entity.ContentType;
-import org.apache.http.entity.StringEntity;  
-import org.apache.http.impl.client.DefaultHttpClient;  
-import org.apache.http.message.BasicNameValuePair;  
-import org.apache.http.params.CoreConnectionPNames;  
-import org.apache.http.protocol.HTTP;  
-import org.apache.http.util.EntityUtils;  
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.params.CoreConnectionPNames;
+import org.apache.http.protocol.HTTP;
+import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -80,7 +79,10 @@ public class HttpClientUtil {
 
 	private static Logger log = LoggerFactory.getLogger(HttpClientUtil.class);
 	
-    private HttpClientUtil(){}  
+    private HttpClientUtil(){}
+    
+    private static final String RESPONSE_CONTENT = "respContent";
+    private static final String RESPONSE_COOKIESTORE = "cookieStore";
       
     /** 
      * 发送HTTP_GET请求 
@@ -92,9 +94,19 @@ public class HttpClientUtil {
      * @param requestURL 请求地址(含参数) 
      * @return 远程主机响应正文 
      */  
-    public static String sendGetRequest(String reqURL){  
-        String respContent = "通信失败"; //响应内容  
-        HttpClient httpClient = new DefaultHttpClient(); //创建默认的httpClient实例  
+    public static Map<String, Object> sendGetRequest(String reqURL, CookieStore cookieStoreInit){
+        String respContent = "通信失败"; //响应内容 
+        Map<String, Object> respObject = new HashMap<String, Object>(); //返回对象
+        DefaultHttpClient httpClient = new DefaultHttpClient(); //创建默认的httpClient实例
+        // 如果需要带上第一次请求的Cookie
+        if(cookieStoreInit != null){
+            CookieStore cookieStore = httpClient.getCookieStore();
+    		List<Cookie> list = cookieStoreInit.getCookies();
+    		for(Cookie o : list){
+    			System.out.println(o.getName() + " = " + o.getValue() + " 12");
+    			cookieStore.addCookie(o);
+    		}
+        }
         //设置代理服务器  
         //httpClient.getParams().setParameter(ConnRoutePNames.DEFAULT_PROXY, new HttpHost("10.0.0.4", 8080));  
         httpClient.getParams().setParameter(CoreConnectionPNames.CONNECTION_TIMEOUT, 10000); //连接超时10s  
@@ -117,7 +129,9 @@ public class HttpClientUtil {
             }  
             String respStatusLine = response.getStatusLine().toString(); //HTTP应答状态行信息  
             String respHeaderMsg = respHeaderDatas.toString().trim();    //HTTP应答报文头信息  
-            String respBodyMsg = respContent;                            //HTTP应答报文体信息  
+            String respBodyMsg = respContent;                           //HTTP应答报文体信息
+            // 返回cookieStore
+            respObject.put(RESPONSE_COOKIESTORE, httpClient.getCookieStore());
             System.out.println("HTTP应答完整报文=[" + respStatusLine + "\r\n" + respHeaderMsg + "\r\n\r\n" + respBodyMsg + "]");  
             System.out.println("-------------------------------------------------------------------------------------------");  
         } catch (ConnectTimeoutException cte){  
@@ -138,8 +152,10 @@ public class HttpClientUtil {
         }finally{  
             //关闭连接,释放资源  
             httpClient.getConnectionManager().shutdown();  
-        }  
-        return respContent;  
+        }
+        respObject.put(RESPONSE_CONTENT, respContent);
+        
+        return respObject;  
     }  
       
       
@@ -156,23 +172,35 @@ public class HttpClientUtil {
      * @param encodeCharset 编码字符集,编码请求数据时用之,此参数为必填项(不能为""或null) 
      * @return 远程主机响应正文 
      */  
-    public static String sendPostRequest(String reqURL, String reqData, String encodeCharset){  
-        String reseContent = "通信失败";  
-        HttpClient httpClient = new DefaultHttpClient();  
+    public static Map<String, Object> sendPostRequest(String reqURL, String reqData, CookieStore cookieStoreInit, String encodeCharset){
+        String respContent = "通信失败"; //响应内容  
+        Map<String, Object> respObject = new HashMap<String, Object>(); //返回对象
+        DefaultHttpClient httpClient = new DefaultHttpClient(); //创建默认的httpClient实例
+        // 如果需要带上第一次请求的Cookie
+        if(cookieStoreInit != null){
+            CookieStore cookieStore = httpClient.getCookieStore();
+    		List<Cookie> list = cookieStoreInit.getCookies();
+    		for(Cookie o : list){
+    			System.out.println(o.getName() + " = " + o.getValue() + " 12");
+    			cookieStore.addCookie(o);
+    		}
+        }
         httpClient.getParams().setParameter(CoreConnectionPNames.CONNECTION_TIMEOUT, 10000);  
         httpClient.getParams().setParameter(CoreConnectionPNames.SO_TIMEOUT, 20000);  
         HttpPost httpPost = new HttpPost(reqURL);  
         //由于下面使用的是new StringEntity(....),所以默认发出去的请求报文头中CONTENT_TYPE值为text/plain; charset=ISO-8859-1  
         //这就有可能会导致服务端接收不到POST过去的参数,比如运行在Tomcat6.0.36中的Servlet,所以我们手工指定CONTENT_TYPE头消息  
         httpPost.setHeader(HTTP.CONTENT_TYPE, "application/json; charset=" + encodeCharset);
-        try{  
+        try{
             httpPost.setEntity(new StringEntity(reqData==null?"":reqData, encodeCharset));
             HttpResponse response = httpClient.execute(httpPost);  
             HttpEntity entity = response.getEntity();  
             if (null != entity) {  
-                reseContent = EntityUtils.toString(entity, ContentType.getOrDefault(entity).getCharset());  
+                respContent = EntityUtils.toString(entity, ContentType.getOrDefault(entity).getCharset());
                 EntityUtils.consume(entity);  
-            }  
+            }
+            // 返回cookieStore
+            respObject.put(RESPONSE_COOKIESTORE, httpClient.getCookieStore());
         } catch (ConnectTimeoutException cte){  
             log.error("请求通信[" + reqURL + "]时连接超时,堆栈轨迹如下", cte);  
         } catch (SocketTimeoutException ste){  
@@ -181,8 +209,10 @@ public class HttpClientUtil {
             log.error("请求通信[" + reqURL + "]时偶遇异常,堆栈轨迹如下", e);  
         }finally{  
             httpClient.getConnectionManager().shutdown();  
-        }  
-        return reseContent;  
+        }
+        respObject.put(RESPONSE_CONTENT, respContent);
+        
+        return respObject;   
     }  
       
       
@@ -270,13 +300,18 @@ public class HttpClientUtil {
     
 
 	public static void main(String[] args) {
-//		String a = HttpClientUtil.sendGetRequest("http://baike.baidu.com/api/usercenter/checkfavorites?lemmaId=3676258");
-//		System.out.println(a);
+		String url = "http://10.0.1.4:8009/api/employees/login";
+		String params = "{\"employeename\": \"1\",\"password\": \"1\"}";
+		String encodeCharset = "UTF-8";
+		Map<String, Object> respObject = new HashMap<String, Object>(); //返回对象
+		
 
-        String b = HttpClientUtil.sendPostRequest("http://www.jiketravel.com:8084/api/employees/login", "{\"employeename\": \"1\",\"password\": \"1\"}", "UTF-8");
-		System.out.println(b);
+        respObject = HttpClientUtil.sendPostRequest(url, params, null, encodeCharset);
+		System.out.println(respObject.get(RESPONSE_CONTENT));
 
-		String a = HttpClientUtil.sendGetRequest("http://www.jiketravel.com:8084/api/flts?isRealtime=true&q=1_SHA,2015-09-11,NKG_,,,Y,");
-		System.out.println(a);
+		url = "http://10.0.1.4:8009/api/msgQueues?isCollapsed=1&limit=5&no=1";
+		CookieStore cookieStore = (CookieStore)respObject.get(RESPONSE_COOKIESTORE);
+		respObject = HttpClientUtil.sendGetRequest(url, cookieStore);
+		System.out.println(respObject.get(RESPONSE_CONTENT));
 	}
 }
