@@ -21,6 +21,7 @@ import com.jike.system.service.itf.IDetectInterfaceService;
 import com.jike.system.util.DateUtils;
 import com.jike.system.util.HttpClientUtil;
 import com.jike.system.util.StringUtil;
+import com.jike.system.web.CommonException;
 
 @Service("interfaceDetectHandler")
 @Transactional
@@ -33,18 +34,18 @@ public class InterfaceDetectHandler{
 	@Autowired
 	private IDetectInterfaceLogService dilService;
 	
-	public DetectInterface selectById(String id) throws Exception {
+	public DetectInterface selectById(String id) throws CommonException {
 		return diService.selectById(id);
 	}
 	
-	public List<DetectInterface> selectAll() throws Exception {
+	public List<DetectInterface> selectAll() throws CommonException {
 		return diService.selectAll();
 	}
 	
 	/*
 	 * 主要执行方法
 	 */
-	public void execute(DetectInterface di) throws Exception{
+	public void execute(DetectInterface di) throws CommonException {
 		log.info("主要执行方法");
 		// 定义任务列表
 		List<DetectInterface> dis = new ArrayList<DetectInterface>();
@@ -66,7 +67,7 @@ public class InterfaceDetectHandler{
 	/*
 	 * 执行任务列表，并进行数据库，通知等操作
 	 */
-	private void executeTaskList(List<DetectInterface> dis) throws Exception{
+	private void executeTaskList(List<DetectInterface> dis) {
 		log.info("执行任务列表，并进行数据库，通知等操作");
 		// 最先请求无cookieStore对象，设为空
 		CookieStore cookieStore = null;
@@ -103,7 +104,11 @@ public class InterfaceDetectHandler{
 			// 记录接口编号
 			dil.setItfId(di.getItfId());
 			// 记录传递参数
-			dil.setInputParams(StringUtil.subStrb(params, 500, SysConsts.DATABASE_ENCODING));
+			try {
+				dil.setInputParams(StringUtil.subStrb(params, 500, SysConsts.DATABASE_ENCODING));
+			} catch (Exception e1) {
+				e1.printStackTrace();
+			}
 			// 如果校验成功
 			if(checkSuccess){
 				// 初始化当前检测失败次数
@@ -139,7 +144,11 @@ public class InterfaceDetectHandler{
 				// 记录接口检测结果:失败
 				dil.setDetectResult(InterfaceConsts.DETECT_RESULT_FAILURE);
 				// 记录错误信息
-				dil.setErrorInfo(StringUtil.subStrb(respContent, 500, SysConsts.DATABASE_ENCODING));
+				try {
+					dil.setErrorInfo(StringUtil.subStrb(respContent, 500, SysConsts.DATABASE_ENCODING));
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 				
 			}
 			// 更新到数据库
@@ -156,7 +165,7 @@ public class InterfaceDetectHandler{
 	/*
 	 * 校验返回信息
 	 */
-	private boolean vaildateRespContent(String respContent, DetectInterface di) throws Exception{
+	private boolean vaildateRespContent(String respContent, DetectInterface di) {
 		log.info("校验返回信息");
 		// 定义是否校验成功
 		boolean checkSuccess = false;

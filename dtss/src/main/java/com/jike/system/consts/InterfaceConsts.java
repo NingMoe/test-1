@@ -20,9 +20,6 @@ public class InterfaceConsts {
 	// 当日已发送警报的接口（隔天清空）
 	public static List<String> CURRENT_IS_NOTICE = new ArrayList<String>();
 
-	// 隔天清空
-	public static String RESET_NOTICE_FREQUENCY= "59 59 23 * * ?";
-
 	public static String ITF_DETECT_STATE_CLOSE= "0"; // 待检测接口状态：关闭
 	public static String ITF_DETECT_STATE_RUN= "1"; // 待检测接口状态：启用
 	public static String ITF_DETECT_STATE_STOP= "2"; // 待检测接口状态：暂停

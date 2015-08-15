@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.jike.system.bean.DetectInterface;
 import com.jike.system.dao.DetectInterfaceMapper;
 import com.jike.system.service.itf.IDetectInterfaceService;
+import com.jike.system.web.CommonException;
 
 
 @Service("detectInterfaceService")
@@ -17,18 +18,18 @@ public class DetectInterfaceService implements IDetectInterfaceService {
 	private DetectInterfaceMapper detectInterfaceMapper;
 	
 	@Override
-	public DetectInterface selectById(String id) throws Exception {
+	public DetectInterface selectById(String id) throws CommonException {
 		return detectInterfaceMapper.selectByPrimaryKey(id);
 	}
 
 	@Override
-	public List<DetectInterface> selectAll() throws Exception {
+	public List<DetectInterface> selectAll() throws CommonException {
 		List<DetectInterface> dis = detectInterfaceMapper.selectByExample(null);
 		return dis;
 	}
 
 	@Override
-	public DetectInterface updateByPrimaryKey(DetectInterface di) throws Exception {
+	public DetectInterface updateByPrimaryKey(DetectInterface di) throws CommonException {
 		detectInterfaceMapper.updateByPrimaryKey(di);
 		return di;
 	}

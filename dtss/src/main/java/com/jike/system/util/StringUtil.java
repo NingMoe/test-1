@@ -462,8 +462,8 @@ public final class StringUtil {
      * @throws Exception
      */
     public static String subStrb(String str,int num, String enc)throws Exception{
-        int changdu = str.getBytes(enc).length;
-        if(changdu > num){
+        int length = str.getBytes(enc).length;
+        if(length > num){
         	str = str.substring(0, str.length() - 1);
         	str = subStrb(str,num,enc);
         }

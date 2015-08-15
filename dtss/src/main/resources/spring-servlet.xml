@@ -12,7 +12,7 @@
 						 http://www.springframework.org/schema/tx
 						 http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
 						 http://www.springframework.org/schema/mvc 
-						 http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd">
+						 http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd">
 
 	<!-- 自动扫描所有注解该路径 -->
 	<context:component-scan base-package="com.jike.**.controller" />
@@ -35,10 +35,26 @@
 		<bean class="com.jike.servlet.PrivilegeAnnotationInterceptor"></bean>
 	</mvc:interceptors>
  -->
-    
+ 	
+ 	<!-- 解决前端接收数据时406 -错误 -->
+    <mvc:annotation-driven  content-negotiation-manager="contentNegotiationManager"/>
+	<bean id="contentNegotiationManager" class="org.springframework.web.accept.ContentNegotiationManagerFactoryBean">   
+	    <property name="favorPathExtension" value="false" />  
+	    <property name="favorParameter" value="false" />   
+	    <property name="ignoreAcceptHeader" value="false" />   
+	    <property name="mediaTypes" >   
+	        <value>  
+	            atom=application/atom+xml  
+	            html=text/html  
+	            json=application/json  
+	            *=*/*  
+	        </value>   
+	    </property>  
+	</bean>
 
-	<mvc:resources mapping="/resources/**" location="/resources/" />
-	<mvc:resources mapping="/fonts/**" location="/fonts/" />
+	<mvc:resources mapping="/images/**" location="/images/" />
+	<mvc:resources mapping="/scripts/**" location="/scripts/" />
+	<mvc:resources mapping="/style/**" location="/style/" />
 	<mvc:resources mapping="/*.html" location="/" />
 
 </beans>
