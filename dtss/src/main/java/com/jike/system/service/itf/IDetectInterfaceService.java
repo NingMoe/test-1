@@ -10,5 +10,7 @@ public interface IDetectInterfaceService {
 	DetectInterface selectById(String id) throws Exception;
 
 	List<DetectInterface> selectAll() throws Exception;
+
+	DetectInterface updateByPrimaryKey(DetectInterface di) throws Exception;
 }
 

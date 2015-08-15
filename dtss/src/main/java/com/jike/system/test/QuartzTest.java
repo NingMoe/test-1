@@ -1,6 +1,5 @@
 package com.jike.system.test;
 
-import com.jike.system.core.QuartzManager;
 
  
 /** 
@@ -36,15 +35,16 @@ public class QuartzTest {
 //           System.out.println("【移除定时】成功");  
            
 
-           String job_name = "动态任务调度";   
-           System.out.println("【添加定时任务】开始(每10秒输出一次)...");    
-           QuartzManager.addJob(job_name, QuartzJob.class, "*/3 * * * * ?");    
-           Thread.sleep(15000);    
-           System.out.println("【移除定时】开始...");    
-           QuartzManager.removeJob(job_name);
-           System.out.println("【移除定时】成功");
-           
-           
+//           String job_name = "动态任务调度";   
+//           System.out.println("【添加定时任务】开始(每10秒输出一次)...");    
+//           QuartzManager.addJob(job_name, QuartzJob.class, "*/3 * * * * ?");    
+//           Thread.sleep(15000);    
+//           System.out.println("【移除定时】开始...");    
+//           QuartzManager.removeJob(job_name);
+//           System.out.println("【移除定时】成功");
+           String aaa = "123|234|345";
+           System.out.println(aaa.replace("|", ","));
+           System.out.println(aaa == "asd");
            
        } catch (Exception e) {  
            e.printStackTrace();  

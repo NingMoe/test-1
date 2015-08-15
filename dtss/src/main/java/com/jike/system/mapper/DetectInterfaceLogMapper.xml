@@ -103,6 +103,9 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.jike.system.bean.DetectInterfaceLog" >
+	<selectKey keyProperty="itfLogId" order="BEFORE" resultType="java.lang.String">
+		select SUBSTR(TO_CHAR(SYSDATE, 'yyyymmdd'),3,8) || SEQ_DETECT_LOG_ID.nextval as itfLogId from dual
+	</selectKey>
     insert into T_SYSTEM_DETECT_INTERFACE_LOG (ITF_LOG_ID, DETECT_TIME, ITF_ID, 
       INPUT_PARAMS, DETECT_RESULT, ERROR_INFO
       )

@@ -416,7 +416,7 @@ public final class StringUtil {
     		String[] sep =  message.split("\""+key+"\":");
     		if(sep.length >1){
     			String s = sep[1];
-    			value=(s.substring(1, s.indexOf(",")-1));
+    			value=s.substring(0, s.indexOf(",")).trim();
     		}
     	}
     	return value;
@@ -451,5 +451,22 @@ public final class StringUtil {
         int remainder = sum % 11;
         String lastCheckBit = String.valueOf(code[remainder]);
         return id17 + lastCheckBit;
+    }
+    
+    /**
+     * subStr 截取定长字符串
+     * @param str
+     * @param num
+     * @param enc 
+     * @return
+     * @throws Exception
+     */
+    public static String subStrb(String str,int num, String enc)throws Exception{
+        int changdu = str.getBytes(enc).length;
+        if(changdu > num){
+        	str = str.substring(0, str.length() - 1);
+        	str = subStrb(str,num,enc);
+        }
+        return str;
     }
 }

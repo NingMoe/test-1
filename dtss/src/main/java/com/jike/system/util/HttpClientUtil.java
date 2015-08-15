@@ -198,6 +198,7 @@ public class HttpClientUtil {
             if (null != entity) {  
                 respContent = EntityUtils.toString(entity, ContentType.getOrDefault(entity).getCharset());
                 EntityUtils.consume(entity);  
+        		System.out.println(respContent);
             }
             // 返回cookieStore
             respObject.put(RESPONSE_COOKIESTORE, httpClient.getCookieStore());
@@ -300,18 +301,18 @@ public class HttpClientUtil {
     
 
 	public static void main(String[] args) {
-		String url = "http://10.0.1.4:8009/api/employees/login";
+/*		String url = "http://www.jiketravel.com:8084/api/employees/login";
 		String params = "{\"employeename\": \"1\",\"password\": \"1\"}";
+		
 		String encodeCharset = "UTF-8";
 		Map<String, Object> respObject = new HashMap<String, Object>(); //返回对象
 		
 
         respObject = HttpClientUtil.sendPostRequest(url, params, null, encodeCharset);
-		System.out.println(respObject.get(RESPONSE_CONTENT));
 
-		url = "http://10.0.1.4:8009/api/msgQueues?isCollapsed=1&limit=5&no=1";
+		url = "http://www.jiketravel.com:8084/api/msgQueues?isCollapsed=1&limit=5&no=1";
 		CookieStore cookieStore = (CookieStore)respObject.get(RESPONSE_COOKIESTORE);
 		respObject = HttpClientUtil.sendGetRequest(url, cookieStore);
-		System.out.println(respObject.get(RESPONSE_CONTENT));
+		*/
 	}
 }

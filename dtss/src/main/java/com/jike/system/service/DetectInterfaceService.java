@@ -26,6 +26,12 @@ public class DetectInterfaceService implements IDetectInterfaceService {
 		List<DetectInterface> dis = detectInterfaceMapper.selectByExample(null);
 		return dis;
 	}
+
+	@Override
+	public DetectInterface updateByPrimaryKey(DetectInterface di) throws Exception {
+		detectInterfaceMapper.updateByPrimaryKey(di);
+		return di;
+	}
 	
 }
 
