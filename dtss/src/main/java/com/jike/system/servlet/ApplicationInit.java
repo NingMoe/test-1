@@ -54,7 +54,6 @@ public class ApplicationInit implements ApplicationContextAware {
 					boolean state = InterfaceConsts.ITF_DETECT_STATE_RUN.equals(di.getState());
 					// 如果启用，加入定时任务
 					if(state){
-						log.info("添加定时任务["+jobName+"]:每"+df+"分钟执行一次");
 						// 添加定时任务
 						QuartzManager.addJob(jobName, jobGroupName, jobName, null, InterfaceDetectJob.class, detectFrequency);
 					}

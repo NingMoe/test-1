@@ -34,7 +34,6 @@ public class InterfaceDetectJob implements Job {
 	
 	@Override  
 	public void execute(JobExecutionContext jec) throws JobExecutionException {
-		log.info("接口检测总开关是否开启："+InterfaceConsts.MASTER_SWITCH_OPEN);
 		// 接口检测总开关是否开启
 		if(InterfaceConsts.MASTER_SWITCH_OPEN){
 			// 获取任务名称

@@ -46,7 +46,7 @@ public class InterfaceDetectHandler{
 	 * 主要执行方法
 	 */
 	public void execute(DetectInterface di) throws CommonException {
-		log.info("主要执行方法");
+		log.debug("主要执行方法");
 		// 定义任务列表
 		List<DetectInterface> dis = new ArrayList<DetectInterface>();
 		// 获取任务组编号
@@ -68,7 +68,7 @@ public class InterfaceDetectHandler{
 	 * 执行任务列表，并进行数据库，通知等操作
 	 */
 	private void executeTaskList(List<DetectInterface> dis) {
-		log.info("执行任务列表，并进行数据库，通知等操作");
+		log.debug("执行任务列表，并进行数据库，通知等操作");
 		// 最先请求无cookieStore对象，设为空
 		CookieStore cookieStore = null;
 		// 遍历任务列表
@@ -166,7 +166,7 @@ public class InterfaceDetectHandler{
 	 * 校验返回信息
 	 */
 	private boolean vaildateRespContent(String respContent, DetectInterface di) {
-		log.info("校验返回信息");
+		log.debug("校验返回信息");
 		// 定义是否校验成功
 		boolean checkSuccess = false;
 		// 获取校验键
@@ -198,7 +198,7 @@ public class InterfaceDetectHandler{
 		sb.append(" URL:"+di.getItfUrl());
 		sb.append(" 参数:"+di.getItfParams());
 		sb.append(" 通过"+di.getRequestMethod()+"请求");
-		sb.append("连续访问"+di.getDetectFrequency()+"次失败！请及时查看并解决！");
+		sb.append("连续访问"+di.getThresholdValue()+"次失败！请及时查看并解决！");
 		message[1] = sb.toString();
 		return message;
 	}
