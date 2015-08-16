@@ -34,24 +34,28 @@ public class InterfaceDetectJob implements Job {
 	
 	@Override  
 	public void execute(JobExecutionContext jec) throws JobExecutionException {
-		// 获取任务名称
-		String jobName = jec.getJobDetail().getName();
-		log.info("执行任务："+jobName);
-		if(StringUtil.isNotEmpty(jobName)){
-			try {
-				// 根据任务名称获取待检测的接口信息
-				DetectInterface di = idHandler.selectById(jobName);
-				if(di != null){
-					// 获取此接口是否需要启用检测
-					boolean state = InterfaceConsts.ITF_DETECT_STATE_RUN.equals(di.getState());
-					// 如果启用，则进行检测
-					if(state){
-						idHandler.execute(di);
+		log.info("接口检测总开关是否开启："+InterfaceConsts.MASTER_SWITCH_OPEN);
+		// 接口检测总开关是否开启
+		if(InterfaceConsts.MASTER_SWITCH_OPEN){
+			// 获取任务名称
+			String jobName = jec.getJobDetail().getName();
+			log.info("执行任务："+jobName);
+			if(StringUtil.isNotEmpty(jobName)){
+				try {
+					// 根据任务名称获取待检测的接口信息
+					DetectInterface di = idHandler.selectById(jobName);
+					if(di != null){
+						// 获取此接口是否需要启用检测
+						boolean state = InterfaceConsts.ITF_DETECT_STATE_RUN.equals(di.getState());
+						// 如果启用，则进行检测
+						if(state){
+							idHandler.execute(di);
+						}
 					}
+				} catch (Exception e) {
+					e.printStackTrace();
+					log.info("检测接口ID:"+jobName+"的定时任务出错[-->DTSS数据库访问出现问题]：", e);
 				}
-			} catch (Exception e) {
-				e.printStackTrace();
-				log.info("检测接口ID:"+jobName+"的定时任务出错[-->DTSS数据库访问出现问题]：", e);
 			}
 		}
 	}

@@ -52,9 +52,10 @@
 	    </property>  
 	</bean>
 
-	<mvc:resources mapping="/images/**" location="/images/" />
-	<mvc:resources mapping="/scripts/**" location="/scripts/" />
-	<mvc:resources mapping="/style/**" location="/style/" />
+	<mvc:resources mapping="/css/**" location="/css/" />
+	<mvc:resources mapping="/img/**" location="/img/" />
+	<mvc:resources mapping="/js/**" location="/js/" />
+	<mvc:resources mapping="/resources/**" location="/resources/" />
 	<mvc:resources mapping="/*.html" location="/" />
 
 </beans>

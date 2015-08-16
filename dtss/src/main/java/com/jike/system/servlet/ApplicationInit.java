@@ -45,7 +45,7 @@ public class ApplicationInit implements ApplicationContextAware {
 				for(DetectInterface di: dis){
 					// 获取执行频率
 					int df = di.getDetectFrequency();
-					String detectFrequency = "0 */"+df+" * * * ?";
+					String detectFrequency = "*/"+df+" * * * * ?";
 					// 获取任务名称
 					String jobName = di.getItfId();
 					// 获取任务组名称

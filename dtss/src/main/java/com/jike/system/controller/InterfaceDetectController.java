@@ -1,6 +1,8 @@
 package com.jike.system.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.jike.system.bean.DetectInterface;
+import com.jike.system.consts.InterfaceConsts;
 import com.jike.system.service.itf.IDetectInterfaceService;
 import com.jike.system.web.CommonException;
 import com.jike.system.web.JsonResult;
@@ -39,6 +42,8 @@ public class InterfaceDetectController extends BaseController{
 
 	@Autowired
 	private IDetectInterfaceService diService;
+	
+	private Map<String, Object> masterSwitchResult;
 	
 	/**
 	 * 按ID查询
@@ -85,9 +90,10 @@ public class InterfaceDetectController extends BaseController{
 	public JsonResult selectByExample(HttpServletRequest request,
 			@ModelAttribute DetectInterface di) throws CommonException {
 		List<DetectInterface> dis = diService.selectAll();
-		return ResultRender.renderPagedResult(modelName + "：按条件查询成功", dis,
+		return ResultRender.renderPagedResult(modelName + "：查询成功", dis,
 				dis.size());
 	}
+	
 	/**
 	 * 添加
 	 * 
@@ -99,9 +105,60 @@ public class InterfaceDetectController extends BaseController{
 	@RequestMapping(value = "", method = RequestMethod.POST)
 	@ResponseBody
 	public JsonResult insert(HttpServletRequest request,
-			@RequestBody DetectInterface di) throws CommonException {
+			@ModelAttribute DetectInterface di) throws CommonException {
 		
 		return ResultRender.renderResult(modelName + "添加成功", di);
+	}
+
+	/**
+	 * 开启或关闭接口检测总开关
+	 * 
+	 * @param request
+	 * @param m
+	 * @return
+	 * @throws CommonException
+	 */
+	@RequestMapping(value = "/masterSwitch", method = RequestMethod.GET)
+	@ResponseBody
+	public JsonResult masterSwitchQuery(HttpServletRequest request) throws CommonException {
+		String flagName = "未知";
+		if(InterfaceConsts.MASTER_SWITCH_OPEN){
+			flagName = "已开启";
+		}else{
+			flagName = "已关闭";
+		}
+		masterSwitchResult = new HashMap<String, Object>();
+		masterSwitchResult.put("flag", InterfaceConsts.MASTER_SWITCH_OPEN);
+		masterSwitchResult.put("flagName", flagName);
+		
+		return ResultRender.renderResult("接口检测总开关开启状态查询成功", masterSwitchResult);
+	}
+	
+	/**
+	 * 开启或关闭接口检测总开关
+	 * 
+	 * @param request
+	 * @param m
+	 * @return
+	 * @throws CommonException
+	 */
+	@RequestMapping(value = "/masterSwitch/{flag}", method = RequestMethod.PUT)
+	@ResponseBody
+	public JsonResult switchMaster(HttpServletRequest request,
+			@PathVariable boolean flag) throws CommonException {
+		String flagName = "未知";
+		if(flag){
+			flagName = "已开启";
+		}else{
+			flagName = "已关闭";
+		}
+		if(flag!=InterfaceConsts.MASTER_SWITCH_OPEN)
+			InterfaceConsts.MASTER_SWITCH_OPEN = flag;
+		masterSwitchResult = new HashMap<String, Object>();
+		masterSwitchResult.put("flag", InterfaceConsts.MASTER_SWITCH_OPEN);
+		masterSwitchResult.put("flagName", flagName);
+		
+		return ResultRender.renderResult("接口检测总开关"+flagName, masterSwitchResult);
 	}
 
 }
