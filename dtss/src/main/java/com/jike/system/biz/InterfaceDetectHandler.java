@@ -196,7 +196,7 @@ public class InterfaceDetectHandler{
 		StringBuffer sb = new  StringBuffer();
 		sb.append("系统["+di.getBelongTo()+"]接口-->");
 		sb.append(" URL:"+di.getItfUrl());
-		sb.append(" 参数:"+di.getItfParams());
+		sb.append(" 参数:"+analyzeParams(di.getItfParams()));
 		sb.append(" 通过"+di.getRequestMethod()+"请求");
 		sb.append("连续访问"+di.getThresholdValue()+"次失败！请及时查看并解决！");
 		message[1] = sb.toString();
