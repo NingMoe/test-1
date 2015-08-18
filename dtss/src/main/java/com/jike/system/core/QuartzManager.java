@@ -1,12 +1,13 @@
 package com.jike.system.core;
 
-import org.apache.cxf.common.util.StringUtils;
 import org.quartz.CronTrigger;
 import org.quartz.JobDetail;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
 import org.quartz.SchedulerFactory;
 import org.quartz.impl.StdSchedulerFactory;
+
+import com.jike.system.util.StringUtil;
 
 /**
  *
@@ -22,154 +23,100 @@ import org.quartz.impl.StdSchedulerFactory;
  *
  */
 public class QuartzManager {
-   private static SchedulerFactory gSchedulerFactory = new StdSchedulerFactory();
-   private static String JOB_GROUP_NAME = "SYSTEM_FEFAULT_JOB_GROUP";
-   private static String TRIGGER_GROUP_NAME = "SYSTEM_FEFAULT_TRIGGER_GROUP";
-
-   /**
-    * @Description: 验证一个任务是否存在(使用默认的任务组名，触发器名，触发器组名)
-    *
-    * @param jobName
-    * @param time
-    *
-    * @Title: QuartzManager.java
-    * @Copyright: Copyright (c) 2014
-    *
-    * @author Comsys-LZP
-    * @date 2014-6-26 下午03:49:21
-    * @version V2.0
-    */
-   public static boolean vaildateJobExist(String jobName) {
-	   boolean isExist = false;
-	   try {
-		   Scheduler sched = gSchedulerFactory.getScheduler();
-           CronTrigger trigger = (CronTrigger) sched.getTrigger(jobName,TRIGGER_GROUP_NAME);
-           if (trigger != null) {
-        	   isExist = true;
-           }
-		} catch (SchedulerException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+	
+	private static  Scheduler scheduler = getScheduler();
+	   
+	private static String DEFAULT_JOB_GROUP = "DEFAULT_JOB_GROUP";
+	private static String DEFAULT_TRIGGER_GROUP = "DEFAULT_TRIGGER_GROUP";
+	
+	/**
+	 * @Description: 创建一个调度对象
+	 * @return
+	 * @throws SchedulerException
+	 */
+	private static Scheduler getScheduler() {
+		    SchedulerFactory sf = new StdSchedulerFactory();
+	        Scheduler scheduler=null;
+			try {
+				scheduler = sf.getScheduler();
+			} catch (SchedulerException e) {
+				e.printStackTrace();
+			}
+	        return scheduler;
+	}
+	
+	public static Scheduler getInstanceScheduler() {
+		return scheduler;
+	}
+	
+	/**
+	 * @Description: 验证一个任务是否存在
+	 * @param jobName
+	 * @return
+	 */
+	public static boolean vaildateJobExist(String jobName, String jobGroupName) {
+		try {
+			boolean isExist = false;
+			JobDetail jobDetail = null;
+			CronTrigger trigger = null;
+			if(StringUtil.isNotEmpty(jobGroupName)){
+				jobDetail = scheduler.getJobDetail(jobName, jobGroupName);
+			}else{
+				trigger = (CronTrigger) scheduler.getTrigger(jobName,DEFAULT_TRIGGER_GROUP);
+			}
+			if (jobDetail != null || trigger != null) {
+				isExist = true;
+			}
+			return isExist;
+		} catch (Exception e) {
+			throw new RuntimeException(e);
 		}
-        return isExist;
-   }
+	}
 
-   /**
-    * @Description: 添加一个定时任务，使用默认的任务组名，触发器名，触发器组名
-    *
-    * @param jobName
-    *            任务名
-    * @param cls
-    *            任务
-    * @param time
-    *            时间设置，参考quartz说明文档
-    *
-    * @Title: QuartzManager.java
-    * @Copyright: Copyright (c) 2014
-    *
-    * @author Comsys-LZP
-    * @date 2014-6-26 下午03:47:44
-    * @version V2.0
-    */
-   public static void addJob(String jobName, Class<?> cls, String time) {
-       try {
-           Scheduler sched = gSchedulerFactory.getScheduler();
-           JobDetail jobDetail = new JobDetail(jobName, JOB_GROUP_NAME, cls);// 任务名，任务组，任务执行类
-           // 触发器
-           CronTrigger trigger = new CronTrigger(jobName, TRIGGER_GROUP_NAME);// 触发器名,触发器组
-           trigger.setCronExpression(time);// 触发器时间设定
-           sched.scheduleJob(jobDetail, trigger);
-           // 启动
-           if (!sched.isShutdown()) {
-               sched.start();
-           }
-       } catch (Exception e) {
-           throw new RuntimeException(e);
-       }
-   }
+	/**
+	 * @Description: 添加一个定时任务，使用默认的任务组名，触发器组名
+	 * @param jobName
+	 * @param cls
+	 * @param time
+	 */
+	public static void addJob(String jobName, Class<?> jobClass, String time) {
+		try {
+			JobDetail jobDetail = new JobDetail(jobName, DEFAULT_JOB_GROUP, jobClass);// 任务名，任务组，任务执行类
+			CronTrigger trigger = new CronTrigger(jobName, DEFAULT_TRIGGER_GROUP);// 触发器名,触发器组
+			trigger.setCronExpression(time);// 触发器时间设定
+			scheduler.scheduleJob(jobDetail, trigger);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
 
-   /**
-    * @Description: 添加一个定时任务
-    *
-    * @param jobName
-    *            任务名
-    * @param jobGroupName
-    *            任务组名
-    * @param triggerName
-    *            触发器名
-    * @param triggerGroupName
-    *            触发器组名
-    * @param jobClass
-    *            任务
-    * @param time
-    *            时间设置，参考quartz说明文档
-    *
-    * @Title: QuartzManager.java
-    * @Copyright: Copyright (c) 2014
-    *
-    * @author Comsys-LZP
-    * @date 2014-6-26 下午03:48:15
-    * @version V2.0
-    */
-   public static void addJob(String jobName, String jobGroupName,
-           String triggerName, String triggerGroupName, Class<?> jobClass,
-           String time) {
-       if(StringUtils.isEmpty(jobGroupName)){
-    	   jobGroupName = JOB_GROUP_NAME;
-       }
-       if(StringUtils.isEmpty(triggerName)){
-    	   triggerName = jobName;
-       }
-       if(StringUtils.isEmpty(triggerGroupName)){
-    	   triggerGroupName = TRIGGER_GROUP_NAME;
-       }
-       try {
-           Scheduler sched = gSchedulerFactory.getScheduler();
-           JobDetail jobDetail = new JobDetail(jobName, jobGroupName, jobClass);// 任务名，任务组，任务执行类
-           // 触发器
-           CronTrigger trigger = new CronTrigger(triggerName, triggerGroupName);// 触发器名,触发器组
-           trigger.setCronExpression(time);// 触发器时间设定
-           sched.scheduleJob(jobDetail, trigger);
-           // 启动
-           if (!sched.isShutdown()) {
-               sched.start();
-           }
-       } catch (Exception e) {
-           throw new RuntimeException(e);
-       }
-   }
-
-   /**
-    * @Description: 修改一个任务的触发时间(使用默认的任务组名，触发器名，触发器组名)
-    *
-    * @param jobName
-    * @param time
-    *
-    * @Title: QuartzManager.java
-    * @Copyright: Copyright (c) 2014
-    *
-    * @author Comsys-LZP
-    * @date 2014-6-26 下午03:49:21
-    * @version V2.0
-    */
-   public static void modifyJobTime(String jobName, String time) {
-       try {
-           Scheduler sched = gSchedulerFactory.getScheduler();
-           CronTrigger trigger = (CronTrigger) sched.getTrigger(jobName,TRIGGER_GROUP_NAME);
-           if (trigger == null) {
-               return;
-           }
-           String oldTime = trigger.getCronExpression();
-           if (!oldTime.equalsIgnoreCase(time)) {
-               JobDetail jobDetail = sched.getJobDetail(jobName,JOB_GROUP_NAME);
-               Class<?> objJobClass = jobDetail.getJobClass();
-               removeJob(jobName);
-               addJob(jobName, objJobClass, time);
-           }
-       } catch (Exception e) {
-           throw new RuntimeException(e);
-       }
-   }
+	/**
+	 * @Description: 添加一个定时任务
+	 * @param jobName
+	 * @param jobGroupName
+	 * @param triggerName
+	 * @param triggerGroupName
+	 * @param jobClass
+	 * @param time
+	 */
+	public static void addJob(String jobName, String jobGroupName, 
+			String triggerName, String triggerGroupName, Class<?> jobClass, 
+			String time) {
+		if(StringUtil.isEmpty(jobGroupName))
+			jobGroupName = DEFAULT_JOB_GROUP;
+		if(StringUtil.isEmpty(triggerName))
+			triggerName = jobName;
+		if(StringUtil.isEmpty(triggerGroupName))
+			triggerGroupName = DEFAULT_TRIGGER_GROUP;
+		try {
+			JobDetail jobDetail = new JobDetail(jobName, jobGroupName, jobClass);// 任务名，任务组，任务执行类
+			CronTrigger trigger = new CronTrigger(triggerName, triggerGroupName);// 触发器名,触发器组
+			trigger.setCronExpression(time);// 触发器时间设定
+			scheduler.scheduleJob(jobDetail, trigger);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
 
    /**
     * @Description: 修改一个任务的触发时间
@@ -185,117 +132,108 @@ public class QuartzManager {
     * @date 2014-6-26 下午03:49:37
     * @version V2.0
     */
-   public static void modifyJobTime(String triggerName,
-           String triggerGroupName, String time) {
-       try {
-           Scheduler sched = gSchedulerFactory.getScheduler();
-           CronTrigger trigger = (CronTrigger) sched.getTrigger(triggerName,triggerGroupName);
-           if (trigger == null) {
-               return;
-           }
-           String oldTime = trigger.getCronExpression();
-           if (!oldTime.equalsIgnoreCase(time)) {
-               CronTrigger ct = (CronTrigger) trigger;
-               // 修改时间
-               ct.setCronExpression(time);
-               // 重启触发器
-               sched.resumeTrigger(triggerName, triggerGroupName);
-           }
-       } catch (Exception e) {
-           throw new RuntimeException(e);
-       }
-   }
+	public static void modifyJobTime(String triggerName, String triggerGroupName, String newTime) {
+		try {
+			if(StringUtil.isEmpty(triggerGroupName))
+				triggerGroupName = DEFAULT_TRIGGER_GROUP;
+			CronTrigger trigger = (CronTrigger) scheduler.getTrigger(triggerName,triggerGroupName);
+			if (trigger == null) {
+				return;
+			}
+			String oldTime = trigger.getCronExpression();
+			if (!oldTime.equalsIgnoreCase(newTime)) {
+				// 修改时间
+				trigger.setCronExpression(newTime);
+				// 重启触发器
+				scheduler.resumeTrigger(triggerName, triggerGroupName);
+			}
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
 
-   /**
-    * @Description: 移除一个任务(使用默认的任务组名，触发器名，触发器组名)
-    *
-    * @param jobName
-    *
-    * @Title: QuartzManager.java
-    * @Copyright: Copyright (c) 2014
-    *
-    * @author Comsys-LZP
-    * @date 2014-6-26 下午03:49:51
-    * @version V2.0
-    */
-   public static void removeJob(String jobName) {
-       try {
-           Scheduler sched = gSchedulerFactory.getScheduler();
-           sched.pauseTrigger(jobName, TRIGGER_GROUP_NAME);// 停止触发器
-           sched.unscheduleJob(jobName, TRIGGER_GROUP_NAME);// 移除触发器
-           sched.deleteJob(jobName, JOB_GROUP_NAME);// 删除任务
-       } catch (Exception e) {
-           throw new RuntimeException(e);
-       }
-   }
-
-   /**
-    * @Description: 移除一个任务
-    *
-    * @param jobName
-    * @param jobGroupName
-    * @param triggerName
-    * @param triggerGroupName
-    *
-    * @Title: QuartzManager.java
-    * @Copyright: Copyright (c) 2014
-    *
-    * @author Comsys-LZP
-    * @date 2014-6-26 下午03:50:01
-    * @version V2.0
-    */
-   public static void removeJob(String jobName, String jobGroupName,
-           String triggerName, String triggerGroupName) {
-       try {
-           Scheduler sched = gSchedulerFactory.getScheduler();
-           sched.pauseTrigger(triggerName, triggerGroupName);// 停止触发器
-           sched.unscheduleJob(triggerName, triggerGroupName);// 移除触发器
-           sched.deleteJob(jobName, jobGroupName);// 删除任务
-       } catch (Exception e) {
-           throw new RuntimeException(e);
-       }
-   }
+	/**
+	 * @Description: 移除一个任务
+	 * @param jobName
+	 * @param jobGroupName
+	 * @param triggerName
+	 * @param triggerGroupName
+	 */
+	public static void removeJob(String jobName, String jobGroupName,
+			String triggerName, String triggerGroupName) {
+		try {
+			if(StringUtil.isEmpty(jobGroupName))
+				jobGroupName = DEFAULT_JOB_GROUP;
+			if(StringUtil.isEmpty(triggerName))
+				triggerName = jobName;
+			if(StringUtil.isEmpty(triggerGroupName))
+				triggerGroupName = DEFAULT_TRIGGER_GROUP;
+			scheduler.pauseTrigger(triggerName, triggerGroupName);// 停止触发器
+			scheduler.unscheduleJob(triggerName, triggerGroupName);// 移除触发器
+			scheduler.deleteJob(jobName, jobGroupName);// 删除任务
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
 
    /**
     * @Description:启动所有定时任务
-    *
-    *
-    * @Title: QuartzManager.java
-    * @Copyright: Copyright (c) 2014
-    *
-    * @author Comsys-LZP
-    * @date 2014-6-26 下午03:50:18
-    * @version V2.0
     */
-   public static void startJobs() {
-       try {
-           Scheduler sched = gSchedulerFactory.getScheduler();
-           sched.start();
-       } catch (Exception e) {
-           throw new RuntimeException(e);
-       }
-   }
+	public static void start() {
+		try {
+			if (!scheduler.isStarted())
+				scheduler.start();
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
 
    /**
-    * @Description:关闭所有定时任务
-    *
-    *
-    * @Title: QuartzManager.java
-    * @Copyright: Copyright (c) 2014
-    *
-    * @author Comsys-LZP
-    * @date 2014-6-26 下午03:50:26
-    * @version V2.0
+    * @Description:启动所有定时任务
     */
-   public static void shutdownJobs() {
-       try {
-           Scheduler sched = gSchedulerFactory.getScheduler();
-           if (!sched.isShutdown()) {
-               sched.shutdown();
-           }
-       } catch (Exception e) {
-           throw new RuntimeException(e);
-       }
-   }
+	public static boolean isStart() {
+		try {
+			return scheduler.isStarted();
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	/**
+	 * @Description:暂停所有定时任务
+	 */
+	public static void pauseAll() {
+		try {
+			if (scheduler.isStarted())
+				scheduler.pauseAll();
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	/**
+	 * @Description:恢复所有定时任务
+	 */
+	public static void resumeAll() {
+		try {
+			if (scheduler.isStarted())
+				scheduler.resumeAll();
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	/**
+	 * @Description:关闭所有定时任务
+	 */
+	public static void shutdown() {
+		try {
+			if (!scheduler.isShutdown())
+				scheduler.shutdown();
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+	
 }
 

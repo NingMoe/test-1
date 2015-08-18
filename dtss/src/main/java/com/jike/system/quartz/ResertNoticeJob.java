@@ -6,7 +6,7 @@ import org.quartz.JobExecutionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.jike.system.consts.InterfaceConsts;
+import com.jike.system.consts.SysConsts;
 
 
 /** 
@@ -30,12 +30,12 @@ public class ResertNoticeJob implements Job {
 	public static String JOB_NAME = "RESERT_NOTICE";
 
 	// 隔天清空
-	public static String RESET_NOTICE_FREQUENCY= "59 59 23 * * ?";
+	public static String RESET_CRON_EXPRESSION= "59 59 23 * * ?";
 	
 	@Override  
 	public void execute(JobExecutionContext jec) throws JobExecutionException {
 		// 获取任务名称
 		log.info("执行任务："+JOB_NAME);
-		InterfaceConsts.CURRENT_IS_NOTICE.clear();
+		SysConsts.CURRENT_IS_NOTICE.clear();
 	}
 } 

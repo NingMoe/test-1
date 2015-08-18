@@ -3,22 +3,18 @@ package com.jike.system.bean;
 import java.io.Serializable;
 import java.util.Date;
 
-public class DetectInterface implements Serializable {
+public class DetectDatabase implements Serializable {
     private String taskId;
 
     private String taskGroupId;
 
-    private String belongTo;
+    private String dbDriver;
 
-    private String itfUrl;
+    private String dbUrl;
 
-    private String itfParams;
+    private String dbUsername;
 
-    private String requestMethod;
-
-    private String checkKey;
-
-    private String checkValue;
+    private String dbPassword;
 
     private String cronExpression;
 
@@ -29,16 +25,6 @@ public class DetectInterface implements Serializable {
     private String noticeLvl;
 
     private String noticeObject;
-
-    private Boolean byProxy;
-
-    private String proxyIp;
-
-    private Integer proxyPort;
-
-    private String proxyUsername;
-
-    private String proxyPassword;
 
     private String state;
 
@@ -72,52 +58,36 @@ public class DetectInterface implements Serializable {
         this.taskGroupId = taskGroupId == null ? null : taskGroupId.trim();
     }
 
-    public String getBelongTo() {
-        return belongTo;
+    public String getDbDriver() {
+        return dbDriver;
     }
 
-    public void setBelongTo(String belongTo) {
-        this.belongTo = belongTo == null ? null : belongTo.trim();
+    public void setDbDriver(String dbDriver) {
+        this.dbDriver = dbDriver == null ? null : dbDriver.trim();
     }
 
-    public String getItfUrl() {
-        return itfUrl;
+    public String getDbUrl() {
+        return dbUrl;
     }
 
-    public void setItfUrl(String itfUrl) {
-        this.itfUrl = itfUrl == null ? null : itfUrl.trim();
+    public void setDbUrl(String dbUrl) {
+        this.dbUrl = dbUrl == null ? null : dbUrl.trim();
     }
 
-    public String getItfParams() {
-        return itfParams;
+    public String getDbUsername() {
+        return dbUsername;
     }
 
-    public void setItfParams(String itfParams) {
-        this.itfParams = itfParams == null ? null : itfParams.trim();
+    public void setDbUsername(String dbUsername) {
+        this.dbUsername = dbUsername == null ? null : dbUsername.trim();
     }
 
-    public String getRequestMethod() {
-        return requestMethod;
+    public String getDbPassword() {
+        return dbPassword;
     }
 
-    public void setRequestMethod(String requestMethod) {
-        this.requestMethod = requestMethod == null ? null : requestMethod.trim();
-    }
-
-    public String getCheckKey() {
-        return checkKey;
-    }
-
-    public void setCheckKey(String checkKey) {
-        this.checkKey = checkKey == null ? null : checkKey.trim();
-    }
-
-    public String getCheckValue() {
-        return checkValue;
-    }
-
-    public void setCheckValue(String checkValue) {
-        this.checkValue = checkValue == null ? null : checkValue.trim();
+    public void setDbPassword(String dbPassword) {
+        this.dbPassword = dbPassword == null ? null : dbPassword.trim();
     }
 
     public String getCronExpression() {
@@ -158,46 +128,6 @@ public class DetectInterface implements Serializable {
 
     public void setNoticeObject(String noticeObject) {
         this.noticeObject = noticeObject == null ? null : noticeObject.trim();
-    }
-
-    public Boolean getByProxy() {
-        return byProxy;
-    }
-
-    public void setByProxy(Boolean byProxy) {
-        this.byProxy = byProxy;
-    }
-
-    public String getProxyIp() {
-        return proxyIp;
-    }
-
-    public void setProxyIp(String proxyIp) {
-        this.proxyIp = proxyIp == null ? null : proxyIp.trim();
-    }
-
-    public Integer getProxyPort() {
-        return proxyPort;
-    }
-
-    public void setProxyPort(Integer proxyPort) {
-        this.proxyPort = proxyPort;
-    }
-
-    public String getProxyUsername() {
-        return proxyUsername;
-    }
-
-    public void setProxyUsername(String proxyUsername) {
-        this.proxyUsername = proxyUsername == null ? null : proxyUsername.trim();
-    }
-
-    public String getProxyPassword() {
-        return proxyPassword;
-    }
-
-    public void setProxyPassword(String proxyPassword) {
-        this.proxyPassword = proxyPassword == null ? null : proxyPassword.trim();
     }
 
     public String getState() {

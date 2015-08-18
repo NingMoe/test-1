@@ -10,7 +10,7 @@ public interface DetectInterfaceMapper {
 
     int deleteByExample(DetectInterfaceExample example);
 
-    int deleteByPrimaryKey(String itfId);
+    int deleteByPrimaryKey(String taskId);
 
     int insert(DetectInterface record);
 
@@ -18,7 +18,7 @@ public interface DetectInterfaceMapper {
 
     List<DetectInterface> selectByExample(DetectInterfaceExample example);
 
-    DetectInterface selectByPrimaryKey(String itfId);
+    DetectInterface selectByPrimaryKey(String taskId);
 
     int updateByExampleSelective(@Param("record") DetectInterface record, @Param("example") DetectInterfaceExample example);
 

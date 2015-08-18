@@ -43,6 +43,8 @@ import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.jike.system.core.QuartzManager;
+
 /** 
  * 封装了采用HttpClient发送HTTP请求的方法 
  * @see 本工具所采用的是HttpComponents-Client-4.2.1 
@@ -314,5 +316,17 @@ public class HttpClientUtil {
 		CookieStore cookieStore = (CookieStore)respObject.get(RESPONSE_COOKIESTORE);
 		respObject = HttpClientUtil.sendGetRequest(url, cookieStore);
 		*/
+		
+//		国际
+//		String url = "http://www.jiketravel.com:8080/api/international/flights?q=1_BJS,2015-08-24,TYO_1,,,Economy,";
+//		国内
+//		String url = "http://www.jiketravel.com:8080/api/flts?q=1_BJS,2015-08-17,SHA_,,,Y,";
+//		
+//		Map<String, Object> respObject = HttpClientUtil.sendGetRequest(url, null);
+//		System.out.println("国内机票："+respObject.get(RESPONSE_CONTENT));
+		
+		System.out.println("国内机票："+QuartzManager.getInstanceScheduler());
+		
+		
 	}
 }

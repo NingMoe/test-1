@@ -15,33 +15,33 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.jike.system.bean.DetectInterface;
-import com.jike.system.consts.InterfaceConsts;
-import com.jike.system.service.itf.IDetectInterfaceService;
+import com.jike.system.bean.DetectDatabase;
+import com.jike.system.consts.DatabaseConsts;
+import com.jike.system.service.itf.IDetectDatabaseService;
 import com.jike.system.web.CommonException;
 import com.jike.system.web.JsonResult;
 import com.jike.system.web.ResultRender;
 /** 
  *  
- * Title: InterfaceDetectController
+ * Title: DatabaseDetectController
  *
- * Description: 接口检测控制类
+ * Description: 数据库检测控制类
  *
  * Company: LuoPan
  *
  * @author pfxu
  *
- * @date Aug 12, 2015
+ * @date Aug 17, 2015
  *
  */
 @Controller
-@RequestMapping("/interfaceDetect")
-public class InterfaceDetectController extends BaseController{
+@RequestMapping("/databaseDetect")
+public class DatabaseDetectController extends BaseController{
 
-	private String modelName = "接口检测数据";
+	private String modelName = "数据库检测数据";
 
 	@Autowired
-	private IDetectInterfaceService diService;
+	private IDetectDatabaseService ddService;
 	
 	private Map<String, Object> masterSwitchResult;
 	
@@ -56,8 +56,8 @@ public class InterfaceDetectController extends BaseController{
 	@ResponseBody
 	public JsonResult selectById(HttpServletRequest request,
 			@PathVariable String taskId) throws CommonException {
-		DetectInterface di = diService.selectById(taskId);
-		return ResultRender.renderResult(modelName + "：查询成功", di);
+		DetectDatabase dd = ddService.selectById(taskId);
+		return ResultRender.renderResult(modelName + "：查询成功", dd);
 	}
 	
 	/**
@@ -72,10 +72,10 @@ public class InterfaceDetectController extends BaseController{
 	@RequestMapping(value = "/{taskId}", method = RequestMethod.PUT)
 	@ResponseBody
 	public JsonResult updateById(HttpServletRequest request,
-			@PathVariable String taskId, @RequestBody DetectInterface di)
+			@PathVariable String taskId, @RequestBody DetectDatabase dd)
 			throws CommonException {
-//		diService.updateById(m, mqId);
-		return ResultRender.renderResult(modelName + "修改成功", di);
+//		ddService.updateById(m, mqId);
+		return ResultRender.renderResult(modelName + "修改成功", dd);
 	}
 	
 	/**
@@ -88,10 +88,10 @@ public class InterfaceDetectController extends BaseController{
 	@RequestMapping(value = "", method = RequestMethod.GET)
 	@ResponseBody
 	public JsonResult selectByExample(HttpServletRequest request,
-			@ModelAttribute DetectInterface di) throws CommonException {
-		List<DetectInterface> dis = diService.selectAll();
-		return ResultRender.renderPagedResult(modelName + "：查询成功", dis,
-				dis.size());
+			@ModelAttribute DetectDatabase di) throws CommonException {
+		List<DetectDatabase> dds = ddService.selectAll();
+		return ResultRender.renderPagedResult(modelName + "：查询成功", dds,
+				dds.size());
 	}
 	
 	/**
@@ -105,9 +105,9 @@ public class InterfaceDetectController extends BaseController{
 	@RequestMapping(value = "", method = RequestMethod.POST)
 	@ResponseBody
 	public JsonResult insert(HttpServletRequest request,
-			@ModelAttribute DetectInterface di) throws CommonException {
+			@ModelAttribute DetectDatabase dd) throws CommonException {
 		
-		return ResultRender.renderResult(modelName + "添加成功", di);
+		return ResultRender.renderResult(modelName + "添加成功", dd);
 	}
 
 	/**
@@ -122,16 +122,16 @@ public class InterfaceDetectController extends BaseController{
 	@ResponseBody
 	public JsonResult masterSwitchQuery(HttpServletRequest request) throws CommonException {
 		String flagName = "未知";
-		if(InterfaceConsts.MASTER_SWITCH_OPEN){
+		if(DatabaseConsts.MASTER_SWITCH_OPEN){
 			flagName = "已开启";
 		}else{
 			flagName = "已关闭";
 		}
 		masterSwitchResult = new HashMap<String, Object>();
-		masterSwitchResult.put("flag", InterfaceConsts.MASTER_SWITCH_OPEN);
+		masterSwitchResult.put("flag", DatabaseConsts.MASTER_SWITCH_OPEN);
 		masterSwitchResult.put("flagName", flagName);
 		
-		return ResultRender.renderResult("接口检测总开关状态查询成功", masterSwitchResult);
+		return ResultRender.renderResult("数据库检测总开关状态查询成功", masterSwitchResult);
 	}
 	
 	/**
@@ -152,13 +152,13 @@ public class InterfaceDetectController extends BaseController{
 		}else{
 			flagName = "已关闭";
 		}
-		if(flag!=InterfaceConsts.MASTER_SWITCH_OPEN)
-			InterfaceConsts.MASTER_SWITCH_OPEN = flag;
+		if(flag!=DatabaseConsts.MASTER_SWITCH_OPEN)
+			DatabaseConsts.MASTER_SWITCH_OPEN = flag;
 		masterSwitchResult = new HashMap<String, Object>();
-		masterSwitchResult.put("flag", InterfaceConsts.MASTER_SWITCH_OPEN);
+		masterSwitchResult.put("flag", DatabaseConsts.MASTER_SWITCH_OPEN);
 		masterSwitchResult.put("flagName", flagName);
 		
-		return ResultRender.renderResult("接口检测总开关"+flagName, masterSwitchResult);
+		return ResultRender.renderResult("数据库检测总开关"+flagName, masterSwitchResult);
 	}
 
 }

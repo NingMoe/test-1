@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class DetectInterfaceLogExample {
+public class DetectLogExample {
     protected String orderByClause;
 
     protected boolean distinct;
@@ -13,7 +13,7 @@ public class DetectInterfaceLogExample {
 
     protected Page page;
 
-    public DetectInterfaceLogExample() {
+    public DetectLogExample() {
         oredCriteria = new ArrayList<Criteria>();
     }
 
@@ -115,203 +115,273 @@ public class DetectInterfaceLogExample {
             criteria.add(new Criterion(condition, value1, value2));
         }
 
-        public Criteria andItfLogIdIsNull() {
-            addCriterion("ITF_LOG_ID is null");
+        public Criteria andLogIdIsNull() {
+            addCriterion("LOG_ID is null");
             return (Criteria) this;
         }
 
-        public Criteria andItfLogIdIsNotNull() {
-            addCriterion("ITF_LOG_ID is not null");
+        public Criteria andLogIdIsNotNull() {
+            addCriterion("LOG_ID is not null");
             return (Criteria) this;
         }
 
-        public Criteria andItfLogIdEqualTo(String value) {
-            addCriterion("ITF_LOG_ID =", value, "itfLogId");
+        public Criteria andLogIdEqualTo(String value) {
+            addCriterion("LOG_ID =", value, "logId");
             return (Criteria) this;
         }
 
-        public Criteria andItfLogIdNotEqualTo(String value) {
-            addCriterion("ITF_LOG_ID <>", value, "itfLogId");
+        public Criteria andLogIdNotEqualTo(String value) {
+            addCriterion("LOG_ID <>", value, "logId");
             return (Criteria) this;
         }
 
-        public Criteria andItfLogIdGreaterThan(String value) {
-            addCriterion("ITF_LOG_ID >", value, "itfLogId");
+        public Criteria andLogIdGreaterThan(String value) {
+            addCriterion("LOG_ID >", value, "logId");
             return (Criteria) this;
         }
 
-        public Criteria andItfLogIdGreaterThanOrEqualTo(String value) {
-            addCriterion("ITF_LOG_ID >=", value, "itfLogId");
+        public Criteria andLogIdGreaterThanOrEqualTo(String value) {
+            addCriterion("LOG_ID >=", value, "logId");
             return (Criteria) this;
         }
 
-        public Criteria andItfLogIdLessThan(String value) {
-            addCriterion("ITF_LOG_ID <", value, "itfLogId");
+        public Criteria andLogIdLessThan(String value) {
+            addCriterion("LOG_ID <", value, "logId");
             return (Criteria) this;
         }
 
-        public Criteria andItfLogIdLessThanOrEqualTo(String value) {
-            addCriterion("ITF_LOG_ID <=", value, "itfLogId");
+        public Criteria andLogIdLessThanOrEqualTo(String value) {
+            addCriterion("LOG_ID <=", value, "logId");
             return (Criteria) this;
         }
 
-        public Criteria andItfLogIdLike(String value) {
-            addCriterion("ITF_LOG_ID like", value, "itfLogId");
+        public Criteria andLogIdLike(String value) {
+            addCriterion("LOG_ID like", value, "logId");
             return (Criteria) this;
         }
 
-        public Criteria andItfLogIdNotLike(String value) {
-            addCriterion("ITF_LOG_ID not like", value, "itfLogId");
+        public Criteria andLogIdNotLike(String value) {
+            addCriterion("LOG_ID not like", value, "logId");
             return (Criteria) this;
         }
 
-        public Criteria andItfLogIdIn(List<String> values) {
-            addCriterion("ITF_LOG_ID in", values, "itfLogId");
+        public Criteria andLogIdIn(List<String> values) {
+            addCriterion("LOG_ID in", values, "logId");
             return (Criteria) this;
         }
 
-        public Criteria andItfLogIdNotIn(List<String> values) {
-            addCriterion("ITF_LOG_ID not in", values, "itfLogId");
+        public Criteria andLogIdNotIn(List<String> values) {
+            addCriterion("LOG_ID not in", values, "logId");
             return (Criteria) this;
         }
 
-        public Criteria andItfLogIdBetween(String value1, String value2) {
-            addCriterion("ITF_LOG_ID between", value1, value2, "itfLogId");
+        public Criteria andLogIdBetween(String value1, String value2) {
+            addCriterion("LOG_ID between", value1, value2, "logId");
             return (Criteria) this;
         }
 
-        public Criteria andItfLogIdNotBetween(String value1, String value2) {
-            addCriterion("ITF_LOG_ID not between", value1, value2, "itfLogId");
+        public Criteria andLogIdNotBetween(String value1, String value2) {
+            addCriterion("LOG_ID not between", value1, value2, "logId");
             return (Criteria) this;
         }
 
-        public Criteria andDetectTimeIsNull() {
-            addCriterion("DETECT_TIME is null");
+        public Criteria andLogTimeIsNull() {
+            addCriterion("LOG_TIME is null");
             return (Criteria) this;
         }
 
-        public Criteria andDetectTimeIsNotNull() {
-            addCriterion("DETECT_TIME is not null");
+        public Criteria andLogTimeIsNotNull() {
+            addCriterion("LOG_TIME is not null");
             return (Criteria) this;
         }
 
-        public Criteria andDetectTimeEqualTo(Date value) {
-            addCriterion("DETECT_TIME =", value, "detectTime");
+        public Criteria andLogTimeEqualTo(Date value) {
+            addCriterion("LOG_TIME =", value, "logTime");
             return (Criteria) this;
         }
 
-        public Criteria andDetectTimeNotEqualTo(Date value) {
-            addCriterion("DETECT_TIME <>", value, "detectTime");
+        public Criteria andLogTimeNotEqualTo(Date value) {
+            addCriterion("LOG_TIME <>", value, "logTime");
             return (Criteria) this;
         }
 
-        public Criteria andDetectTimeGreaterThan(Date value) {
-            addCriterion("DETECT_TIME >", value, "detectTime");
+        public Criteria andLogTimeGreaterThan(Date value) {
+            addCriterion("LOG_TIME >", value, "logTime");
             return (Criteria) this;
         }
 
-        public Criteria andDetectTimeGreaterThanOrEqualTo(Date value) {
-            addCriterion("DETECT_TIME >=", value, "detectTime");
+        public Criteria andLogTimeGreaterThanOrEqualTo(Date value) {
+            addCriterion("LOG_TIME >=", value, "logTime");
             return (Criteria) this;
         }
 
-        public Criteria andDetectTimeLessThan(Date value) {
-            addCriterion("DETECT_TIME <", value, "detectTime");
+        public Criteria andLogTimeLessThan(Date value) {
+            addCriterion("LOG_TIME <", value, "logTime");
             return (Criteria) this;
         }
 
-        public Criteria andDetectTimeLessThanOrEqualTo(Date value) {
-            addCriterion("DETECT_TIME <=", value, "detectTime");
+        public Criteria andLogTimeLessThanOrEqualTo(Date value) {
+            addCriterion("LOG_TIME <=", value, "logTime");
             return (Criteria) this;
         }
 
-        public Criteria andDetectTimeIn(List<Date> values) {
-            addCriterion("DETECT_TIME in", values, "detectTime");
+        public Criteria andLogTimeIn(List<Date> values) {
+            addCriterion("LOG_TIME in", values, "logTime");
             return (Criteria) this;
         }
 
-        public Criteria andDetectTimeNotIn(List<Date> values) {
-            addCriterion("DETECT_TIME not in", values, "detectTime");
+        public Criteria andLogTimeNotIn(List<Date> values) {
+            addCriterion("LOG_TIME not in", values, "logTime");
             return (Criteria) this;
         }
 
-        public Criteria andDetectTimeBetween(Date value1, Date value2) {
-            addCriterion("DETECT_TIME between", value1, value2, "detectTime");
+        public Criteria andLogTimeBetween(Date value1, Date value2) {
+            addCriterion("LOG_TIME between", value1, value2, "logTime");
             return (Criteria) this;
         }
 
-        public Criteria andDetectTimeNotBetween(Date value1, Date value2) {
-            addCriterion("DETECT_TIME not between", value1, value2, "detectTime");
+        public Criteria andLogTimeNotBetween(Date value1, Date value2) {
+            addCriterion("LOG_TIME not between", value1, value2, "logTime");
             return (Criteria) this;
         }
 
-        public Criteria andItfIdIsNull() {
-            addCriterion("ITF_ID is null");
+        public Criteria andLogTypeIsNull() {
+            addCriterion("LOG_TYPE is null");
             return (Criteria) this;
         }
 
-        public Criteria andItfIdIsNotNull() {
-            addCriterion("ITF_ID is not null");
+        public Criteria andLogTypeIsNotNull() {
+            addCriterion("LOG_TYPE is not null");
             return (Criteria) this;
         }
 
-        public Criteria andItfIdEqualTo(String value) {
-            addCriterion("ITF_ID =", value, "itfId");
+        public Criteria andLogTypeEqualTo(String value) {
+            addCriterion("LOG_TYPE =", value, "logType");
             return (Criteria) this;
         }
 
-        public Criteria andItfIdNotEqualTo(String value) {
-            addCriterion("ITF_ID <>", value, "itfId");
+        public Criteria andLogTypeNotEqualTo(String value) {
+            addCriterion("LOG_TYPE <>", value, "logType");
             return (Criteria) this;
         }
 
-        public Criteria andItfIdGreaterThan(String value) {
-            addCriterion("ITF_ID >", value, "itfId");
+        public Criteria andLogTypeGreaterThan(String value) {
+            addCriterion("LOG_TYPE >", value, "logType");
             return (Criteria) this;
         }
 
-        public Criteria andItfIdGreaterThanOrEqualTo(String value) {
-            addCriterion("ITF_ID >=", value, "itfId");
+        public Criteria andLogTypeGreaterThanOrEqualTo(String value) {
+            addCriterion("LOG_TYPE >=", value, "logType");
             return (Criteria) this;
         }
 
-        public Criteria andItfIdLessThan(String value) {
-            addCriterion("ITF_ID <", value, "itfId");
+        public Criteria andLogTypeLessThan(String value) {
+            addCriterion("LOG_TYPE <", value, "logType");
             return (Criteria) this;
         }
 
-        public Criteria andItfIdLessThanOrEqualTo(String value) {
-            addCriterion("ITF_ID <=", value, "itfId");
+        public Criteria andLogTypeLessThanOrEqualTo(String value) {
+            addCriterion("LOG_TYPE <=", value, "logType");
             return (Criteria) this;
         }
 
-        public Criteria andItfIdLike(String value) {
-            addCriterion("ITF_ID like", value, "itfId");
+        public Criteria andLogTypeLike(String value) {
+            addCriterion("LOG_TYPE like", value, "logType");
             return (Criteria) this;
         }
 
-        public Criteria andItfIdNotLike(String value) {
-            addCriterion("ITF_ID not like", value, "itfId");
+        public Criteria andLogTypeNotLike(String value) {
+            addCriterion("LOG_TYPE not like", value, "logType");
             return (Criteria) this;
         }
 
-        public Criteria andItfIdIn(List<String> values) {
-            addCriterion("ITF_ID in", values, "itfId");
+        public Criteria andLogTypeIn(List<String> values) {
+            addCriterion("LOG_TYPE in", values, "logType");
             return (Criteria) this;
         }
 
-        public Criteria andItfIdNotIn(List<String> values) {
-            addCriterion("ITF_ID not in", values, "itfId");
+        public Criteria andLogTypeNotIn(List<String> values) {
+            addCriterion("LOG_TYPE not in", values, "logType");
             return (Criteria) this;
         }
 
-        public Criteria andItfIdBetween(String value1, String value2) {
-            addCriterion("ITF_ID between", value1, value2, "itfId");
+        public Criteria andLogTypeBetween(String value1, String value2) {
+            addCriterion("LOG_TYPE between", value1, value2, "logType");
             return (Criteria) this;
         }
 
-        public Criteria andItfIdNotBetween(String value1, String value2) {
-            addCriterion("ITF_ID not between", value1, value2, "itfId");
+        public Criteria andLogTypeNotBetween(String value1, String value2) {
+            addCriterion("LOG_TYPE not between", value1, value2, "logType");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaskIdIsNull() {
+            addCriterion("TASK_ID is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaskIdIsNotNull() {
+            addCriterion("TASK_ID is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaskIdEqualTo(String value) {
+            addCriterion("TASK_ID =", value, "taskId");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaskIdNotEqualTo(String value) {
+            addCriterion("TASK_ID <>", value, "taskId");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaskIdGreaterThan(String value) {
+            addCriterion("TASK_ID >", value, "taskId");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaskIdGreaterThanOrEqualTo(String value) {
+            addCriterion("TASK_ID >=", value, "taskId");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaskIdLessThan(String value) {
+            addCriterion("TASK_ID <", value, "taskId");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaskIdLessThanOrEqualTo(String value) {
+            addCriterion("TASK_ID <=", value, "taskId");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaskIdLike(String value) {
+            addCriterion("TASK_ID like", value, "taskId");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaskIdNotLike(String value) {
+            addCriterion("TASK_ID not like", value, "taskId");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaskIdIn(List<String> values) {
+            addCriterion("TASK_ID in", values, "taskId");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaskIdNotIn(List<String> values) {
+            addCriterion("TASK_ID not in", values, "taskId");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaskIdBetween(String value1, String value2) {
+            addCriterion("TASK_ID between", value1, value2, "taskId");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaskIdNotBetween(String value1, String value2) {
+            addCriterion("TASK_ID not between", value1, value2, "taskId");
             return (Criteria) this;
         }
 
@@ -525,13 +595,18 @@ public class DetectInterfaceLogExample {
             return (Criteria) this;
         }
 
-        public Criteria andItfLogIdLikeInsensitive(String value) {
-            addCriterion("upper(ITF_LOG_ID) like", value.toUpperCase(), "itfLogId");
+        public Criteria andLogIdLikeInsensitive(String value) {
+            addCriterion("upper(LOG_ID) like", value.toUpperCase(), "logId");
             return (Criteria) this;
         }
 
-        public Criteria andItfIdLikeInsensitive(String value) {
-            addCriterion("upper(ITF_ID) like", value.toUpperCase(), "itfId");
+        public Criteria andLogTypeLikeInsensitive(String value) {
+            addCriterion("upper(LOG_TYPE) like", value.toUpperCase(), "logType");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaskIdLikeInsensitive(String value) {
+            addCriterion("upper(TASK_ID) like", value.toUpperCase(), "taskId");
             return (Criteria) this;
         }
 

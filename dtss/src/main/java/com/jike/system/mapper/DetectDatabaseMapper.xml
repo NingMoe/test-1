@@ -1,25 +1,18 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.jike.system.dao.DetectInterfaceMapper" >
-  <resultMap id="BaseResultMap" type="com.jike.system.bean.DetectInterface" >
+<mapper namespace="com.jike.system.dao.DetectDatabaseMapper" >
+  <resultMap id="BaseResultMap" type="com.jike.system.bean.DetectDatabase" >
     <id column="TASK_ID" property="taskId" jdbcType="VARCHAR" />
     <result column="TASK_GROUP_ID" property="taskGroupId" jdbcType="VARCHAR" />
-    <result column="BELONG_TO" property="belongTo" jdbcType="VARCHAR" />
-    <result column="ITF_URL" property="itfUrl" jdbcType="VARCHAR" />
-    <result column="ITF_PARAMS" property="itfParams" jdbcType="VARCHAR" />
-    <result column="REQUEST_METHOD" property="requestMethod" jdbcType="VARCHAR" />
-    <result column="CHECK_KEY" property="checkKey" jdbcType="VARCHAR" />
-    <result column="CHECK_VALUE" property="checkValue" jdbcType="VARCHAR" />
+    <result column="DB_DRIVER" property="dbDriver" jdbcType="VARCHAR" />
+    <result column="DB_URL" property="dbUrl" jdbcType="VARCHAR" />
+    <result column="DB_USERNAME" property="dbUsername" jdbcType="VARCHAR" />
+    <result column="DB_PASSWORD" property="dbPassword" jdbcType="VARCHAR" />
     <result column="CRON_EXPRESSION" property="cronExpression" jdbcType="VARCHAR" />
     <result column="THRESHOLD_VALUE" property="thresholdValue" jdbcType="NUMERIC" />
     <result column="CURRENT_FAILURE_NUM" property="currentFailureNum" jdbcType="NUMERIC" />
     <result column="NOTICE_LVL" property="noticeLvl" jdbcType="CHAR" />
     <result column="NOTICE_OBJECT" property="noticeObject" jdbcType="VARCHAR" />
-    <result column="BY_PROXY" property="byProxy" jdbcType="NUMERIC" />
-    <result column="PROXY_IP" property="proxyIp" jdbcType="VARCHAR" />
-    <result column="PROXY_PORT" property="proxyPort" jdbcType="NUMERIC" />
-    <result column="PROXY_USERNAME" property="proxyUsername" jdbcType="VARCHAR" />
-    <result column="PROXY_PASSWORD" property="proxyPassword" jdbcType="VARCHAR" />
     <result column="STATE" property="state" jdbcType="CHAR" />
     <result column="TOTAL_NOTICE_NUM" property="totalNoticeNum" jdbcType="DECIMAL" />
     <result column="CREATE_USER" property="createUser" jdbcType="VARCHAR" />
@@ -87,19 +80,18 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    TASK_ID, TASK_GROUP_ID, BELONG_TO, ITF_URL, ITF_PARAMS, REQUEST_METHOD, CHECK_KEY, 
-    CHECK_VALUE, CRON_EXPRESSION, THRESHOLD_VALUE, CURRENT_FAILURE_NUM, NOTICE_LVL, NOTICE_OBJECT, 
-    BY_PROXY, PROXY_IP, PROXY_PORT, PROXY_USERNAME, PROXY_PASSWORD, STATE, TOTAL_NOTICE_NUM, 
+    TASK_ID, TASK_GROUP_ID, DB_DRIVER, DB_URL, DB_USERNAME, DB_PASSWORD, CRON_EXPRESSION, 
+    THRESHOLD_VALUE, CURRENT_FAILURE_NUM, NOTICE_LVL, NOTICE_OBJECT, STATE, TOTAL_NOTICE_NUM, 
     CREATE_USER, CREATE_TIME, UPDATE_USER, UPDATE_TIME, GUID
   </sql>
-  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.jike.system.bean.DetectInterfaceExample" >
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.jike.system.bean.DetectDatabaseExample" >
     <include refid="OracleDialectPrefix" />
     select
     <if test="distinct" >
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from T_SYSTEM_DETECT_INTERFACE
+    from T_SYSTEM_DETECT_DATABASE
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
@@ -111,41 +103,37 @@
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
     <include refid="Base_Column_List" />
-    from T_SYSTEM_DETECT_INTERFACE
+    from T_SYSTEM_DETECT_DATABASE
     where TASK_ID = #{taskId,jdbcType=VARCHAR}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
-    delete from T_SYSTEM_DETECT_INTERFACE
+    delete from T_SYSTEM_DETECT_DATABASE
     where TASK_ID = #{taskId,jdbcType=VARCHAR}
   </delete>
-  <delete id="deleteByExample" parameterType="com.jike.system.bean.DetectInterfaceExample" >
-    delete from T_SYSTEM_DETECT_INTERFACE
+  <delete id="deleteByExample" parameterType="com.jike.system.bean.DetectDatabaseExample" >
+    delete from T_SYSTEM_DETECT_DATABASE
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.jike.system.bean.DetectInterface" >
-    insert into T_SYSTEM_DETECT_INTERFACE (TASK_ID, TASK_GROUP_ID, BELONG_TO, 
-      ITF_URL, ITF_PARAMS, REQUEST_METHOD, 
-      CHECK_KEY, CHECK_VALUE, CRON_EXPRESSION, 
-      THRESHOLD_VALUE, CURRENT_FAILURE_NUM, NOTICE_LVL, 
-      NOTICE_OBJECT, BY_PROXY, PROXY_IP, 
-      PROXY_PORT, PROXY_USERNAME, PROXY_PASSWORD, 
-      STATE, TOTAL_NOTICE_NUM, CREATE_USER, 
-      CREATE_TIME, UPDATE_USER, UPDATE_TIME, 
-      GUID)
-    values (#{taskId,jdbcType=VARCHAR}, #{taskGroupId,jdbcType=VARCHAR}, #{belongTo,jdbcType=VARCHAR}, 
-      #{itfUrl,jdbcType=VARCHAR}, #{itfParams,jdbcType=VARCHAR}, #{requestMethod,jdbcType=VARCHAR}, 
-      #{checkKey,jdbcType=VARCHAR}, #{checkValue,jdbcType=VARCHAR}, #{cronExpression,jdbcType=VARCHAR}, 
-      #{thresholdValue,jdbcType=NUMERIC}, #{currentFailureNum,jdbcType=NUMERIC}, #{noticeLvl,jdbcType=CHAR}, 
-      #{noticeObject,jdbcType=VARCHAR}, #{byProxy,jdbcType=NUMERIC}, #{proxyIp,jdbcType=VARCHAR}, 
-      #{proxyPort,jdbcType=NUMERIC}, #{proxyUsername,jdbcType=VARCHAR}, #{proxyPassword,jdbcType=VARCHAR}, 
-      #{state,jdbcType=CHAR}, #{totalNoticeNum,jdbcType=DECIMAL}, #{createUser,jdbcType=VARCHAR}, 
-      #{createTime,jdbcType=TIMESTAMP}, #{updateUser,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, 
-      #{guid,jdbcType=VARCHAR})
+  <insert id="insert" parameterType="com.jike.system.bean.DetectDatabase" >
+    insert into T_SYSTEM_DETECT_DATABASE (TASK_ID, TASK_GROUP_ID, DB_DRIVER, 
+      DB_URL, DB_USERNAME, DB_PASSWORD, 
+      CRON_EXPRESSION, THRESHOLD_VALUE, CURRENT_FAILURE_NUM, 
+      NOTICE_LVL, NOTICE_OBJECT, STATE, 
+      TOTAL_NOTICE_NUM, CREATE_USER, CREATE_TIME, 
+      UPDATE_USER, UPDATE_TIME, GUID
+      )
+    values (#{taskId,jdbcType=VARCHAR}, #{taskGroupId,jdbcType=VARCHAR}, #{dbDriver,jdbcType=VARCHAR}, 
+      #{dbUrl,jdbcType=VARCHAR}, #{dbUsername,jdbcType=VARCHAR}, #{dbPassword,jdbcType=VARCHAR}, 
+      #{cronExpression,jdbcType=VARCHAR}, #{thresholdValue,jdbcType=NUMERIC}, #{currentFailureNum,jdbcType=NUMERIC}, 
+      #{noticeLvl,jdbcType=CHAR}, #{noticeObject,jdbcType=VARCHAR}, #{state,jdbcType=CHAR}, 
+      #{totalNoticeNum,jdbcType=DECIMAL}, #{createUser,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updateUser,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, #{guid,jdbcType=VARCHAR}
+      )
   </insert>
-  <insert id="insertSelective" parameterType="com.jike.system.bean.DetectInterface" >
-    insert into T_SYSTEM_DETECT_INTERFACE
+  <insert id="insertSelective" parameterType="com.jike.system.bean.DetectDatabase" >
+    insert into T_SYSTEM_DETECT_DATABASE
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="taskId != null" >
         TASK_ID,
@@ -153,23 +141,17 @@
       <if test="taskGroupId != null" >
         TASK_GROUP_ID,
       </if>
-      <if test="belongTo != null" >
-        BELONG_TO,
+      <if test="dbDriver != null" >
+        DB_DRIVER,
       </if>
-      <if test="itfUrl != null" >
-        ITF_URL,
+      <if test="dbUrl != null" >
+        DB_URL,
       </if>
-      <if test="itfParams != null" >
-        ITF_PARAMS,
+      <if test="dbUsername != null" >
+        DB_USERNAME,
       </if>
-      <if test="requestMethod != null" >
-        REQUEST_METHOD,
-      </if>
-      <if test="checkKey != null" >
-        CHECK_KEY,
-      </if>
-      <if test="checkValue != null" >
-        CHECK_VALUE,
+      <if test="dbPassword != null" >
+        DB_PASSWORD,
       </if>
       <if test="cronExpression != null" >
         CRON_EXPRESSION,
@@ -185,21 +167,6 @@
       </if>
       <if test="noticeObject != null" >
         NOTICE_OBJECT,
-      </if>
-      <if test="byProxy != null" >
-        BY_PROXY,
-      </if>
-      <if test="proxyIp != null" >
-        PROXY_IP,
-      </if>
-      <if test="proxyPort != null" >
-        PROXY_PORT,
-      </if>
-      <if test="proxyUsername != null" >
-        PROXY_USERNAME,
-      </if>
-      <if test="proxyPassword != null" >
-        PROXY_PASSWORD,
       </if>
       <if test="state != null" >
         STATE,
@@ -230,23 +197,17 @@
       <if test="taskGroupId != null" >
         #{taskGroupId,jdbcType=VARCHAR},
       </if>
-      <if test="belongTo != null" >
-        #{belongTo,jdbcType=VARCHAR},
+      <if test="dbDriver != null" >
+        #{dbDriver,jdbcType=VARCHAR},
       </if>
-      <if test="itfUrl != null" >
-        #{itfUrl,jdbcType=VARCHAR},
+      <if test="dbUrl != null" >
+        #{dbUrl,jdbcType=VARCHAR},
       </if>
-      <if test="itfParams != null" >
-        #{itfParams,jdbcType=VARCHAR},
+      <if test="dbUsername != null" >
+        #{dbUsername,jdbcType=VARCHAR},
       </if>
-      <if test="requestMethod != null" >
-        #{requestMethod,jdbcType=VARCHAR},
-      </if>
-      <if test="checkKey != null" >
-        #{checkKey,jdbcType=VARCHAR},
-      </if>
-      <if test="checkValue != null" >
-        #{checkValue,jdbcType=VARCHAR},
+      <if test="dbPassword != null" >
+        #{dbPassword,jdbcType=VARCHAR},
       </if>
       <if test="cronExpression != null" >
         #{cronExpression,jdbcType=VARCHAR},
@@ -262,21 +223,6 @@
       </if>
       <if test="noticeObject != null" >
         #{noticeObject,jdbcType=VARCHAR},
-      </if>
-      <if test="byProxy != null" >
-        #{byProxy,jdbcType=NUMERIC},
-      </if>
-      <if test="proxyIp != null" >
-        #{proxyIp,jdbcType=VARCHAR},
-      </if>
-      <if test="proxyPort != null" >
-        #{proxyPort,jdbcType=NUMERIC},
-      </if>
-      <if test="proxyUsername != null" >
-        #{proxyUsername,jdbcType=VARCHAR},
-      </if>
-      <if test="proxyPassword != null" >
-        #{proxyPassword,jdbcType=VARCHAR},
       </if>
       <if test="state != null" >
         #{state,jdbcType=CHAR},
@@ -301,14 +247,14 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.jike.system.bean.DetectInterfaceExample" resultType="java.lang.Integer" >
-    select count(*) from T_SYSTEM_DETECT_INTERFACE
+  <select id="countByExample" parameterType="com.jike.system.bean.DetectDatabaseExample" resultType="java.lang.Integer" >
+    select count(*) from T_SYSTEM_DETECT_DATABASE
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map" >
-    update T_SYSTEM_DETECT_INTERFACE
+    update T_SYSTEM_DETECT_DATABASE
     <set >
       <if test="record.taskId != null" >
         TASK_ID = #{record.taskId,jdbcType=VARCHAR},
@@ -316,23 +262,17 @@
       <if test="record.taskGroupId != null" >
         TASK_GROUP_ID = #{record.taskGroupId,jdbcType=VARCHAR},
       </if>
-      <if test="record.belongTo != null" >
-        BELONG_TO = #{record.belongTo,jdbcType=VARCHAR},
+      <if test="record.dbDriver != null" >
+        DB_DRIVER = #{record.dbDriver,jdbcType=VARCHAR},
       </if>
-      <if test="record.itfUrl != null" >
-        ITF_URL = #{record.itfUrl,jdbcType=VARCHAR},
+      <if test="record.dbUrl != null" >
+        DB_URL = #{record.dbUrl,jdbcType=VARCHAR},
       </if>
-      <if test="record.itfParams != null" >
-        ITF_PARAMS = #{record.itfParams,jdbcType=VARCHAR},
+      <if test="record.dbUsername != null" >
+        DB_USERNAME = #{record.dbUsername,jdbcType=VARCHAR},
       </if>
-      <if test="record.requestMethod != null" >
-        REQUEST_METHOD = #{record.requestMethod,jdbcType=VARCHAR},
-      </if>
-      <if test="record.checkKey != null" >
-        CHECK_KEY = #{record.checkKey,jdbcType=VARCHAR},
-      </if>
-      <if test="record.checkValue != null" >
-        CHECK_VALUE = #{record.checkValue,jdbcType=VARCHAR},
+      <if test="record.dbPassword != null" >
+        DB_PASSWORD = #{record.dbPassword,jdbcType=VARCHAR},
       </if>
       <if test="record.cronExpression != null" >
         CRON_EXPRESSION = #{record.cronExpression,jdbcType=VARCHAR},
@@ -348,21 +288,6 @@
       </if>
       <if test="record.noticeObject != null" >
         NOTICE_OBJECT = #{record.noticeObject,jdbcType=VARCHAR},
-      </if>
-      <if test="record.byProxy != null" >
-        BY_PROXY = #{record.byProxy,jdbcType=NUMERIC},
-      </if>
-      <if test="record.proxyIp != null" >
-        PROXY_IP = #{record.proxyIp,jdbcType=VARCHAR},
-      </if>
-      <if test="record.proxyPort != null" >
-        PROXY_PORT = #{record.proxyPort,jdbcType=NUMERIC},
-      </if>
-      <if test="record.proxyUsername != null" >
-        PROXY_USERNAME = #{record.proxyUsername,jdbcType=VARCHAR},
-      </if>
-      <if test="record.proxyPassword != null" >
-        PROXY_PASSWORD = #{record.proxyPassword,jdbcType=VARCHAR},
       </if>
       <if test="record.state != null" >
         STATE = #{record.state,jdbcType=CHAR},
@@ -391,25 +316,18 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map" >
-    update T_SYSTEM_DETECT_INTERFACE
+    update T_SYSTEM_DETECT_DATABASE
     set TASK_ID = #{record.taskId,jdbcType=VARCHAR},
       TASK_GROUP_ID = #{record.taskGroupId,jdbcType=VARCHAR},
-      BELONG_TO = #{record.belongTo,jdbcType=VARCHAR},
-      ITF_URL = #{record.itfUrl,jdbcType=VARCHAR},
-      ITF_PARAMS = #{record.itfParams,jdbcType=VARCHAR},
-      REQUEST_METHOD = #{record.requestMethod,jdbcType=VARCHAR},
-      CHECK_KEY = #{record.checkKey,jdbcType=VARCHAR},
-      CHECK_VALUE = #{record.checkValue,jdbcType=VARCHAR},
+      DB_DRIVER = #{record.dbDriver,jdbcType=VARCHAR},
+      DB_URL = #{record.dbUrl,jdbcType=VARCHAR},
+      DB_USERNAME = #{record.dbUsername,jdbcType=VARCHAR},
+      DB_PASSWORD = #{record.dbPassword,jdbcType=VARCHAR},
       CRON_EXPRESSION = #{record.cronExpression,jdbcType=VARCHAR},
       THRESHOLD_VALUE = #{record.thresholdValue,jdbcType=NUMERIC},
       CURRENT_FAILURE_NUM = #{record.currentFailureNum,jdbcType=NUMERIC},
       NOTICE_LVL = #{record.noticeLvl,jdbcType=CHAR},
       NOTICE_OBJECT = #{record.noticeObject,jdbcType=VARCHAR},
-      BY_PROXY = #{record.byProxy,jdbcType=NUMERIC},
-      PROXY_IP = #{record.proxyIp,jdbcType=VARCHAR},
-      PROXY_PORT = #{record.proxyPort,jdbcType=NUMERIC},
-      PROXY_USERNAME = #{record.proxyUsername,jdbcType=VARCHAR},
-      PROXY_PASSWORD = #{record.proxyPassword,jdbcType=VARCHAR},
       STATE = #{record.state,jdbcType=CHAR},
       TOTAL_NOTICE_NUM = #{record.totalNoticeNum,jdbcType=DECIMAL},
       CREATE_USER = #{record.createUser,jdbcType=VARCHAR},
@@ -421,29 +339,23 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.jike.system.bean.DetectInterface" >
-    update T_SYSTEM_DETECT_INTERFACE
+  <update id="updateByPrimaryKeySelective" parameterType="com.jike.system.bean.DetectDatabase" >
+    update T_SYSTEM_DETECT_DATABASE
     <set >
       <if test="taskGroupId != null" >
         TASK_GROUP_ID = #{taskGroupId,jdbcType=VARCHAR},
       </if>
-      <if test="belongTo != null" >
-        BELONG_TO = #{belongTo,jdbcType=VARCHAR},
+      <if test="dbDriver != null" >
+        DB_DRIVER = #{dbDriver,jdbcType=VARCHAR},
       </if>
-      <if test="itfUrl != null" >
-        ITF_URL = #{itfUrl,jdbcType=VARCHAR},
+      <if test="dbUrl != null" >
+        DB_URL = #{dbUrl,jdbcType=VARCHAR},
       </if>
-      <if test="itfParams != null" >
-        ITF_PARAMS = #{itfParams,jdbcType=VARCHAR},
+      <if test="dbUsername != null" >
+        DB_USERNAME = #{dbUsername,jdbcType=VARCHAR},
       </if>
-      <if test="requestMethod != null" >
-        REQUEST_METHOD = #{requestMethod,jdbcType=VARCHAR},
-      </if>
-      <if test="checkKey != null" >
-        CHECK_KEY = #{checkKey,jdbcType=VARCHAR},
-      </if>
-      <if test="checkValue != null" >
-        CHECK_VALUE = #{checkValue,jdbcType=VARCHAR},
+      <if test="dbPassword != null" >
+        DB_PASSWORD = #{dbPassword,jdbcType=VARCHAR},
       </if>
       <if test="cronExpression != null" >
         CRON_EXPRESSION = #{cronExpression,jdbcType=VARCHAR},
@@ -459,21 +371,6 @@
       </if>
       <if test="noticeObject != null" >
         NOTICE_OBJECT = #{noticeObject,jdbcType=VARCHAR},
-      </if>
-      <if test="byProxy != null" >
-        BY_PROXY = #{byProxy,jdbcType=NUMERIC},
-      </if>
-      <if test="proxyIp != null" >
-        PROXY_IP = #{proxyIp,jdbcType=VARCHAR},
-      </if>
-      <if test="proxyPort != null" >
-        PROXY_PORT = #{proxyPort,jdbcType=NUMERIC},
-      </if>
-      <if test="proxyUsername != null" >
-        PROXY_USERNAME = #{proxyUsername,jdbcType=VARCHAR},
-      </if>
-      <if test="proxyPassword != null" >
-        PROXY_PASSWORD = #{proxyPassword,jdbcType=VARCHAR},
       </if>
       <if test="state != null" >
         STATE = #{state,jdbcType=CHAR},
@@ -499,25 +396,18 @@
     </set>
     where TASK_ID = #{taskId,jdbcType=VARCHAR}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.jike.system.bean.DetectInterface" >
-    update T_SYSTEM_DETECT_INTERFACE
+  <update id="updateByPrimaryKey" parameterType="com.jike.system.bean.DetectDatabase" >
+    update T_SYSTEM_DETECT_DATABASE
     set TASK_GROUP_ID = #{taskGroupId,jdbcType=VARCHAR},
-      BELONG_TO = #{belongTo,jdbcType=VARCHAR},
-      ITF_URL = #{itfUrl,jdbcType=VARCHAR},
-      ITF_PARAMS = #{itfParams,jdbcType=VARCHAR},
-      REQUEST_METHOD = #{requestMethod,jdbcType=VARCHAR},
-      CHECK_KEY = #{checkKey,jdbcType=VARCHAR},
-      CHECK_VALUE = #{checkValue,jdbcType=VARCHAR},
+      DB_DRIVER = #{dbDriver,jdbcType=VARCHAR},
+      DB_URL = #{dbUrl,jdbcType=VARCHAR},
+      DB_USERNAME = #{dbUsername,jdbcType=VARCHAR},
+      DB_PASSWORD = #{dbPassword,jdbcType=VARCHAR},
       CRON_EXPRESSION = #{cronExpression,jdbcType=VARCHAR},
       THRESHOLD_VALUE = #{thresholdValue,jdbcType=NUMERIC},
       CURRENT_FAILURE_NUM = #{currentFailureNum,jdbcType=NUMERIC},
       NOTICE_LVL = #{noticeLvl,jdbcType=CHAR},
       NOTICE_OBJECT = #{noticeObject,jdbcType=VARCHAR},
-      BY_PROXY = #{byProxy,jdbcType=NUMERIC},
-      PROXY_IP = #{proxyIp,jdbcType=VARCHAR},
-      PROXY_PORT = #{proxyPort,jdbcType=NUMERIC},
-      PROXY_USERNAME = #{proxyUsername,jdbcType=VARCHAR},
-      PROXY_PASSWORD = #{proxyPassword,jdbcType=VARCHAR},
       STATE = #{state,jdbcType=CHAR},
       TOTAL_NOTICE_NUM = #{totalNoticeNum,jdbcType=DECIMAL},
       CREATE_USER = #{createUser,jdbcType=VARCHAR},

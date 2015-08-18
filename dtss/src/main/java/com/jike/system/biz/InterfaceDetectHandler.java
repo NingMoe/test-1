@@ -13,11 +13,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.jike.system.bean.DetectInterface;
-import com.jike.system.bean.DetectInterfaceLog;
+import com.jike.system.bean.DetectLog;
 import com.jike.system.consts.InterfaceConsts;
 import com.jike.system.consts.SysConsts;
-import com.jike.system.service.itf.IDetectInterfaceLogService;
 import com.jike.system.service.itf.IDetectInterfaceService;
+import com.jike.system.service.itf.IDetectLogService;
 import com.jike.system.util.DateUtils;
 import com.jike.system.util.HttpClientUtil;
 import com.jike.system.util.StringUtil;
@@ -32,7 +32,7 @@ public class InterfaceDetectHandler{
 	@Autowired
 	private IDetectInterfaceService diService;
 	@Autowired
-	private IDetectInterfaceLogService dilService;
+	private IDetectLogService dlService;
 	
 	public DetectInterface selectById(String id) throws CommonException {
 		return diService.selectById(id);
@@ -98,43 +98,43 @@ public class InterfaceDetectHandler{
 			// 校验返回信息，并进行数据库，通知等操作
 			boolean checkSuccess = vaildateRespContent(respContent, di);
 			// 记录此次检测数据
-			DetectInterfaceLog dil = new DetectInterfaceLog();
+			DetectLog dl = new DetectLog();
+			// 记录检测类型
+			dl.setLogType(SysConsts.LOG_TYPE_INTERFACE);
 			// 记录检测时间
-			dil.setDetectTime(new Date());
-			// 记录接口编号
-			dil.setItfId(di.getItfId());
+			dl.setLogTime(new Date());
+			// 记录检测编号
+			dl.setTaskId(di.getTaskId());
 			// 记录传递参数
 			try {
-				dil.setInputParams(StringUtil.subStrb(params, 500, SysConsts.DATABASE_ENCODING));
+				dl.setInputParams(StringUtil.subStrb(params, 500, SysConsts.DATABASE_ENCODING));
 			} catch (Exception e1) {
 				e1.printStackTrace();
 			}
 			// 如果校验成功
 			if(checkSuccess){
 				// 初始化当前检测失败次数
-				short failureNum = 0;
-				di.setThresholdValue(failureNum);
-
+				di.setCurrentFailureNum(0);
 				// 记录接口检测结果:成功
-				dil.setDetectResult(InterfaceConsts.DETECT_RESULT_SUCCESS);
+				dl.setDetectResult(SysConsts.DETECT_RESULT_SUCCESS);
 			}else{
 				// 当前检测失败次数+1
-				short failureNum = (short) (di.getCurrentFailureNum() + 1);
+				int failureNum = di.getCurrentFailureNum() + 1;
 				// 当前失败次数是否超过阈值
 				if(failureNum > di.getThresholdValue()){
 					// 如果当日该接口未发送警报
-					if(!InterfaceConsts.CURRENT_IS_NOTICE.contains(di.getItfId())){
+					if(!SysConsts.CURRENT_IS_NOTICE.contains(di.getTaskId())){
 						log.info("当前失败次数已超过阈值，将发送短信提示相关人员……");
 						// 发送警报
 						String[] message = createSms(di);
 						SmsHandler.sendMessage(message);
 						log.info("提示短信已发送");
 						// 记录当日该接口已发送警报
-						InterfaceConsts.CURRENT_IS_NOTICE.add(di.getItfId());
+						SysConsts.CURRENT_IS_NOTICE.add(di.getTaskId());
 						// 累计警报次数+1
 						di.setTotalNoticeNum(di.getTotalNoticeNum() + 1);
 						// 设置接口检测状态为：暂停
-						di.setState(InterfaceConsts.ITF_DETECT_STATE_STOP);
+						di.setState(SysConsts.DETECT_STATE_STOP);
 					}
 				}else{
 					// 当前失败次数超过阈值不记录
@@ -142,10 +142,10 @@ public class InterfaceDetectHandler{
 				}
 				
 				// 记录接口检测结果:失败
-				dil.setDetectResult(InterfaceConsts.DETECT_RESULT_FAILURE);
+				dl.setDetectResult(SysConsts.DETECT_RESULT_FAILURE);
 				// 记录错误信息
 				try {
-					dil.setErrorInfo(StringUtil.subStrb(respContent, 500, SysConsts.DATABASE_ENCODING));
+					dl.setErrorInfo(StringUtil.subStrb(respContent, 500, SysConsts.DATABASE_ENCODING));
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -153,7 +153,7 @@ public class InterfaceDetectHandler{
 			}
 			// 更新到数据库
 			diService.updateByPrimaryKey(di);
-			dilService.insert(dil);
+			dlService.insert(dl);
 			// 如果验证不通过就跳出循环
 			if(!checkSuccess)
 				break;
@@ -174,7 +174,7 @@ public class InterfaceDetectHandler{
 		// 获取校验值
 		String checkValue = di.getCheckValue();
 		// 获取respContent中key对应的value
-		String value = StringUtil.getKeyValue(respContent, checkKey);
+		String value = StringUtil.getJsonKey2Value(respContent, checkKey);
 		// 如何相等
 		if(checkValue.equals(value))
 			checkSuccess = true;
@@ -188,7 +188,7 @@ public class InterfaceDetectHandler{
 		String[] message = new String[2];
 		String noticeObject = di.getNoticeObject();
 		if(StringUtil.isNotEmpty(noticeObject)){
-			noticeObject = noticeObject.replace(InterfaceConsts.NOTICE_OBJECT_SPLIT, SmsHandler.MOBILE_SPLIT);
+			noticeObject = noticeObject.replace(SysConsts.NOTICE_OBJECT_SPLIT, SmsHandler.MOBILE_SPLIT);
 		}
 		// 组装警报对象
 		message[0] = noticeObject;

@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.jike.system.dao.DetectInterfaceLogMapper" >
-  <resultMap id="BaseResultMap" type="com.jike.system.bean.DetectInterfaceLog" >
-    <id column="ITF_LOG_ID" property="itfLogId" jdbcType="VARCHAR" />
-    <result column="DETECT_TIME" property="detectTime" jdbcType="TIMESTAMP" />
-    <result column="ITF_ID" property="itfId" jdbcType="VARCHAR" />
+<mapper namespace="com.jike.system.dao.DetectLogMapper" >
+  <resultMap id="BaseResultMap" type="com.jike.system.bean.DetectLog" >
+    <id column="LOG_ID" property="logId" jdbcType="VARCHAR" />
+    <result column="LOG_TIME" property="logTime" jdbcType="TIMESTAMP" />
+    <result column="LOG_TYPE" property="logType" jdbcType="CHAR" />
+    <result column="TASK_ID" property="taskId" jdbcType="VARCHAR" />
     <result column="INPUT_PARAMS" property="inputParams" jdbcType="VARCHAR" />
     <result column="DETECT_RESULT" property="detectResult" jdbcType="VARCHAR" />
     <result column="ERROR_INFO" property="errorInfo" jdbcType="VARCHAR" />
@@ -68,16 +69,16 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    ITF_LOG_ID, DETECT_TIME, ITF_ID, INPUT_PARAMS, DETECT_RESULT, ERROR_INFO
+    LOG_ID, LOG_TIME, LOG_TYPE, TASK_ID, INPUT_PARAMS, DETECT_RESULT, ERROR_INFO
   </sql>
-  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.jike.system.bean.DetectInterfaceLogExample" >
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.jike.system.bean.DetectLogExample" >
     <include refid="OracleDialectPrefix" />
     select
     <if test="distinct" >
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from T_SYSTEM_DETECT_INTERFACE_LOG
+    from T_SYSTEM_DETECT_LOG
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
@@ -89,41 +90,44 @@
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
     <include refid="Base_Column_List" />
-    from T_SYSTEM_DETECT_INTERFACE_LOG
-    where ITF_LOG_ID = #{itfLogId,jdbcType=VARCHAR}
+    from T_SYSTEM_DETECT_LOG
+    where LOG_ID = #{logId,jdbcType=VARCHAR}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
-    delete from T_SYSTEM_DETECT_INTERFACE_LOG
-    where ITF_LOG_ID = #{itfLogId,jdbcType=VARCHAR}
+    delete from T_SYSTEM_DETECT_LOG
+    where LOG_ID = #{logId,jdbcType=VARCHAR}
   </delete>
-  <delete id="deleteByExample" parameterType="com.jike.system.bean.DetectInterfaceLogExample" >
-    delete from T_SYSTEM_DETECT_INTERFACE_LOG
+  <delete id="deleteByExample" parameterType="com.jike.system.bean.DetectLogExample" >
+    delete from T_SYSTEM_DETECT_LOG
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.jike.system.bean.DetectInterfaceLog" >
-	<selectKey keyProperty="itfLogId" order="BEFORE" resultType="java.lang.String">
-		select SUBSTR(TO_CHAR(SYSDATE, 'yyyymmdd'),3,8) || SEQ_DETECT_LOG_ID.nextval as itfLogId from dual
+  <insert id="insert" parameterType="com.jike.system.bean.DetectLog" >
+  	<selectKey keyProperty="logId" order="BEFORE" resultType="java.lang.String">
+		select SUBSTR(TO_CHAR(SYSDATE, 'yyyymmdd'),3,8) || SEQ_DETECT_LOG_ID.nextval as logId from dual
 	</selectKey>
-    insert into T_SYSTEM_DETECT_INTERFACE_LOG (ITF_LOG_ID, DETECT_TIME, ITF_ID, 
-      INPUT_PARAMS, DETECT_RESULT, ERROR_INFO
-      )
-    values (#{itfLogId,jdbcType=VARCHAR}, #{detectTime,jdbcType=TIMESTAMP}, #{itfId,jdbcType=VARCHAR}, 
-      #{inputParams,jdbcType=VARCHAR}, #{detectResult,jdbcType=VARCHAR}, #{errorInfo,jdbcType=VARCHAR}
-      )
+    insert into T_SYSTEM_DETECT_LOG (LOG_ID, LOG_TIME, LOG_TYPE, 
+      TASK_ID, INPUT_PARAMS, DETECT_RESULT, 
+      ERROR_INFO)
+    values (#{logId,jdbcType=VARCHAR}, #{logTime,jdbcType=TIMESTAMP}, #{logType,jdbcType=CHAR}, 
+      #{taskId,jdbcType=VARCHAR}, #{inputParams,jdbcType=VARCHAR}, #{detectResult,jdbcType=VARCHAR}, 
+      #{errorInfo,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.jike.system.bean.DetectInterfaceLog" >
-    insert into T_SYSTEM_DETECT_INTERFACE_LOG
+  <insert id="insertSelective" parameterType="com.jike.system.bean.DetectLog" >
+    insert into T_SYSTEM_DETECT_LOG
     <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="itfLogId != null" >
-        ITF_LOG_ID,
+      <if test="logId != null" >
+        LOG_ID,
       </if>
-      <if test="detectTime != null" >
-        DETECT_TIME,
+      <if test="logTime != null" >
+        LOG_TIME,
       </if>
-      <if test="itfId != null" >
-        ITF_ID,
+      <if test="logType != null" >
+        LOG_TYPE,
+      </if>
+      <if test="taskId != null" >
+        TASK_ID,
       </if>
       <if test="inputParams != null" >
         INPUT_PARAMS,
@@ -136,14 +140,17 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="itfLogId != null" >
-        #{itfLogId,jdbcType=VARCHAR},
+      <if test="logId != null" >
+        #{logId,jdbcType=VARCHAR},
       </if>
-      <if test="detectTime != null" >
-        #{detectTime,jdbcType=TIMESTAMP},
+      <if test="logTime != null" >
+        #{logTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="itfId != null" >
-        #{itfId,jdbcType=VARCHAR},
+      <if test="logType != null" >
+        #{logType,jdbcType=CHAR},
+      </if>
+      <if test="taskId != null" >
+        #{taskId,jdbcType=VARCHAR},
       </if>
       <if test="inputParams != null" >
         #{inputParams,jdbcType=VARCHAR},
@@ -156,23 +163,26 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.jike.system.bean.DetectInterfaceLogExample" resultType="java.lang.Integer" >
-    select count(*) from T_SYSTEM_DETECT_INTERFACE_LOG
+  <select id="countByExample" parameterType="com.jike.system.bean.DetectLogExample" resultType="java.lang.Integer" >
+    select count(*) from T_SYSTEM_DETECT_LOG
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map" >
-    update T_SYSTEM_DETECT_INTERFACE_LOG
+    update T_SYSTEM_DETECT_LOG
     <set >
-      <if test="record.itfLogId != null" >
-        ITF_LOG_ID = #{record.itfLogId,jdbcType=VARCHAR},
+      <if test="record.logId != null" >
+        LOG_ID = #{record.logId,jdbcType=VARCHAR},
       </if>
-      <if test="record.detectTime != null" >
-        DETECT_TIME = #{record.detectTime,jdbcType=TIMESTAMP},
+      <if test="record.logTime != null" >
+        LOG_TIME = #{record.logTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="record.itfId != null" >
-        ITF_ID = #{record.itfId,jdbcType=VARCHAR},
+      <if test="record.logType != null" >
+        LOG_TYPE = #{record.logType,jdbcType=CHAR},
+      </if>
+      <if test="record.taskId != null" >
+        TASK_ID = #{record.taskId,jdbcType=VARCHAR},
       </if>
       <if test="record.inputParams != null" >
         INPUT_PARAMS = #{record.inputParams,jdbcType=VARCHAR},
@@ -189,10 +199,11 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map" >
-    update T_SYSTEM_DETECT_INTERFACE_LOG
-    set ITF_LOG_ID = #{record.itfLogId,jdbcType=VARCHAR},
-      DETECT_TIME = #{record.detectTime,jdbcType=TIMESTAMP},
-      ITF_ID = #{record.itfId,jdbcType=VARCHAR},
+    update T_SYSTEM_DETECT_LOG
+    set LOG_ID = #{record.logId,jdbcType=VARCHAR},
+      LOG_TIME = #{record.logTime,jdbcType=TIMESTAMP},
+      LOG_TYPE = #{record.logType,jdbcType=CHAR},
+      TASK_ID = #{record.taskId,jdbcType=VARCHAR},
       INPUT_PARAMS = #{record.inputParams,jdbcType=VARCHAR},
       DETECT_RESULT = #{record.detectResult,jdbcType=VARCHAR},
       ERROR_INFO = #{record.errorInfo,jdbcType=VARCHAR}
@@ -200,14 +211,17 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.jike.system.bean.DetectInterfaceLog" >
-    update T_SYSTEM_DETECT_INTERFACE_LOG
+  <update id="updateByPrimaryKeySelective" parameterType="com.jike.system.bean.DetectLog" >
+    update T_SYSTEM_DETECT_LOG
     <set >
-      <if test="detectTime != null" >
-        DETECT_TIME = #{detectTime,jdbcType=TIMESTAMP},
+      <if test="logTime != null" >
+        LOG_TIME = #{logTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="itfId != null" >
-        ITF_ID = #{itfId,jdbcType=VARCHAR},
+      <if test="logType != null" >
+        LOG_TYPE = #{logType,jdbcType=CHAR},
+      </if>
+      <if test="taskId != null" >
+        TASK_ID = #{taskId,jdbcType=VARCHAR},
       </if>
       <if test="inputParams != null" >
         INPUT_PARAMS = #{inputParams,jdbcType=VARCHAR},
@@ -219,16 +233,17 @@
         ERROR_INFO = #{errorInfo,jdbcType=VARCHAR},
       </if>
     </set>
-    where ITF_LOG_ID = #{itfLogId,jdbcType=VARCHAR}
+    where LOG_ID = #{logId,jdbcType=VARCHAR}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.jike.system.bean.DetectInterfaceLog" >
-    update T_SYSTEM_DETECT_INTERFACE_LOG
-    set DETECT_TIME = #{detectTime,jdbcType=TIMESTAMP},
-      ITF_ID = #{itfId,jdbcType=VARCHAR},
+  <update id="updateByPrimaryKey" parameterType="com.jike.system.bean.DetectLog" >
+    update T_SYSTEM_DETECT_LOG
+    set LOG_TIME = #{logTime,jdbcType=TIMESTAMP},
+      LOG_TYPE = #{logType,jdbcType=CHAR},
+      TASK_ID = #{taskId,jdbcType=VARCHAR},
       INPUT_PARAMS = #{inputParams,jdbcType=VARCHAR},
       DETECT_RESULT = #{detectResult,jdbcType=VARCHAR},
       ERROR_INFO = #{errorInfo,jdbcType=VARCHAR}
-    where ITF_LOG_ID = #{itfLogId,jdbcType=VARCHAR}
+    where LOG_ID = #{logId,jdbcType=VARCHAR}
   </update>
   <sql id="OracleDialectPrefix" >
     <if test="page != null" >

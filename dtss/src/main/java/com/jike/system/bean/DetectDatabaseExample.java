@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class DetectInterfaceExample {
+public class DetectDatabaseExample {
     protected String orderByClause;
 
     protected boolean distinct;
@@ -13,7 +13,7 @@ public class DetectInterfaceExample {
 
     protected Page page;
 
-    public DetectInterfaceExample() {
+    public DetectDatabaseExample() {
         oredCriteria = new ArrayList<Criteria>();
     }
 
@@ -255,423 +255,283 @@ public class DetectInterfaceExample {
             return (Criteria) this;
         }
 
-        public Criteria andBelongToIsNull() {
-            addCriterion("BELONG_TO is null");
+        public Criteria andDbDriverIsNull() {
+            addCriterion("DB_DRIVER is null");
             return (Criteria) this;
         }
 
-        public Criteria andBelongToIsNotNull() {
-            addCriterion("BELONG_TO is not null");
+        public Criteria andDbDriverIsNotNull() {
+            addCriterion("DB_DRIVER is not null");
             return (Criteria) this;
         }
 
-        public Criteria andBelongToEqualTo(String value) {
-            addCriterion("BELONG_TO =", value, "belongTo");
+        public Criteria andDbDriverEqualTo(String value) {
+            addCriterion("DB_DRIVER =", value, "dbDriver");
             return (Criteria) this;
         }
 
-        public Criteria andBelongToNotEqualTo(String value) {
-            addCriterion("BELONG_TO <>", value, "belongTo");
+        public Criteria andDbDriverNotEqualTo(String value) {
+            addCriterion("DB_DRIVER <>", value, "dbDriver");
             return (Criteria) this;
         }
 
-        public Criteria andBelongToGreaterThan(String value) {
-            addCriterion("BELONG_TO >", value, "belongTo");
+        public Criteria andDbDriverGreaterThan(String value) {
+            addCriterion("DB_DRIVER >", value, "dbDriver");
             return (Criteria) this;
         }
 
-        public Criteria andBelongToGreaterThanOrEqualTo(String value) {
-            addCriterion("BELONG_TO >=", value, "belongTo");
+        public Criteria andDbDriverGreaterThanOrEqualTo(String value) {
+            addCriterion("DB_DRIVER >=", value, "dbDriver");
             return (Criteria) this;
         }
 
-        public Criteria andBelongToLessThan(String value) {
-            addCriterion("BELONG_TO <", value, "belongTo");
+        public Criteria andDbDriverLessThan(String value) {
+            addCriterion("DB_DRIVER <", value, "dbDriver");
             return (Criteria) this;
         }
 
-        public Criteria andBelongToLessThanOrEqualTo(String value) {
-            addCriterion("BELONG_TO <=", value, "belongTo");
+        public Criteria andDbDriverLessThanOrEqualTo(String value) {
+            addCriterion("DB_DRIVER <=", value, "dbDriver");
             return (Criteria) this;
         }
 
-        public Criteria andBelongToLike(String value) {
-            addCriterion("BELONG_TO like", value, "belongTo");
+        public Criteria andDbDriverLike(String value) {
+            addCriterion("DB_DRIVER like", value, "dbDriver");
             return (Criteria) this;
         }
 
-        public Criteria andBelongToNotLike(String value) {
-            addCriterion("BELONG_TO not like", value, "belongTo");
+        public Criteria andDbDriverNotLike(String value) {
+            addCriterion("DB_DRIVER not like", value, "dbDriver");
             return (Criteria) this;
         }
 
-        public Criteria andBelongToIn(List<String> values) {
-            addCriterion("BELONG_TO in", values, "belongTo");
+        public Criteria andDbDriverIn(List<String> values) {
+            addCriterion("DB_DRIVER in", values, "dbDriver");
             return (Criteria) this;
         }
 
-        public Criteria andBelongToNotIn(List<String> values) {
-            addCriterion("BELONG_TO not in", values, "belongTo");
+        public Criteria andDbDriverNotIn(List<String> values) {
+            addCriterion("DB_DRIVER not in", values, "dbDriver");
             return (Criteria) this;
         }
 
-        public Criteria andBelongToBetween(String value1, String value2) {
-            addCriterion("BELONG_TO between", value1, value2, "belongTo");
+        public Criteria andDbDriverBetween(String value1, String value2) {
+            addCriterion("DB_DRIVER between", value1, value2, "dbDriver");
             return (Criteria) this;
         }
 
-        public Criteria andBelongToNotBetween(String value1, String value2) {
-            addCriterion("BELONG_TO not between", value1, value2, "belongTo");
+        public Criteria andDbDriverNotBetween(String value1, String value2) {
+            addCriterion("DB_DRIVER not between", value1, value2, "dbDriver");
             return (Criteria) this;
         }
 
-        public Criteria andItfUrlIsNull() {
-            addCriterion("ITF_URL is null");
+        public Criteria andDbUrlIsNull() {
+            addCriterion("DB_URL is null");
             return (Criteria) this;
         }
 
-        public Criteria andItfUrlIsNotNull() {
-            addCriterion("ITF_URL is not null");
+        public Criteria andDbUrlIsNotNull() {
+            addCriterion("DB_URL is not null");
             return (Criteria) this;
         }
 
-        public Criteria andItfUrlEqualTo(String value) {
-            addCriterion("ITF_URL =", value, "itfUrl");
+        public Criteria andDbUrlEqualTo(String value) {
+            addCriterion("DB_URL =", value, "dbUrl");
             return (Criteria) this;
         }
 
-        public Criteria andItfUrlNotEqualTo(String value) {
-            addCriterion("ITF_URL <>", value, "itfUrl");
+        public Criteria andDbUrlNotEqualTo(String value) {
+            addCriterion("DB_URL <>", value, "dbUrl");
             return (Criteria) this;
         }
 
-        public Criteria andItfUrlGreaterThan(String value) {
-            addCriterion("ITF_URL >", value, "itfUrl");
+        public Criteria andDbUrlGreaterThan(String value) {
+            addCriterion("DB_URL >", value, "dbUrl");
             return (Criteria) this;
         }
 
-        public Criteria andItfUrlGreaterThanOrEqualTo(String value) {
-            addCriterion("ITF_URL >=", value, "itfUrl");
+        public Criteria andDbUrlGreaterThanOrEqualTo(String value) {
+            addCriterion("DB_URL >=", value, "dbUrl");
             return (Criteria) this;
         }
 
-        public Criteria andItfUrlLessThan(String value) {
-            addCriterion("ITF_URL <", value, "itfUrl");
+        public Criteria andDbUrlLessThan(String value) {
+            addCriterion("DB_URL <", value, "dbUrl");
             return (Criteria) this;
         }
 
-        public Criteria andItfUrlLessThanOrEqualTo(String value) {
-            addCriterion("ITF_URL <=", value, "itfUrl");
+        public Criteria andDbUrlLessThanOrEqualTo(String value) {
+            addCriterion("DB_URL <=", value, "dbUrl");
             return (Criteria) this;
         }
 
-        public Criteria andItfUrlLike(String value) {
-            addCriterion("ITF_URL like", value, "itfUrl");
+        public Criteria andDbUrlLike(String value) {
+            addCriterion("DB_URL like", value, "dbUrl");
             return (Criteria) this;
         }
 
-        public Criteria andItfUrlNotLike(String value) {
-            addCriterion("ITF_URL not like", value, "itfUrl");
+        public Criteria andDbUrlNotLike(String value) {
+            addCriterion("DB_URL not like", value, "dbUrl");
             return (Criteria) this;
         }
 
-        public Criteria andItfUrlIn(List<String> values) {
-            addCriterion("ITF_URL in", values, "itfUrl");
+        public Criteria andDbUrlIn(List<String> values) {
+            addCriterion("DB_URL in", values, "dbUrl");
             return (Criteria) this;
         }
 
-        public Criteria andItfUrlNotIn(List<String> values) {
-            addCriterion("ITF_URL not in", values, "itfUrl");
+        public Criteria andDbUrlNotIn(List<String> values) {
+            addCriterion("DB_URL not in", values, "dbUrl");
             return (Criteria) this;
         }
 
-        public Criteria andItfUrlBetween(String value1, String value2) {
-            addCriterion("ITF_URL between", value1, value2, "itfUrl");
+        public Criteria andDbUrlBetween(String value1, String value2) {
+            addCriterion("DB_URL between", value1, value2, "dbUrl");
             return (Criteria) this;
         }
 
-        public Criteria andItfUrlNotBetween(String value1, String value2) {
-            addCriterion("ITF_URL not between", value1, value2, "itfUrl");
+        public Criteria andDbUrlNotBetween(String value1, String value2) {
+            addCriterion("DB_URL not between", value1, value2, "dbUrl");
             return (Criteria) this;
         }
 
-        public Criteria andItfParamsIsNull() {
-            addCriterion("ITF_PARAMS is null");
+        public Criteria andDbUsernameIsNull() {
+            addCriterion("DB_USERNAME is null");
             return (Criteria) this;
         }
 
-        public Criteria andItfParamsIsNotNull() {
-            addCriterion("ITF_PARAMS is not null");
+        public Criteria andDbUsernameIsNotNull() {
+            addCriterion("DB_USERNAME is not null");
             return (Criteria) this;
         }
 
-        public Criteria andItfParamsEqualTo(String value) {
-            addCriterion("ITF_PARAMS =", value, "itfParams");
+        public Criteria andDbUsernameEqualTo(String value) {
+            addCriterion("DB_USERNAME =", value, "dbUsername");
             return (Criteria) this;
         }
 
-        public Criteria andItfParamsNotEqualTo(String value) {
-            addCriterion("ITF_PARAMS <>", value, "itfParams");
+        public Criteria andDbUsernameNotEqualTo(String value) {
+            addCriterion("DB_USERNAME <>", value, "dbUsername");
             return (Criteria) this;
         }
 
-        public Criteria andItfParamsGreaterThan(String value) {
-            addCriterion("ITF_PARAMS >", value, "itfParams");
+        public Criteria andDbUsernameGreaterThan(String value) {
+            addCriterion("DB_USERNAME >", value, "dbUsername");
             return (Criteria) this;
         }
 
-        public Criteria andItfParamsGreaterThanOrEqualTo(String value) {
-            addCriterion("ITF_PARAMS >=", value, "itfParams");
+        public Criteria andDbUsernameGreaterThanOrEqualTo(String value) {
+            addCriterion("DB_USERNAME >=", value, "dbUsername");
             return (Criteria) this;
         }
 
-        public Criteria andItfParamsLessThan(String value) {
-            addCriterion("ITF_PARAMS <", value, "itfParams");
+        public Criteria andDbUsernameLessThan(String value) {
+            addCriterion("DB_USERNAME <", value, "dbUsername");
             return (Criteria) this;
         }
 
-        public Criteria andItfParamsLessThanOrEqualTo(String value) {
-            addCriterion("ITF_PARAMS <=", value, "itfParams");
+        public Criteria andDbUsernameLessThanOrEqualTo(String value) {
+            addCriterion("DB_USERNAME <=", value, "dbUsername");
             return (Criteria) this;
         }
 
-        public Criteria andItfParamsLike(String value) {
-            addCriterion("ITF_PARAMS like", value, "itfParams");
+        public Criteria andDbUsernameLike(String value) {
+            addCriterion("DB_USERNAME like", value, "dbUsername");
             return (Criteria) this;
         }
 
-        public Criteria andItfParamsNotLike(String value) {
-            addCriterion("ITF_PARAMS not like", value, "itfParams");
+        public Criteria andDbUsernameNotLike(String value) {
+            addCriterion("DB_USERNAME not like", value, "dbUsername");
             return (Criteria) this;
         }
 
-        public Criteria andItfParamsIn(List<String> values) {
-            addCriterion("ITF_PARAMS in", values, "itfParams");
+        public Criteria andDbUsernameIn(List<String> values) {
+            addCriterion("DB_USERNAME in", values, "dbUsername");
             return (Criteria) this;
         }
 
-        public Criteria andItfParamsNotIn(List<String> values) {
-            addCriterion("ITF_PARAMS not in", values, "itfParams");
+        public Criteria andDbUsernameNotIn(List<String> values) {
+            addCriterion("DB_USERNAME not in", values, "dbUsername");
             return (Criteria) this;
         }
 
-        public Criteria andItfParamsBetween(String value1, String value2) {
-            addCriterion("ITF_PARAMS between", value1, value2, "itfParams");
+        public Criteria andDbUsernameBetween(String value1, String value2) {
+            addCriterion("DB_USERNAME between", value1, value2, "dbUsername");
             return (Criteria) this;
         }
 
-        public Criteria andItfParamsNotBetween(String value1, String value2) {
-            addCriterion("ITF_PARAMS not between", value1, value2, "itfParams");
+        public Criteria andDbUsernameNotBetween(String value1, String value2) {
+            addCriterion("DB_USERNAME not between", value1, value2, "dbUsername");
             return (Criteria) this;
         }
 
-        public Criteria andRequestMethodIsNull() {
-            addCriterion("REQUEST_METHOD is null");
+        public Criteria andDbPasswordIsNull() {
+            addCriterion("DB_PASSWORD is null");
             return (Criteria) this;
         }
 
-        public Criteria andRequestMethodIsNotNull() {
-            addCriterion("REQUEST_METHOD is not null");
+        public Criteria andDbPasswordIsNotNull() {
+            addCriterion("DB_PASSWORD is not null");
             return (Criteria) this;
         }
 
-        public Criteria andRequestMethodEqualTo(String value) {
-            addCriterion("REQUEST_METHOD =", value, "requestMethod");
+        public Criteria andDbPasswordEqualTo(String value) {
+            addCriterion("DB_PASSWORD =", value, "dbPassword");
             return (Criteria) this;
         }
 
-        public Criteria andRequestMethodNotEqualTo(String value) {
-            addCriterion("REQUEST_METHOD <>", value, "requestMethod");
+        public Criteria andDbPasswordNotEqualTo(String value) {
+            addCriterion("DB_PASSWORD <>", value, "dbPassword");
             return (Criteria) this;
         }
 
-        public Criteria andRequestMethodGreaterThan(String value) {
-            addCriterion("REQUEST_METHOD >", value, "requestMethod");
+        public Criteria andDbPasswordGreaterThan(String value) {
+            addCriterion("DB_PASSWORD >", value, "dbPassword");
             return (Criteria) this;
         }
 
-        public Criteria andRequestMethodGreaterThanOrEqualTo(String value) {
-            addCriterion("REQUEST_METHOD >=", value, "requestMethod");
+        public Criteria andDbPasswordGreaterThanOrEqualTo(String value) {
+            addCriterion("DB_PASSWORD >=", value, "dbPassword");
             return (Criteria) this;
         }
 
-        public Criteria andRequestMethodLessThan(String value) {
-            addCriterion("REQUEST_METHOD <", value, "requestMethod");
+        public Criteria andDbPasswordLessThan(String value) {
+            addCriterion("DB_PASSWORD <", value, "dbPassword");
             return (Criteria) this;
         }
 
-        public Criteria andRequestMethodLessThanOrEqualTo(String value) {
-            addCriterion("REQUEST_METHOD <=", value, "requestMethod");
+        public Criteria andDbPasswordLessThanOrEqualTo(String value) {
+            addCriterion("DB_PASSWORD <=", value, "dbPassword");
             return (Criteria) this;
         }
 
-        public Criteria andRequestMethodLike(String value) {
-            addCriterion("REQUEST_METHOD like", value, "requestMethod");
+        public Criteria andDbPasswordLike(String value) {
+            addCriterion("DB_PASSWORD like", value, "dbPassword");
             return (Criteria) this;
         }
 
-        public Criteria andRequestMethodNotLike(String value) {
-            addCriterion("REQUEST_METHOD not like", value, "requestMethod");
+        public Criteria andDbPasswordNotLike(String value) {
+            addCriterion("DB_PASSWORD not like", value, "dbPassword");
             return (Criteria) this;
         }
 
-        public Criteria andRequestMethodIn(List<String> values) {
-            addCriterion("REQUEST_METHOD in", values, "requestMethod");
+        public Criteria andDbPasswordIn(List<String> values) {
+            addCriterion("DB_PASSWORD in", values, "dbPassword");
             return (Criteria) this;
         }
 
-        public Criteria andRequestMethodNotIn(List<String> values) {
-            addCriterion("REQUEST_METHOD not in", values, "requestMethod");
+        public Criteria andDbPasswordNotIn(List<String> values) {
+            addCriterion("DB_PASSWORD not in", values, "dbPassword");
             return (Criteria) this;
         }
 
-        public Criteria andRequestMethodBetween(String value1, String value2) {
-            addCriterion("REQUEST_METHOD between", value1, value2, "requestMethod");
+        public Criteria andDbPasswordBetween(String value1, String value2) {
+            addCriterion("DB_PASSWORD between", value1, value2, "dbPassword");
             return (Criteria) this;
         }
 
-        public Criteria andRequestMethodNotBetween(String value1, String value2) {
-            addCriterion("REQUEST_METHOD not between", value1, value2, "requestMethod");
-            return (Criteria) this;
-        }
-
-        public Criteria andCheckKeyIsNull() {
-            addCriterion("CHECK_KEY is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andCheckKeyIsNotNull() {
-            addCriterion("CHECK_KEY is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andCheckKeyEqualTo(String value) {
-            addCriterion("CHECK_KEY =", value, "checkKey");
-            return (Criteria) this;
-        }
-
-        public Criteria andCheckKeyNotEqualTo(String value) {
-            addCriterion("CHECK_KEY <>", value, "checkKey");
-            return (Criteria) this;
-        }
-
-        public Criteria andCheckKeyGreaterThan(String value) {
-            addCriterion("CHECK_KEY >", value, "checkKey");
-            return (Criteria) this;
-        }
-
-        public Criteria andCheckKeyGreaterThanOrEqualTo(String value) {
-            addCriterion("CHECK_KEY >=", value, "checkKey");
-            return (Criteria) this;
-        }
-
-        public Criteria andCheckKeyLessThan(String value) {
-            addCriterion("CHECK_KEY <", value, "checkKey");
-            return (Criteria) this;
-        }
-
-        public Criteria andCheckKeyLessThanOrEqualTo(String value) {
-            addCriterion("CHECK_KEY <=", value, "checkKey");
-            return (Criteria) this;
-        }
-
-        public Criteria andCheckKeyLike(String value) {
-            addCriterion("CHECK_KEY like", value, "checkKey");
-            return (Criteria) this;
-        }
-
-        public Criteria andCheckKeyNotLike(String value) {
-            addCriterion("CHECK_KEY not like", value, "checkKey");
-            return (Criteria) this;
-        }
-
-        public Criteria andCheckKeyIn(List<String> values) {
-            addCriterion("CHECK_KEY in", values, "checkKey");
-            return (Criteria) this;
-        }
-
-        public Criteria andCheckKeyNotIn(List<String> values) {
-            addCriterion("CHECK_KEY not in", values, "checkKey");
-            return (Criteria) this;
-        }
-
-        public Criteria andCheckKeyBetween(String value1, String value2) {
-            addCriterion("CHECK_KEY between", value1, value2, "checkKey");
-            return (Criteria) this;
-        }
-
-        public Criteria andCheckKeyNotBetween(String value1, String value2) {
-            addCriterion("CHECK_KEY not between", value1, value2, "checkKey");
-            return (Criteria) this;
-        }
-
-        public Criteria andCheckValueIsNull() {
-            addCriterion("CHECK_VALUE is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andCheckValueIsNotNull() {
-            addCriterion("CHECK_VALUE is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andCheckValueEqualTo(String value) {
-            addCriterion("CHECK_VALUE =", value, "checkValue");
-            return (Criteria) this;
-        }
-
-        public Criteria andCheckValueNotEqualTo(String value) {
-            addCriterion("CHECK_VALUE <>", value, "checkValue");
-            return (Criteria) this;
-        }
-
-        public Criteria andCheckValueGreaterThan(String value) {
-            addCriterion("CHECK_VALUE >", value, "checkValue");
-            return (Criteria) this;
-        }
-
-        public Criteria andCheckValueGreaterThanOrEqualTo(String value) {
-            addCriterion("CHECK_VALUE >=", value, "checkValue");
-            return (Criteria) this;
-        }
-
-        public Criteria andCheckValueLessThan(String value) {
-            addCriterion("CHECK_VALUE <", value, "checkValue");
-            return (Criteria) this;
-        }
-
-        public Criteria andCheckValueLessThanOrEqualTo(String value) {
-            addCriterion("CHECK_VALUE <=", value, "checkValue");
-            return (Criteria) this;
-        }
-
-        public Criteria andCheckValueLike(String value) {
-            addCriterion("CHECK_VALUE like", value, "checkValue");
-            return (Criteria) this;
-        }
-
-        public Criteria andCheckValueNotLike(String value) {
-            addCriterion("CHECK_VALUE not like", value, "checkValue");
-            return (Criteria) this;
-        }
-
-        public Criteria andCheckValueIn(List<String> values) {
-            addCriterion("CHECK_VALUE in", values, "checkValue");
-            return (Criteria) this;
-        }
-
-        public Criteria andCheckValueNotIn(List<String> values) {
-            addCriterion("CHECK_VALUE not in", values, "checkValue");
-            return (Criteria) this;
-        }
-
-        public Criteria andCheckValueBetween(String value1, String value2) {
-            addCriterion("CHECK_VALUE between", value1, value2, "checkValue");
-            return (Criteria) this;
-        }
-
-        public Criteria andCheckValueNotBetween(String value1, String value2) {
-            addCriterion("CHECK_VALUE not between", value1, value2, "checkValue");
+        public Criteria andDbPasswordNotBetween(String value1, String value2) {
+            addCriterion("DB_PASSWORD not between", value1, value2, "dbPassword");
             return (Criteria) this;
         }
 
@@ -1002,346 +862,6 @@ public class DetectInterfaceExample {
 
         public Criteria andNoticeObjectNotBetween(String value1, String value2) {
             addCriterion("NOTICE_OBJECT not between", value1, value2, "noticeObject");
-            return (Criteria) this;
-        }
-
-        public Criteria andByProxyIsNull() {
-            addCriterion("BY_PROXY is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andByProxyIsNotNull() {
-            addCriterion("BY_PROXY is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andByProxyEqualTo(Boolean value) {
-            addCriterion("BY_PROXY =", value, "byProxy");
-            return (Criteria) this;
-        }
-
-        public Criteria andByProxyNotEqualTo(Boolean value) {
-            addCriterion("BY_PROXY <>", value, "byProxy");
-            return (Criteria) this;
-        }
-
-        public Criteria andByProxyGreaterThan(Boolean value) {
-            addCriterion("BY_PROXY >", value, "byProxy");
-            return (Criteria) this;
-        }
-
-        public Criteria andByProxyGreaterThanOrEqualTo(Boolean value) {
-            addCriterion("BY_PROXY >=", value, "byProxy");
-            return (Criteria) this;
-        }
-
-        public Criteria andByProxyLessThan(Boolean value) {
-            addCriterion("BY_PROXY <", value, "byProxy");
-            return (Criteria) this;
-        }
-
-        public Criteria andByProxyLessThanOrEqualTo(Boolean value) {
-            addCriterion("BY_PROXY <=", value, "byProxy");
-            return (Criteria) this;
-        }
-
-        public Criteria andByProxyLike(Boolean value) {
-            addCriterion("BY_PROXY like", value, "byProxy");
-            return (Criteria) this;
-        }
-
-        public Criteria andByProxyNotLike(Boolean value) {
-            addCriterion("BY_PROXY not like", value, "byProxy");
-            return (Criteria) this;
-        }
-
-        public Criteria andByProxyIn(List<Boolean> values) {
-            addCriterion("BY_PROXY in", values, "byProxy");
-            return (Criteria) this;
-        }
-
-        public Criteria andByProxyNotIn(List<Boolean> values) {
-            addCriterion("BY_PROXY not in", values, "byProxy");
-            return (Criteria) this;
-        }
-
-        public Criteria andByProxyBetween(Boolean value1, Boolean value2) {
-            addCriterion("BY_PROXY between", value1, value2, "byProxy");
-            return (Criteria) this;
-        }
-
-        public Criteria andByProxyNotBetween(Boolean value1, Boolean value2) {
-            addCriterion("BY_PROXY not between", value1, value2, "byProxy");
-            return (Criteria) this;
-        }
-
-        public Criteria andProxyIpIsNull() {
-            addCriterion("PROXY_IP is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andProxyIpIsNotNull() {
-            addCriterion("PROXY_IP is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andProxyIpEqualTo(String value) {
-            addCriterion("PROXY_IP =", value, "proxyIp");
-            return (Criteria) this;
-        }
-
-        public Criteria andProxyIpNotEqualTo(String value) {
-            addCriterion("PROXY_IP <>", value, "proxyIp");
-            return (Criteria) this;
-        }
-
-        public Criteria andProxyIpGreaterThan(String value) {
-            addCriterion("PROXY_IP >", value, "proxyIp");
-            return (Criteria) this;
-        }
-
-        public Criteria andProxyIpGreaterThanOrEqualTo(String value) {
-            addCriterion("PROXY_IP >=", value, "proxyIp");
-            return (Criteria) this;
-        }
-
-        public Criteria andProxyIpLessThan(String value) {
-            addCriterion("PROXY_IP <", value, "proxyIp");
-            return (Criteria) this;
-        }
-
-        public Criteria andProxyIpLessThanOrEqualTo(String value) {
-            addCriterion("PROXY_IP <=", value, "proxyIp");
-            return (Criteria) this;
-        }
-
-        public Criteria andProxyIpLike(String value) {
-            addCriterion("PROXY_IP like", value, "proxyIp");
-            return (Criteria) this;
-        }
-
-        public Criteria andProxyIpNotLike(String value) {
-            addCriterion("PROXY_IP not like", value, "proxyIp");
-            return (Criteria) this;
-        }
-
-        public Criteria andProxyIpIn(List<String> values) {
-            addCriterion("PROXY_IP in", values, "proxyIp");
-            return (Criteria) this;
-        }
-
-        public Criteria andProxyIpNotIn(List<String> values) {
-            addCriterion("PROXY_IP not in", values, "proxyIp");
-            return (Criteria) this;
-        }
-
-        public Criteria andProxyIpBetween(String value1, String value2) {
-            addCriterion("PROXY_IP between", value1, value2, "proxyIp");
-            return (Criteria) this;
-        }
-
-        public Criteria andProxyIpNotBetween(String value1, String value2) {
-            addCriterion("PROXY_IP not between", value1, value2, "proxyIp");
-            return (Criteria) this;
-        }
-
-        public Criteria andProxyPortIsNull() {
-            addCriterion("PROXY_PORT is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andProxyPortIsNotNull() {
-            addCriterion("PROXY_PORT is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andProxyPortEqualTo(Integer value) {
-            addCriterion("PROXY_PORT =", value, "proxyPort");
-            return (Criteria) this;
-        }
-
-        public Criteria andProxyPortNotEqualTo(Integer value) {
-            addCriterion("PROXY_PORT <>", value, "proxyPort");
-            return (Criteria) this;
-        }
-
-        public Criteria andProxyPortGreaterThan(Integer value) {
-            addCriterion("PROXY_PORT >", value, "proxyPort");
-            return (Criteria) this;
-        }
-
-        public Criteria andProxyPortGreaterThanOrEqualTo(Integer value) {
-            addCriterion("PROXY_PORT >=", value, "proxyPort");
-            return (Criteria) this;
-        }
-
-        public Criteria andProxyPortLessThan(Integer value) {
-            addCriterion("PROXY_PORT <", value, "proxyPort");
-            return (Criteria) this;
-        }
-
-        public Criteria andProxyPortLessThanOrEqualTo(Integer value) {
-            addCriterion("PROXY_PORT <=", value, "proxyPort");
-            return (Criteria) this;
-        }
-
-        public Criteria andProxyPortIn(List<Integer> values) {
-            addCriterion("PROXY_PORT in", values, "proxyPort");
-            return (Criteria) this;
-        }
-
-        public Criteria andProxyPortNotIn(List<Integer> values) {
-            addCriterion("PROXY_PORT not in", values, "proxyPort");
-            return (Criteria) this;
-        }
-
-        public Criteria andProxyPortBetween(Integer value1, Integer value2) {
-            addCriterion("PROXY_PORT between", value1, value2, "proxyPort");
-            return (Criteria) this;
-        }
-
-        public Criteria andProxyPortNotBetween(Integer value1, Integer value2) {
-            addCriterion("PROXY_PORT not between", value1, value2, "proxyPort");
-            return (Criteria) this;
-        }
-
-        public Criteria andProxyUsernameIsNull() {
-            addCriterion("PROXY_USERNAME is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andProxyUsernameIsNotNull() {
-            addCriterion("PROXY_USERNAME is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andProxyUsernameEqualTo(String value) {
-            addCriterion("PROXY_USERNAME =", value, "proxyUsername");
-            return (Criteria) this;
-        }
-
-        public Criteria andProxyUsernameNotEqualTo(String value) {
-            addCriterion("PROXY_USERNAME <>", value, "proxyUsername");
-            return (Criteria) this;
-        }
-
-        public Criteria andProxyUsernameGreaterThan(String value) {
-            addCriterion("PROXY_USERNAME >", value, "proxyUsername");
-            return (Criteria) this;
-        }
-
-        public Criteria andProxyUsernameGreaterThanOrEqualTo(String value) {
-            addCriterion("PROXY_USERNAME >=", value, "proxyUsername");
-            return (Criteria) this;
-        }
-
-        public Criteria andProxyUsernameLessThan(String value) {
-            addCriterion("PROXY_USERNAME <", value, "proxyUsername");
-            return (Criteria) this;
-        }
-
-        public Criteria andProxyUsernameLessThanOrEqualTo(String value) {
-            addCriterion("PROXY_USERNAME <=", value, "proxyUsername");
-            return (Criteria) this;
-        }
-
-        public Criteria andProxyUsernameLike(String value) {
-            addCriterion("PROXY_USERNAME like", value, "proxyUsername");
-            return (Criteria) this;
-        }
-
-        public Criteria andProxyUsernameNotLike(String value) {
-            addCriterion("PROXY_USERNAME not like", value, "proxyUsername");
-            return (Criteria) this;
-        }
-
-        public Criteria andProxyUsernameIn(List<String> values) {
-            addCriterion("PROXY_USERNAME in", values, "proxyUsername");
-            return (Criteria) this;
-        }
-
-        public Criteria andProxyUsernameNotIn(List<String> values) {
-            addCriterion("PROXY_USERNAME not in", values, "proxyUsername");
-            return (Criteria) this;
-        }
-
-        public Criteria andProxyUsernameBetween(String value1, String value2) {
-            addCriterion("PROXY_USERNAME between", value1, value2, "proxyUsername");
-            return (Criteria) this;
-        }
-
-        public Criteria andProxyUsernameNotBetween(String value1, String value2) {
-            addCriterion("PROXY_USERNAME not between", value1, value2, "proxyUsername");
-            return (Criteria) this;
-        }
-
-        public Criteria andProxyPasswordIsNull() {
-            addCriterion("PROXY_PASSWORD is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andProxyPasswordIsNotNull() {
-            addCriterion("PROXY_PASSWORD is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andProxyPasswordEqualTo(String value) {
-            addCriterion("PROXY_PASSWORD =", value, "proxyPassword");
-            return (Criteria) this;
-        }
-
-        public Criteria andProxyPasswordNotEqualTo(String value) {
-            addCriterion("PROXY_PASSWORD <>", value, "proxyPassword");
-            return (Criteria) this;
-        }
-
-        public Criteria andProxyPasswordGreaterThan(String value) {
-            addCriterion("PROXY_PASSWORD >", value, "proxyPassword");
-            return (Criteria) this;
-        }
-
-        public Criteria andProxyPasswordGreaterThanOrEqualTo(String value) {
-            addCriterion("PROXY_PASSWORD >=", value, "proxyPassword");
-            return (Criteria) this;
-        }
-
-        public Criteria andProxyPasswordLessThan(String value) {
-            addCriterion("PROXY_PASSWORD <", value, "proxyPassword");
-            return (Criteria) this;
-        }
-
-        public Criteria andProxyPasswordLessThanOrEqualTo(String value) {
-            addCriterion("PROXY_PASSWORD <=", value, "proxyPassword");
-            return (Criteria) this;
-        }
-
-        public Criteria andProxyPasswordLike(String value) {
-            addCriterion("PROXY_PASSWORD like", value, "proxyPassword");
-            return (Criteria) this;
-        }
-
-        public Criteria andProxyPasswordNotLike(String value) {
-            addCriterion("PROXY_PASSWORD not like", value, "proxyPassword");
-            return (Criteria) this;
-        }
-
-        public Criteria andProxyPasswordIn(List<String> values) {
-            addCriterion("PROXY_PASSWORD in", values, "proxyPassword");
-            return (Criteria) this;
-        }
-
-        public Criteria andProxyPasswordNotIn(List<String> values) {
-            addCriterion("PROXY_PASSWORD not in", values, "proxyPassword");
-            return (Criteria) this;
-        }
-
-        public Criteria andProxyPasswordBetween(String value1, String value2) {
-            addCriterion("PROXY_PASSWORD between", value1, value2, "proxyPassword");
-            return (Criteria) this;
-        }
-
-        public Criteria andProxyPasswordNotBetween(String value1, String value2) {
-            addCriterion("PROXY_PASSWORD not between", value1, value2, "proxyPassword");
             return (Criteria) this;
         }
 
@@ -1815,33 +1335,23 @@ public class DetectInterfaceExample {
             return (Criteria) this;
         }
 
-        public Criteria andBelongToLikeInsensitive(String value) {
-            addCriterion("upper(BELONG_TO) like", value.toUpperCase(), "belongTo");
+        public Criteria andDbDriverLikeInsensitive(String value) {
+            addCriterion("upper(DB_DRIVER) like", value.toUpperCase(), "dbDriver");
             return (Criteria) this;
         }
 
-        public Criteria andItfUrlLikeInsensitive(String value) {
-            addCriterion("upper(ITF_URL) like", value.toUpperCase(), "itfUrl");
+        public Criteria andDbUrlLikeInsensitive(String value) {
+            addCriterion("upper(DB_URL) like", value.toUpperCase(), "dbUrl");
             return (Criteria) this;
         }
 
-        public Criteria andItfParamsLikeInsensitive(String value) {
-            addCriterion("upper(ITF_PARAMS) like", value.toUpperCase(), "itfParams");
+        public Criteria andDbUsernameLikeInsensitive(String value) {
+            addCriterion("upper(DB_USERNAME) like", value.toUpperCase(), "dbUsername");
             return (Criteria) this;
         }
 
-        public Criteria andRequestMethodLikeInsensitive(String value) {
-            addCriterion("upper(REQUEST_METHOD) like", value.toUpperCase(), "requestMethod");
-            return (Criteria) this;
-        }
-
-        public Criteria andCheckKeyLikeInsensitive(String value) {
-            addCriterion("upper(CHECK_KEY) like", value.toUpperCase(), "checkKey");
-            return (Criteria) this;
-        }
-
-        public Criteria andCheckValueLikeInsensitive(String value) {
-            addCriterion("upper(CHECK_VALUE) like", value.toUpperCase(), "checkValue");
+        public Criteria andDbPasswordLikeInsensitive(String value) {
+            addCriterion("upper(DB_PASSWORD) like", value.toUpperCase(), "dbPassword");
             return (Criteria) this;
         }
 
@@ -1857,21 +1367,6 @@ public class DetectInterfaceExample {
 
         public Criteria andNoticeObjectLikeInsensitive(String value) {
             addCriterion("upper(NOTICE_OBJECT) like", value.toUpperCase(), "noticeObject");
-            return (Criteria) this;
-        }
-
-        public Criteria andProxyIpLikeInsensitive(String value) {
-            addCriterion("upper(PROXY_IP) like", value.toUpperCase(), "proxyIp");
-            return (Criteria) this;
-        }
-
-        public Criteria andProxyUsernameLikeInsensitive(String value) {
-            addCriterion("upper(PROXY_USERNAME) like", value.toUpperCase(), "proxyUsername");
-            return (Criteria) this;
-        }
-
-        public Criteria andProxyPasswordLikeInsensitive(String value) {
-            addCriterion("upper(PROXY_PASSWORD) like", value.toUpperCase(), "proxyPassword");
             return (Criteria) this;
         }
 

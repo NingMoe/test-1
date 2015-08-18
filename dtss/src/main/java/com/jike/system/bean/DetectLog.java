@@ -3,12 +3,14 @@ package com.jike.system.bean;
 import java.io.Serializable;
 import java.util.Date;
 
-public class DetectInterfaceLog implements Serializable {
-    private String itfLogId;
+public class DetectLog implements Serializable {
+    private String logId;
 
-    private Date detectTime;
+    private Date logTime;
 
-    private String itfId;
+    private String logType;
+
+    private String taskId;
 
     private String inputParams;
 
@@ -18,28 +20,36 @@ public class DetectInterfaceLog implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    public String getItfLogId() {
-        return itfLogId;
+    public String getLogId() {
+        return logId;
     }
 
-    public void setItfLogId(String itfLogId) {
-        this.itfLogId = itfLogId == null ? null : itfLogId.trim();
+    public void setLogId(String logId) {
+        this.logId = logId == null ? null : logId.trim();
     }
 
-    public Date getDetectTime() {
-        return detectTime;
+    public Date getLogTime() {
+        return logTime;
     }
 
-    public void setDetectTime(Date detectTime) {
-        this.detectTime = detectTime;
+    public void setLogTime(Date logTime) {
+        this.logTime = logTime;
     }
 
-    public String getItfId() {
-        return itfId;
+    public String getLogType() {
+        return logType;
     }
 
-    public void setItfId(String itfId) {
-        this.itfId = itfId == null ? null : itfId.trim();
+    public void setLogType(String logType) {
+        this.logType = logType == null ? null : logType.trim();
+    }
+
+    public String getTaskId() {
+        return taskId;
+    }
+
+    public void setTaskId(String taskId) {
+        this.taskId = taskId == null ? null : taskId.trim();
     }
 
     public String getInputParams() {

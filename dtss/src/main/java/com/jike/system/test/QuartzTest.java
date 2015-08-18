@@ -1,53 +1,34 @@
 package com.jike.system.test;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+
+import com.jike.system.util.DBUtils;
 
  
 /** 
-* @Description: 测试类 
-* 
-* @ClassName: QuartzTest 
-* @Copyright: Copyright (c) 2014 
-* 
-* @author Comsys-LZP 
-* @date 2014-6-26 下午03:35:05 
-* @version V2.0 
+* 一个简单的测试quartz任务管理器测试类 
 */  
-public class QuartzTest {
-   public static void main(String[] args) {
-       try {
-//           String job_name = "动态任务调度";
-//           System.out.println("【系统启动】开始(每1秒输出一次)...");
-//           QuartzManager.addJob(job_name, QuartzJob.class, "0/1 * * * * ?");
-//             
-//           Thread.sleep(5000);    
-//           System.out.println("【修改时间】开始(每2秒输出一次)...");    
-//           QuartzManager.modifyJobTime(job_name, "10/2 * * * * ?");    
-//           Thread.sleep(6000);    
-//           System.out.println("【移除定时】开始...");    
-//           QuartzManager.removeJob(job_name);    
-//           System.out.println("【移除定时】成功");    
-//             
-//           System.out.println("【再次添加定时任务】开始(每10秒输出一次)...");    
-//           QuartzManager.addJob(job_name, QuartzJob.class, "*/10 * * * * ?");    
-//           Thread.sleep(60000);    
-//           System.out.println("【移除定时】开始...");
-//           QuartzManager.removeJob(job_name);    
-//           System.out.println("【移除定时】成功");  
-           
+public class QuartzTest {  
+ 
+   public static void main(String[] args) throws Exception {
 
-//           String job_name = "动态任务调度";   
-//           System.out.println("【添加定时任务】开始(每10秒输出一次)...");    
-//           QuartzManager.addJob(job_name, QuartzJob.class, "*/3 * * * * ?");    
-//           Thread.sleep(15000);    
-//           System.out.println("【移除定时】开始...");    
-//           QuartzManager.removeJob(job_name);
-//           System.out.println("【移除定时】成功");
-           String aaa = "123|234|345";
-           System.out.println(aaa.replace("|", ","));
-           System.out.println(aaa == "asd");
-           
-       } catch (Exception e) {  
-           e.printStackTrace();  
-       }  
+	   String driver = "oracle.jdbc.OracleDriver"; 
+	   String url = "jdbc:oracle:thin:@112.80.51.78:1621:traveldb";   
+	   String user = "jike";  
+	   String psw = "jike";  
+	   Connection conn = DBUtils.getConnection(driver, url, user, psw);
+	   if(conn != null){
+		   System.out.println(conn);
+		   String sql = "select * from T_SYSTEM_DETECT_INTERFACE_LOG where ITF_LOG_ID=?";
+		   PreparedStatement pre = conn.prepareStatement(sql);
+		   pre.setString(1, "1508181000000215");
+		   ResultSet result = pre.executeQuery();
+		   while (result.next())
+			   System.out.println(result.getString("INPUT_PARAMS"));
+		   DBUtils.closeResources(conn, pre, result);
+	   }
    }  
+ 
 }  

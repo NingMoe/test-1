@@ -3,14 +3,38 @@
 $(function() {
 	// 执行查询
 	$.ajax({
+        url: 'systemTask/masterSwitch',
+        type: 'GET',
+        dataType: 'text',
+        success: function(data){
+        	// 将json字符串转换为json对象
+			var parsedJson = jQuery.parseJSON(data);
+			$("#systemTask").html(parsedJson.results.flagName);
+			$("#systemTask").val(parsedJson.results.flag);
+        }
+    });
+	
+	$.ajax({
         url: 'interfaceDetect/masterSwitch',
         type: 'GET',
         dataType: 'text',
         success: function(data){
         	// 将json字符串转换为json对象
 			var parsedJson = jQuery.parseJSON(data);
-			$("#masterSwitch").html(parsedJson.results.flagName);
-			$("#masterSwitch").val(parsedJson.results.flag);
+			$("#interfaceDetect").html(parsedJson.results.flagName);
+			$("#interfaceDetect").val(parsedJson.results.flag);
+        }
+    });
+	
+	$.ajax({
+        url: 'databaseDetect/masterSwitch',
+        type: 'GET',
+        dataType: 'text',
+        success: function(data){
+        	// 将json字符串转换为json对象
+			var parsedJson = jQuery.parseJSON(data);
+			$("#databaseDetect").html(parsedJson.results.flagName);
+			$("#databaseDetect").val(parsedJson.results.flag);
         }
     });
 
@@ -36,7 +60,9 @@ $(function() {
 	};
 
 
-	$(document).on("click", "#masterSwitch", function(e) {
+	$(document).on("click", ".masterSwitch", function(e) {
+		var id = $(e.target).attr('id');
+		var value = $(e.target).val();
 		// 创建加载效果图
 		var target = document.createElement("div");
 		document.body.appendChild(target);
@@ -47,7 +73,7 @@ $(function() {
 		window.setTimeout(function() {
 			// 执行切换
 			$.ajax({
-		        url: 'interfaceDetect/masterSwitch/'+($("#masterSwitch").val()=='true'?'false':'true'),
+		        url: id+'/masterSwitch/'+(value=='true'?'false':'true'),
 		        type: 'PUT',
 	            dataType: 'text',
 		        success: function(data){
@@ -57,11 +83,16 @@ $(function() {
 						text: parsedJson.results.flagName,
 						icon: "img/check.png"
 					});
-					$("#masterSwitch").html(parsedJson.results.flagName);
-					$("#masterSwitch").val(parsedJson.results.flag);
+					$('#'+id).html(parsedJson.results.flagName);
+					$('#'+id).val(parsedJson.results.flag);
 					window.setTimeout(function() {
 						overlay.hide();
 					}, 2e3);
+		        },
+				failure: function(data){
+		        	// 将json字符串转换为json对象
+					var parsedJson = jQuery.parseJSON(data);
+					overlay.hide();
 		        }
 		    });
 		}, 1e3);

@@ -11,6 +11,9 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.lang.StringUtils;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+
 /**
  * @ClassName: StringUtils
  * @Description: 字符串操作工具类
@@ -468,5 +471,23 @@ public final class StringUtil {
         	str = subStrb(str,num,enc);
         }
         return str;
+    }
+    
+    /**
+     * @Title: getType
+     * @Description: 报警服务器端给发送的json数据 中 找出 type 类型
+     * @param String message
+     * @return String    返回类型
+     * @throws
+     */
+    public static String getJsonKey2Value(String jsonStr, String key){
+		String value =null;
+    	if(jsonStr != null && !jsonStr.equals("")){
+    		JSONObject obj = JSON.parseObject(jsonStr);
+    		if(obj.containsKey(key)){
+    			value = obj.get(key).toString();
+    		}
+    	}
+    	return value;
     }
 }
