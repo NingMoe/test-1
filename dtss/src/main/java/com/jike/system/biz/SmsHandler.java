@@ -8,23 +8,23 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.jike.system.util.HttpClientUtil;
-import com.jike.system.util.SmsParamUtil;
+import com.jike.system.util.ParamControlUtil;
 
 public class SmsHandler{
 
 	private static Logger log = LoggerFactory.getLogger(SmsHandler.class);
 	// 请求编码
-	public static String REQUEST_ENCODECHARSET = SmsParamUtil.getParam("REQUEST_ENCODECHARSET");
+	public static String REQUEST_ENCODECHARSET = ParamControlUtil.getSmsParam("REQUEST_ENCODECHARSET");
 	// 请求URL
-	public static String REQUEST_URL= SmsParamUtil.getParam("REQUEST_URL");
+	public static String REQUEST_URL= ParamControlUtil.getSmsParam("REQUEST_URL");
 	// 请求发送短信--账号
-	public static String REQUEST_ACCOUNT = SmsParamUtil.getParam("REQUEST_ACCOUNT");
+	public static String REQUEST_ACCOUNT = ParamControlUtil.getSmsParam("REQUEST_ACCOUNT");
 	// 请求发送短信--密码
-	public static String REQUEST_PASSWD = SmsParamUtil.getParam("REQUEST_PASSWD");
+	public static String REQUEST_PASSWD = ParamControlUtil.getSmsParam("REQUEST_PASSWD");
 	// 需要状态?
-	public static String NEED_STATUS = SmsParamUtil.getParam("NEED_STATUS");
+	public static String NEED_STATUS = ParamControlUtil.getSmsParam("NEED_STATUS");
 	// ext号
-	public static String EXT_NO = SmsParamUtil.getParam("EXT_NO");
+	public static String EXT_NO = ParamControlUtil.getSmsParam("EXT_NO");
 	// 短信号码分隔符--","
 	public static String MOBILE_SPLIT = ",";
 	

@@ -1,13 +1,16 @@
 package com.jike.system.quartz;
 
+import java.util.Map;
+
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.jike.system.consts.DatabaseConsts;
+import com.jike.system.consts.InterfaceConsts;
 import com.jike.system.consts.SysConsts;
-
 
 /** 
  *  
@@ -37,5 +40,13 @@ public class ResertNoticeJob implements Job {
 		// 获取任务名称
 		log.info("执行任务："+JOB_NAME);
 		SysConsts.CURRENT_IS_NOTICE.clear();
+		// 隔天调零job连续失败次数(Interface)
+		for(String key : InterfaceConsts.FAILURE_TIME.keySet()){
+			InterfaceConsts.FAILURE_TIME.put(key, 0);
+		}
+		// 隔天调零job连续失败次数(Database)
+		for(Map<String, String> dd : DatabaseConsts.DETECT_DATABASE.values()){
+			dd.put(DatabaseConsts.CURRENT_FAILURE_NUM, "0");
+		}
 	}
 } 

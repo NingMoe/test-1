@@ -114,12 +114,13 @@ public class InterfaceDetectHandler{
 			// 如果校验成功
 			if(checkSuccess){
 				// 初始化当前检测失败次数
-				di.setCurrentFailureNum(0);
+//				di.setCurrentFailureNum(0);
+				InterfaceConsts.FAILURE_TIME.put(di.getTaskId(), 0);
 				// 记录接口检测结果:成功
 				dl.setDetectResult(SysConsts.DETECT_RESULT_SUCCESS);
 			}else{
 				// 当前检测失败次数+1
-				int failureNum = di.getCurrentFailureNum() + 1;
+				int failureNum = InterfaceConsts.FAILURE_TIME.get(di.getTaskId()) + 1;
 				// 当前失败次数是否超过阈值
 				if(failureNum > di.getThresholdValue()){
 					// 如果当日该接口未发送警报
@@ -135,12 +136,14 @@ public class InterfaceDetectHandler{
 						di.setTotalNoticeNum(di.getTotalNoticeNum() + 1);
 						// 设置接口检测状态为：暂停
 						di.setState(SysConsts.DETECT_STATE_STOP);
+						// 更新到数据库
+						diService.updateByPrimaryKey(di);
 					}
 				}else{
 					// 当前失败次数超过阈值不记录
-					di.setCurrentFailureNum(failureNum);
+//					di.setCurrentFailureNum(failureNum);
+					InterfaceConsts.FAILURE_TIME.put(di.getTaskId(), failureNum);
 				}
-				
 				// 记录接口检测结果:失败
 				dl.setDetectResult(SysConsts.DETECT_RESULT_FAILURE);
 				// 记录错误信息
@@ -149,10 +152,8 @@ public class InterfaceDetectHandler{
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
-				
 			}
 			// 更新到数据库
-			diService.updateByPrimaryKey(di);
 			dlService.insert(dl);
 			// 如果验证不通过就跳出循环
 			if(!checkSuccess)
@@ -175,7 +176,7 @@ public class InterfaceDetectHandler{
 		String checkValue = di.getCheckValue();
 		// 获取respContent中key对应的value
 		String value = StringUtil.getJsonKey2Value(respContent, checkKey);
-		// 如何相等
+		// 如果相等
 		if(checkValue.equals(value))
 			checkSuccess = true;
 		return checkSuccess;

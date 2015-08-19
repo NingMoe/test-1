@@ -90,9 +90,6 @@
 	<!-- 事务（注解 ） -->
 	<tx:annotation-driven transaction-manager="transactionManager" />
 
-	<!-- <tx:annotation-driven mode="aspectj" /> -->
-	<aop:aspectj-autoproxy expose-proxy="true" />
-
 	<!-- 启动成功后 注入applicationContext -->
 	<bean class="com.jike.system.servlet.ApplicationInit" />
 

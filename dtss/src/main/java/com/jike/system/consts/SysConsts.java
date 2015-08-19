@@ -13,7 +13,7 @@ public class SysConsts {
 	// 当日已发送警报的接口（隔天清空）
 	public static List<String> CURRENT_IS_NOTICE = new ArrayList<String>();
 
-	public static boolean MASTER_SWITCH_OPEN= false; // 定时任务总开关：false-关闭；true-开启
+	public static boolean MASTER_SWITCH_OPEN = false; // 定时任务总开关：false-关闭；true-开启
 
 	public static String DETECT_STATE_CLOSE= "0"; // 待检测状态：关闭
 	public static String DETECT_STATE_RUN= "1"; // 待检测状态：启用

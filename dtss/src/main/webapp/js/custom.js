@@ -68,6 +68,7 @@ $(function() {
 		document.body.appendChild(target);
 		var spinner = new Spinner(opts).spin(target);
 		var overlay = iosOverlay({
+			text: "处理中...",
 			spinner: spinner
 		});
 		window.setTimeout(function() {

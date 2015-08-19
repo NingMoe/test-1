@@ -234,6 +234,18 @@ public class QuartzManager {
 			throw new RuntimeException(e);
 		}
 	}
+
+
+   /**
+    * @Description:启动所有定时任务
+    */
+	public static boolean isShutdown() {
+		try {
+			return scheduler.isShutdown();
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
 	
 }
 

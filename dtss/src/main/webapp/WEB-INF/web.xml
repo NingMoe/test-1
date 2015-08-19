@@ -34,6 +34,11 @@
 		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
 	</listener>
 
+	<!-- 注销Quartz -->
+	<listener>
+		<listener-class>com.jike.system.servlet.ShutdownQuartz</listener-class>
+	</listener>
+
 
 	<!-- 配置Spring核心控制器 -->
 	<servlet>
