@@ -39,7 +39,6 @@ public class InterfaceDetectJob implements Job {
 		if(SysConsts.MASTER_SWITCH_OPEN && InterfaceConsts.MASTER_SWITCH_OPEN){
 			// 获取任务名称
 			String jobName = jec.getJobDetail().getName();
-			log.info("执行任务："+jobName);
 			if(StringUtil.isNotEmpty(jobName)){
 				try {
 					// 根据任务名称获取待检测的接口信息
@@ -49,6 +48,7 @@ public class InterfaceDetectJob implements Job {
 						boolean state = SysConsts.DETECT_STATE_RUN.equals(di.getState());
 						// 如果启用，则进行检测
 						if(state){
+							log.info("执行任务："+jobName);
 							idHandler.execute(di);
 						}
 					}

@@ -26,7 +26,6 @@ public class DatabaseDetectJob implements Job {
 		if(SysConsts.MASTER_SWITCH_OPEN && DatabaseConsts.MASTER_SWITCH_OPEN){
 			// 获取任务名称
 			String jobName = jec.getJobDetail().getName();
-			log.info("执行任务："+jobName);
 			if(StringUtil.isNotEmpty(jobName)){
 				// 根据任务名称获取待检测的接口信息
 				Map<String, String> dd = DatabaseConsts.DETECT_DATABASE.get(jobName);
@@ -35,6 +34,7 @@ public class DatabaseDetectJob implements Job {
 					boolean state = SysConsts.DETECT_STATE_RUN.equals(dd.get(DatabaseConsts.STATE));
 					// 如果启用，则进行检测
 					if(state){
+						log.info("执行任务："+jobName);
 						ddHandler.execute(dd);
 					}
 				}
