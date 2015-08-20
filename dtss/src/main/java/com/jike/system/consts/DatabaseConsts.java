@@ -5,9 +5,9 @@ import java.util.Map;
 
 /**
  * 
- * Title: InterfaceConsts
+ * Title: DatabaseConsts
  *
- * Description:
+ * Description: 数据库检测静态数据
  *
  * Company: LuoPan
  *
@@ -50,7 +50,8 @@ public class DatabaseConsts {
 	// 待检测数据库列表
 	public static Map<String, Map<String, String>> DETECT_DATABASE = new HashMap<String, Map<String, String>>();
 
-	public static boolean MASTER_SWITCH_OPEN = false; // 数据库检测总开关：false-关闭；true-开启
+	// 数据库检测总开关：false-关闭；true-开启
+	public static boolean MASTER_SWITCH_OPEN = false;
 	
 	// 数据库检测对象元素分隔符
 	public static String DBDETECT_ELEMENT_SPLIT = "#";

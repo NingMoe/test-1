@@ -1,6 +1,7 @@
 package com.jike.system.controller;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -11,7 +12,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.jike.system.consts.DatabaseConsts;
 import com.jike.system.consts.SysConsts;
+import com.jike.system.core.Job;
 import com.jike.system.core.QuartzManager;
 import com.jike.system.web.CommonException;
 import com.jike.system.web.JsonResult;
@@ -92,6 +95,19 @@ public class SystemTaskController extends BaseController{
 		masterSwitchResult.put("flagName", flagName);
 		
 		return ResultRender.renderResult(modelName+"总开关"+flagName, masterSwitchResult);
+	}
+	
+
+	@RequestMapping(value = "/queryJobs", method = RequestMethod.GET)
+	@ResponseBody
+	public JsonResult queryJobs(HttpServletRequest request) throws CommonException {
+		List<Job> jobs = QuartzManager.queryJobs(DatabaseConsts.DEFAULT_GROUP);
+		if(!jobs.isEmpty()){
+			for(Job job : jobs){
+				job.setFailureTime(Integer.parseInt(DatabaseConsts.DETECT_DATABASE.get(job.getJobName()).get(DatabaseConsts.CURRENT_FAILURE_NUM)));
+			}
+		}
+		return ResultRender.renderPagedResult(modelName+"任务查询成功", jobs, jobs.size());
 	}
 
 }

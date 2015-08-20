@@ -1,5 +1,8 @@
 package com.jike.system.core;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.quartz.CronTrigger;
 import org.quartz.JobDetail;
 import org.quartz.Scheduler;
@@ -24,6 +27,7 @@ import com.jike.system.util.StringUtil;
  */
 public class QuartzManager {
 	
+	// 单例模式
 	private static  Scheduler scheduler = getScheduler();
 	   
 	private static String DEFAULT_JOB_GROUP = "DEFAULT_JOB_GROUP";
@@ -45,8 +49,42 @@ public class QuartzManager {
 	        return scheduler;
 	}
 	
+	/**
+	 * @Description: 获取一个调度对象
+	 * @return
+	 */
 	public static Scheduler getInstanceScheduler() {
 		return scheduler;
+	}
+	
+	/**
+	 * @Description: 查询系统所有的Job
+	 * @param jobGroupName
+	 * @return
+	 */
+	public static List<Job> queryJobs(String jobGroupName){
+		List<Job> jobList = null;
+		if(StringUtil.isEmpty(jobGroupName)){
+			jobGroupName = DEFAULT_JOB_GROUP;
+		}
+		try {
+			String[] jobNames = scheduler.getJobNames(jobGroupName);
+			if(jobNames.length > 0){
+				JobDetail jobDetail = null;
+				jobList = new ArrayList<Job>();
+				for(String jobName : jobNames){
+					jobDetail = scheduler.getJobDetail(jobName, jobGroupName);
+					Job job = new Job();
+					job.setJobName(jobDetail.getName());
+					job.setJobGroupName(jobDetail.getGroup());
+					job.setJobState(scheduler.getTriggerState(jobName, DEFAULT_TRIGGER_GROUP));
+					jobList.add(job);
+				}
+			}
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+		return jobList;
 	}
 	
 	/**

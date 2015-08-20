@@ -7,7 +7,7 @@ import java.util.Map;
  * 
  * Title: InterfaceConsts
  *
- * Description:
+ * Description: 接口检测静态数据
  *
  * Company: LuoPan
  *
