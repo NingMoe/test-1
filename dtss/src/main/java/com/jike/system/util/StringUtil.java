@@ -475,7 +475,7 @@ public final class StringUtil {
     
     /**
      * @Title: getType
-     * @Description: 报警服务器端给发送的json数据 中 找出 type 类型
+     * @Description: 获取json数据中key对应的value值
      * @param String message
      * @return String    返回类型
      * @throws

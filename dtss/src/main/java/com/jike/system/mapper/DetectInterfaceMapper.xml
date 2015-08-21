@@ -8,8 +8,8 @@
     <result column="ITF_URL" property="itfUrl" jdbcType="VARCHAR" />
     <result column="ITF_PARAMS" property="itfParams" jdbcType="VARCHAR" />
     <result column="REQUEST_METHOD" property="requestMethod" jdbcType="VARCHAR" />
-    <result column="CHECK_KEY" property="checkKey" jdbcType="VARCHAR" />
-    <result column="CHECK_VALUE" property="checkValue" jdbcType="VARCHAR" />
+    <result column="CHECK_VALUE1" property="checkValue1" jdbcType="VARCHAR" />
+    <result column="CHECK_VALUE2" property="checkValue2" jdbcType="VARCHAR" />
     <result column="CRON_EXPRESSION" property="cronExpression" jdbcType="VARCHAR" />
     <result column="THRESHOLD_VALUE" property="thresholdValue" jdbcType="NUMERIC" />
     <result column="CURRENT_FAILURE_NUM" property="currentFailureNum" jdbcType="NUMERIC" />
@@ -87,10 +87,10 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    TASK_ID, TASK_GROUP_ID, BELONG_TO, ITF_URL, ITF_PARAMS, REQUEST_METHOD, CHECK_KEY, 
-    CHECK_VALUE, CRON_EXPRESSION, THRESHOLD_VALUE, CURRENT_FAILURE_NUM, NOTICE_LVL, NOTICE_OBJECT, 
-    BY_PROXY, PROXY_IP, PROXY_PORT, PROXY_USERNAME, PROXY_PASSWORD, STATE, TOTAL_NOTICE_NUM, 
-    CREATE_USER, CREATE_TIME, UPDATE_USER, UPDATE_TIME, GUID
+    TASK_ID, TASK_GROUP_ID, BELONG_TO, ITF_URL, ITF_PARAMS, REQUEST_METHOD, CHECK_VALUE1, 
+    CHECK_VALUE2, CRON_EXPRESSION, THRESHOLD_VALUE, CURRENT_FAILURE_NUM, NOTICE_LVL, 
+    NOTICE_OBJECT, BY_PROXY, PROXY_IP, PROXY_PORT, PROXY_USERNAME, PROXY_PASSWORD, STATE, 
+    TOTAL_NOTICE_NUM, CREATE_USER, CREATE_TIME, UPDATE_USER, UPDATE_TIME, GUID
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.jike.system.bean.DetectInterfaceExample" >
     <include refid="OracleDialectPrefix" />
@@ -127,7 +127,7 @@
   <insert id="insert" parameterType="com.jike.system.bean.DetectInterface" >
     insert into T_SYSTEM_DETECT_INTERFACE (TASK_ID, TASK_GROUP_ID, BELONG_TO, 
       ITF_URL, ITF_PARAMS, REQUEST_METHOD, 
-      CHECK_KEY, CHECK_VALUE, CRON_EXPRESSION, 
+      CHECK_VALUE1, CHECK_VALUE2, CRON_EXPRESSION, 
       THRESHOLD_VALUE, CURRENT_FAILURE_NUM, NOTICE_LVL, 
       NOTICE_OBJECT, BY_PROXY, PROXY_IP, 
       PROXY_PORT, PROXY_USERNAME, PROXY_PASSWORD, 
@@ -136,7 +136,7 @@
       GUID)
     values (#{taskId,jdbcType=VARCHAR}, #{taskGroupId,jdbcType=VARCHAR}, #{belongTo,jdbcType=VARCHAR}, 
       #{itfUrl,jdbcType=VARCHAR}, #{itfParams,jdbcType=VARCHAR}, #{requestMethod,jdbcType=VARCHAR}, 
-      #{checkKey,jdbcType=VARCHAR}, #{checkValue,jdbcType=VARCHAR}, #{cronExpression,jdbcType=VARCHAR}, 
+      #{checkValue1,jdbcType=VARCHAR}, #{checkValue2,jdbcType=VARCHAR}, #{cronExpression,jdbcType=VARCHAR}, 
       #{thresholdValue,jdbcType=NUMERIC}, #{currentFailureNum,jdbcType=NUMERIC}, #{noticeLvl,jdbcType=CHAR}, 
       #{noticeObject,jdbcType=VARCHAR}, #{byProxy,jdbcType=NUMERIC}, #{proxyIp,jdbcType=VARCHAR}, 
       #{proxyPort,jdbcType=NUMERIC}, #{proxyUsername,jdbcType=VARCHAR}, #{proxyPassword,jdbcType=VARCHAR}, 
@@ -165,11 +165,11 @@
       <if test="requestMethod != null" >
         REQUEST_METHOD,
       </if>
-      <if test="checkKey != null" >
-        CHECK_KEY,
+      <if test="checkValue1 != null" >
+        CHECK_VALUE1,
       </if>
-      <if test="checkValue != null" >
-        CHECK_VALUE,
+      <if test="checkValue2 != null" >
+        CHECK_VALUE2,
       </if>
       <if test="cronExpression != null" >
         CRON_EXPRESSION,
@@ -242,11 +242,11 @@
       <if test="requestMethod != null" >
         #{requestMethod,jdbcType=VARCHAR},
       </if>
-      <if test="checkKey != null" >
-        #{checkKey,jdbcType=VARCHAR},
+      <if test="checkValue1 != null" >
+        #{checkValue1,jdbcType=VARCHAR},
       </if>
-      <if test="checkValue != null" >
-        #{checkValue,jdbcType=VARCHAR},
+      <if test="checkValue2 != null" >
+        #{checkValue2,jdbcType=VARCHAR},
       </if>
       <if test="cronExpression != null" >
         #{cronExpression,jdbcType=VARCHAR},
@@ -328,11 +328,11 @@
       <if test="record.requestMethod != null" >
         REQUEST_METHOD = #{record.requestMethod,jdbcType=VARCHAR},
       </if>
-      <if test="record.checkKey != null" >
-        CHECK_KEY = #{record.checkKey,jdbcType=VARCHAR},
+      <if test="record.checkValue1 != null" >
+        CHECK_VALUE1 = #{record.checkValue1,jdbcType=VARCHAR},
       </if>
-      <if test="record.checkValue != null" >
-        CHECK_VALUE = #{record.checkValue,jdbcType=VARCHAR},
+      <if test="record.checkValue2 != null" >
+        CHECK_VALUE2 = #{record.checkValue2,jdbcType=VARCHAR},
       </if>
       <if test="record.cronExpression != null" >
         CRON_EXPRESSION = #{record.cronExpression,jdbcType=VARCHAR},
@@ -398,8 +398,8 @@
       ITF_URL = #{record.itfUrl,jdbcType=VARCHAR},
       ITF_PARAMS = #{record.itfParams,jdbcType=VARCHAR},
       REQUEST_METHOD = #{record.requestMethod,jdbcType=VARCHAR},
-      CHECK_KEY = #{record.checkKey,jdbcType=VARCHAR},
-      CHECK_VALUE = #{record.checkValue,jdbcType=VARCHAR},
+      CHECK_VALUE1 = #{record.checkValue1,jdbcType=VARCHAR},
+      CHECK_VALUE2 = #{record.checkValue2,jdbcType=VARCHAR},
       CRON_EXPRESSION = #{record.cronExpression,jdbcType=VARCHAR},
       THRESHOLD_VALUE = #{record.thresholdValue,jdbcType=NUMERIC},
       CURRENT_FAILURE_NUM = #{record.currentFailureNum,jdbcType=NUMERIC},
@@ -439,11 +439,11 @@
       <if test="requestMethod != null" >
         REQUEST_METHOD = #{requestMethod,jdbcType=VARCHAR},
       </if>
-      <if test="checkKey != null" >
-        CHECK_KEY = #{checkKey,jdbcType=VARCHAR},
+      <if test="checkValue1 != null" >
+        CHECK_VALUE1 = #{checkValue1,jdbcType=VARCHAR},
       </if>
-      <if test="checkValue != null" >
-        CHECK_VALUE = #{checkValue,jdbcType=VARCHAR},
+      <if test="checkValue2 != null" >
+        CHECK_VALUE2 = #{checkValue2,jdbcType=VARCHAR},
       </if>
       <if test="cronExpression != null" >
         CRON_EXPRESSION = #{cronExpression,jdbcType=VARCHAR},
@@ -506,8 +506,8 @@
       ITF_URL = #{itfUrl,jdbcType=VARCHAR},
       ITF_PARAMS = #{itfParams,jdbcType=VARCHAR},
       REQUEST_METHOD = #{requestMethod,jdbcType=VARCHAR},
-      CHECK_KEY = #{checkKey,jdbcType=VARCHAR},
-      CHECK_VALUE = #{checkValue,jdbcType=VARCHAR},
+      CHECK_VALUE1 = #{checkValue1,jdbcType=VARCHAR},
+      CHECK_VALUE2 = #{checkValue2,jdbcType=VARCHAR},
       CRON_EXPRESSION = #{cronExpression,jdbcType=VARCHAR},
       THRESHOLD_VALUE = #{thresholdValue,jdbcType=NUMERIC},
       CURRENT_FAILURE_NUM = #{currentFailureNum,jdbcType=NUMERIC},

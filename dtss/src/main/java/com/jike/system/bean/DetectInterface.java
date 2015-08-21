@@ -16,9 +16,9 @@ public class DetectInterface implements Serializable {
 
     private String requestMethod;
 
-    private String checkKey;
+    private String checkValue1;
 
-    private String checkValue;
+    private String checkValue2;
 
     private String cronExpression;
 
@@ -104,20 +104,20 @@ public class DetectInterface implements Serializable {
         this.requestMethod = requestMethod == null ? null : requestMethod.trim();
     }
 
-    public String getCheckKey() {
-        return checkKey;
+    public String getCheckValue1() {
+        return checkValue1;
     }
 
-    public void setCheckKey(String checkKey) {
-        this.checkKey = checkKey == null ? null : checkKey.trim();
+    public void setCheckValue1(String checkValue1) {
+        this.checkValue1 = checkValue1 == null ? null : checkValue1.trim();
     }
 
-    public String getCheckValue() {
-        return checkValue;
+    public String getCheckValue2() {
+        return checkValue2;
     }
 
-    public void setCheckValue(String checkValue) {
-        this.checkValue = checkValue == null ? null : checkValue.trim();
+    public void setCheckValue2(String checkValue2) {
+        this.checkValue2 = checkValue2 == null ? null : checkValue2.trim();
     }
 
     public String getCronExpression() {

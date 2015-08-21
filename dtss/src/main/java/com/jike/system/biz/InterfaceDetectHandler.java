@@ -169,16 +169,18 @@ public class InterfaceDetectHandler{
 	private boolean vaildateRespContent(String respContent, DetectInterface di) {
 		log.debug("校验返回信息");
 		// 定义是否校验成功
-		boolean checkSuccess = false;
-		// 获取校验键
-		String checkKey = di.getCheckKey();
-		// 获取校验值
-		String checkValue = di.getCheckValue();
-		// 获取respContent中key对应的value
-		String value = StringUtil.getJsonKey2Value(respContent, checkKey);
-		// 如果相等
-		if(checkValue.equals(value))
-			checkSuccess = true;
+		boolean checkSuccess = true;
+		// 获取校验值1
+		String checkValue1 = di.getCheckValue1();
+		// 获取校验值2
+		String checkValue2 = di.getCheckValue2();
+		// 默认第一个校验值不为空
+		if(StringUtil.isEmpty(checkValue1)||!respContent.contains(checkValue1)){
+			checkSuccess = false;
+		}
+		if(StringUtil.isNotEmpty(checkValue2)&&!respContent.contains(checkValue2)){
+			checkSuccess = false;
+		}
 		return checkSuccess;
 	}
 	

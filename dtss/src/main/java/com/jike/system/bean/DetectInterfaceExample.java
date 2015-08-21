@@ -535,143 +535,143 @@ public class DetectInterfaceExample {
             return (Criteria) this;
         }
 
-        public Criteria andCheckKeyIsNull() {
-            addCriterion("CHECK_KEY is null");
+        public Criteria andCheckValue1IsNull() {
+            addCriterion("CHECK_VALUE1 is null");
             return (Criteria) this;
         }
 
-        public Criteria andCheckKeyIsNotNull() {
-            addCriterion("CHECK_KEY is not null");
+        public Criteria andCheckValue1IsNotNull() {
+            addCriterion("CHECK_VALUE1 is not null");
             return (Criteria) this;
         }
 
-        public Criteria andCheckKeyEqualTo(String value) {
-            addCriterion("CHECK_KEY =", value, "checkKey");
+        public Criteria andCheckValue1EqualTo(String value) {
+            addCriterion("CHECK_VALUE1 =", value, "checkValue1");
             return (Criteria) this;
         }
 
-        public Criteria andCheckKeyNotEqualTo(String value) {
-            addCriterion("CHECK_KEY <>", value, "checkKey");
+        public Criteria andCheckValue1NotEqualTo(String value) {
+            addCriterion("CHECK_VALUE1 <>", value, "checkValue1");
             return (Criteria) this;
         }
 
-        public Criteria andCheckKeyGreaterThan(String value) {
-            addCriterion("CHECK_KEY >", value, "checkKey");
+        public Criteria andCheckValue1GreaterThan(String value) {
+            addCriterion("CHECK_VALUE1 >", value, "checkValue1");
             return (Criteria) this;
         }
 
-        public Criteria andCheckKeyGreaterThanOrEqualTo(String value) {
-            addCriterion("CHECK_KEY >=", value, "checkKey");
+        public Criteria andCheckValue1GreaterThanOrEqualTo(String value) {
+            addCriterion("CHECK_VALUE1 >=", value, "checkValue1");
             return (Criteria) this;
         }
 
-        public Criteria andCheckKeyLessThan(String value) {
-            addCriterion("CHECK_KEY <", value, "checkKey");
+        public Criteria andCheckValue1LessThan(String value) {
+            addCriterion("CHECK_VALUE1 <", value, "checkValue1");
             return (Criteria) this;
         }
 
-        public Criteria andCheckKeyLessThanOrEqualTo(String value) {
-            addCriterion("CHECK_KEY <=", value, "checkKey");
+        public Criteria andCheckValue1LessThanOrEqualTo(String value) {
+            addCriterion("CHECK_VALUE1 <=", value, "checkValue1");
             return (Criteria) this;
         }
 
-        public Criteria andCheckKeyLike(String value) {
-            addCriterion("CHECK_KEY like", value, "checkKey");
+        public Criteria andCheckValue1Like(String value) {
+            addCriterion("CHECK_VALUE1 like", value, "checkValue1");
             return (Criteria) this;
         }
 
-        public Criteria andCheckKeyNotLike(String value) {
-            addCriterion("CHECK_KEY not like", value, "checkKey");
+        public Criteria andCheckValue1NotLike(String value) {
+            addCriterion("CHECK_VALUE1 not like", value, "checkValue1");
             return (Criteria) this;
         }
 
-        public Criteria andCheckKeyIn(List<String> values) {
-            addCriterion("CHECK_KEY in", values, "checkKey");
+        public Criteria andCheckValue1In(List<String> values) {
+            addCriterion("CHECK_VALUE1 in", values, "checkValue1");
             return (Criteria) this;
         }
 
-        public Criteria andCheckKeyNotIn(List<String> values) {
-            addCriterion("CHECK_KEY not in", values, "checkKey");
+        public Criteria andCheckValue1NotIn(List<String> values) {
+            addCriterion("CHECK_VALUE1 not in", values, "checkValue1");
             return (Criteria) this;
         }
 
-        public Criteria andCheckKeyBetween(String value1, String value2) {
-            addCriterion("CHECK_KEY between", value1, value2, "checkKey");
+        public Criteria andCheckValue1Between(String value1, String value2) {
+            addCriterion("CHECK_VALUE1 between", value1, value2, "checkValue1");
             return (Criteria) this;
         }
 
-        public Criteria andCheckKeyNotBetween(String value1, String value2) {
-            addCriterion("CHECK_KEY not between", value1, value2, "checkKey");
+        public Criteria andCheckValue1NotBetween(String value1, String value2) {
+            addCriterion("CHECK_VALUE1 not between", value1, value2, "checkValue1");
             return (Criteria) this;
         }
 
-        public Criteria andCheckValueIsNull() {
-            addCriterion("CHECK_VALUE is null");
+        public Criteria andCheckValue2IsNull() {
+            addCriterion("CHECK_VALUE2 is null");
             return (Criteria) this;
         }
 
-        public Criteria andCheckValueIsNotNull() {
-            addCriterion("CHECK_VALUE is not null");
+        public Criteria andCheckValue2IsNotNull() {
+            addCriterion("CHECK_VALUE2 is not null");
             return (Criteria) this;
         }
 
-        public Criteria andCheckValueEqualTo(String value) {
-            addCriterion("CHECK_VALUE =", value, "checkValue");
+        public Criteria andCheckValue2EqualTo(String value) {
+            addCriterion("CHECK_VALUE2 =", value, "checkValue2");
             return (Criteria) this;
         }
 
-        public Criteria andCheckValueNotEqualTo(String value) {
-            addCriterion("CHECK_VALUE <>", value, "checkValue");
+        public Criteria andCheckValue2NotEqualTo(String value) {
+            addCriterion("CHECK_VALUE2 <>", value, "checkValue2");
             return (Criteria) this;
         }
 
-        public Criteria andCheckValueGreaterThan(String value) {
-            addCriterion("CHECK_VALUE >", value, "checkValue");
+        public Criteria andCheckValue2GreaterThan(String value) {
+            addCriterion("CHECK_VALUE2 >", value, "checkValue2");
             return (Criteria) this;
         }
 
-        public Criteria andCheckValueGreaterThanOrEqualTo(String value) {
-            addCriterion("CHECK_VALUE >=", value, "checkValue");
+        public Criteria andCheckValue2GreaterThanOrEqualTo(String value) {
+            addCriterion("CHECK_VALUE2 >=", value, "checkValue2");
             return (Criteria) this;
         }
 
-        public Criteria andCheckValueLessThan(String value) {
-            addCriterion("CHECK_VALUE <", value, "checkValue");
+        public Criteria andCheckValue2LessThan(String value) {
+            addCriterion("CHECK_VALUE2 <", value, "checkValue2");
             return (Criteria) this;
         }
 
-        public Criteria andCheckValueLessThanOrEqualTo(String value) {
-            addCriterion("CHECK_VALUE <=", value, "checkValue");
+        public Criteria andCheckValue2LessThanOrEqualTo(String value) {
+            addCriterion("CHECK_VALUE2 <=", value, "checkValue2");
             return (Criteria) this;
         }
 
-        public Criteria andCheckValueLike(String value) {
-            addCriterion("CHECK_VALUE like", value, "checkValue");
+        public Criteria andCheckValue2Like(String value) {
+            addCriterion("CHECK_VALUE2 like", value, "checkValue2");
             return (Criteria) this;
         }
 
-        public Criteria andCheckValueNotLike(String value) {
-            addCriterion("CHECK_VALUE not like", value, "checkValue");
+        public Criteria andCheckValue2NotLike(String value) {
+            addCriterion("CHECK_VALUE2 not like", value, "checkValue2");
             return (Criteria) this;
         }
 
-        public Criteria andCheckValueIn(List<String> values) {
-            addCriterion("CHECK_VALUE in", values, "checkValue");
+        public Criteria andCheckValue2In(List<String> values) {
+            addCriterion("CHECK_VALUE2 in", values, "checkValue2");
             return (Criteria) this;
         }
 
-        public Criteria andCheckValueNotIn(List<String> values) {
-            addCriterion("CHECK_VALUE not in", values, "checkValue");
+        public Criteria andCheckValue2NotIn(List<String> values) {
+            addCriterion("CHECK_VALUE2 not in", values, "checkValue2");
             return (Criteria) this;
         }
 
-        public Criteria andCheckValueBetween(String value1, String value2) {
-            addCriterion("CHECK_VALUE between", value1, value2, "checkValue");
+        public Criteria andCheckValue2Between(String value1, String value2) {
+            addCriterion("CHECK_VALUE2 between", value1, value2, "checkValue2");
             return (Criteria) this;
         }
 
-        public Criteria andCheckValueNotBetween(String value1, String value2) {
-            addCriterion("CHECK_VALUE not between", value1, value2, "checkValue");
+        public Criteria andCheckValue2NotBetween(String value1, String value2) {
+            addCriterion("CHECK_VALUE2 not between", value1, value2, "checkValue2");
             return (Criteria) this;
         }
 
@@ -1835,13 +1835,13 @@ public class DetectInterfaceExample {
             return (Criteria) this;
         }
 
-        public Criteria andCheckKeyLikeInsensitive(String value) {
-            addCriterion("upper(CHECK_KEY) like", value.toUpperCase(), "checkKey");
+        public Criteria andCheckValue1LikeInsensitive(String value) {
+            addCriterion("upper(CHECK_VALUE1) like", value.toUpperCase(), "checkValue1");
             return (Criteria) this;
         }
 
-        public Criteria andCheckValueLikeInsensitive(String value) {
-            addCriterion("upper(CHECK_VALUE) like", value.toUpperCase(), "checkValue");
+        public Criteria andCheckValue2LikeInsensitive(String value) {
+            addCriterion("upper(CHECK_VALUE2) like", value.toUpperCase(), "checkValue2");
             return (Criteria) this;
         }
 

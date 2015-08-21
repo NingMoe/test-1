@@ -64,8 +64,6 @@ public class ApplicationInit implements ApplicationContextAware {
 				boolean state = SysConsts.DETECT_STATE_RUN.equals(di.getState());
 				// 如果启用，加入定时任务
 				if(state){
-					// 添加job连续失败次数
-					InterfaceConsts.FAILURE_TIME.put(jobName, 0);
 					// 添加定时任务
 					try {
 						QuartzManager.addJob(jobName, jobGroupName, null, null, InterfaceDetectJob.class, cronExpression);
@@ -73,6 +71,8 @@ public class ApplicationInit implements ApplicationContextAware {
 						e.printStackTrace();
 						log.info("开启接口检测["+jobName+"]定时任务出错：", e);
 					}
+					// 添加job连续失败次数
+					InterfaceConsts.FAILURE_TIME.put(jobName, 0);
 				}
 			}
 		}
