@@ -32,8 +32,8 @@ public class DatabaseConsts {
 	public static final String DB_PASSWORD = "DB_PASSWORD";
 	// 数据库连接超时
 	public static final String DB_TIMEOUT = "DB_TIMEOUT";
-	// 检测频率（Cron表达式）
-	public static final String CRON_EXPRESSION = "CRON_EXPRESSION";
+	// 检测频率
+	public static final String FREQUENCY = "FREQUENCY";
 	// 阈值（限定检测失败次数）
 	public static final String THRESHOLD_VALUE = "THRESHOLD_VALUE";
 	// 当前检测失败次数

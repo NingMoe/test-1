@@ -20,7 +20,7 @@ public class DetectInterface implements Serializable {
 
     private String checkValue2;
 
-    private String cronExpression;
+    private Long frequency;
 
     private Integer thresholdValue;
 
@@ -120,12 +120,12 @@ public class DetectInterface implements Serializable {
         this.checkValue2 = checkValue2 == null ? null : checkValue2.trim();
     }
 
-    public String getCronExpression() {
-        return cronExpression;
+    public Long getFrequency() {
+        return frequency;
     }
 
-    public void setCronExpression(String cronExpression) {
-        this.cronExpression = cronExpression == null ? null : cronExpression.trim();
+    public void setFrequency(Long frequency) {
+        this.frequency = frequency;
     }
 
     public Integer getThresholdValue() {

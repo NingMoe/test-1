@@ -25,12 +25,12 @@
 		<!-- password="jike" /> -->
 		<!-- <jdbcConnection driverClass="oracle.jdbc.OracleDriver" connectionURL="jdbc:oracle:thin:@www.jiketravel.com:1521:traveldb" 
 			userId="jike" password="jike" /> -->
-		<jdbcConnection driverClass="oracle.jdbc.OracleDriver"
-		connectionURL="jdbc:oracle:thin:@10.0.1.22:1521:traveldb" userId="jike"
-		password="jike" />
 		<!-- <jdbcConnection driverClass="oracle.jdbc.OracleDriver"
+		connectionURL="jdbc:oracle:thin:@10.0.1.22:1521:traveldb" userId="jike"
+		password="jike" /> -->
+		<jdbcConnection driverClass="oracle.jdbc.OracleDriver"
 			connectionURL="jdbc:oracle:thin:@112.80.51.78:1621:traveldb" userId="jike"
-			password="jike" /> -->
+			password="jike" />
 
 
 		<!-- 指定生成的类型为java类型，避免数据库中number等类型字段 -->

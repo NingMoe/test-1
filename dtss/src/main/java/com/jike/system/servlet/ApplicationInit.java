@@ -4,6 +4,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.quartz.SimpleTrigger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
@@ -55,18 +56,19 @@ public class ApplicationInit implements ApplicationContextAware {
 		if(!dis.isEmpty()){
 			for(DetectInterface di: dis){
 				// 获取执行频率
-				String cronExpression = di.getCronExpression();
+				Long frequency = di.getFrequency()*1000L;
 				// 获取任务名称
 				String jobName = di.getTaskId();
 				// 获取任务组名称
-				String jobGroupName = di.getTaskGroupId();
+				String jobGroupName = StringUtil.isEmpty(di.getTaskGroupId())?InterfaceConsts.DEFAULT_GROUP:di.getTaskGroupId();
 				// 获取此接口是否需要启用检测
 				boolean state = SysConsts.DETECT_STATE_RUN.equals(di.getState());
 				// 如果启用，加入定时任务
 				if(state){
 					// 添加定时任务
 					try {
-						QuartzManager.addJob(jobName, jobGroupName, null, null, InterfaceDetectJob.class, cronExpression);
+						QuartzManager.addSimpleJob(jobName, jobGroupName, jobName, InterfaceConsts.DEFAULT_GROUP, 
+								InterfaceDetectJob.class, null, null, SimpleTrigger.REPEAT_INDEFINITELY, frequency);
 					} catch (RuntimeException e) {
 						e.printStackTrace();
 						log.info("开启接口检测["+jobName+"]定时任务出错：", e);
@@ -95,7 +97,7 @@ public class ApplicationInit implements ApplicationContextAware {
 				dd.put(DatabaseConsts.DB_URL, ddElements[3]);
 				dd.put(DatabaseConsts.DB_USERNAME, ddElements[4]);
 				dd.put(DatabaseConsts.DB_PASSWORD, ddElements[5]);
-				dd.put(DatabaseConsts.CRON_EXPRESSION, ddElements[6]);
+				dd.put(DatabaseConsts.FREQUENCY, ddElements[6]);
 				dd.put(DatabaseConsts.THRESHOLD_VALUE, ddElements[7]);
 				dd.put(DatabaseConsts.CURRENT_FAILURE_NUM, ddElements[8]);
 				dd.put(DatabaseConsts.NOTICE_LVL, ddElements[9]);
@@ -112,7 +114,7 @@ public class ApplicationInit implements ApplicationContextAware {
 		// 若数据库检测数据从系统静态数据取得
 		for(Map<String, String> dd : DatabaseConsts.DETECT_DATABASE.values()){
 			// 获取执行频率
-			String cronExpression = dd.get(DatabaseConsts.CRON_EXPRESSION);
+			Long frequency = Long.parseLong(dd.get(DatabaseConsts.FREQUENCY))*1000L;
 			// 获取任务名称
 			String jobName = dd.get(DatabaseConsts.TASK_ID);
 			// 获取任务组名称
@@ -123,7 +125,8 @@ public class ApplicationInit implements ApplicationContextAware {
 			if(state){
 				// 添加定时任务
 				try {
-					QuartzManager.addJob(jobName, jobGroupName, null, null, DatabaseDetectJob.class, cronExpression);
+					QuartzManager.addSimpleJob(jobName, jobGroupName, jobName, jobGroupName, DatabaseDetectJob.class, 
+							null, null, SimpleTrigger.REPEAT_INDEFINITELY, frequency);
 				} catch (RuntimeException e) {
 					e.printStackTrace();
 					log.info("开启数据库检测["+jobName+"]定时任务出错：", e);
@@ -141,7 +144,7 @@ public class ApplicationInit implements ApplicationContextAware {
 		String cronExpression = ResertNoticeJob.RESET_CRON_EXPRESSION;
 		// 添加定时任务
 		try {
-			QuartzManager.addJob(jobName, ResertNoticeJob.class, cronExpression);
+			QuartzManager.addCronExpJob(jobName, null, jobName, null, InterfaceDetectJob.class, cronExpression);
 		} catch (RuntimeException e) {
 			e.printStackTrace();
 			log.info("开启重置警报对象任务出错：", e);

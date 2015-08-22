@@ -1,6 +1,7 @@
 package com.jike.system.core;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.quartz.CronTrigger;
@@ -8,6 +9,7 @@ import org.quartz.JobDetail;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
 import org.quartz.SchedulerFactory;
+import org.quartz.SimpleTrigger;
 import org.quartz.impl.StdSchedulerFactory;
 
 import com.jike.system.util.StringUtil;
@@ -96,13 +98,10 @@ public class QuartzManager {
 		try {
 			boolean isExist = false;
 			JobDetail jobDetail = null;
-			CronTrigger trigger = null;
 			if(StringUtil.isNotEmpty(jobGroupName)){
 				jobDetail = scheduler.getJobDetail(jobName, jobGroupName);
-			}else{
-				trigger = (CronTrigger) scheduler.getTrigger(jobName,DEFAULT_TRIGGER_GROUP);
 			}
-			if (jobDetail != null || trigger != null) {
+			if (jobDetail != null) {
 				isExist = true;
 			}
 			return isExist;
@@ -112,16 +111,36 @@ public class QuartzManager {
 	}
 
 	/**
-	 * @Description: 添加一个定时任务，使用默认的任务组名，触发器组名
+	 * @Description: 添加一个简单定时任务
 	 * @param jobName
-	 * @param cls
-	 * @param time
+	 * @param jobGroupName
+	 * @param triggerName
+	 * @param triggerGroupName
+	 * @param jobClass
+	 * @param startTime
+	 * @param endTime
+	 * @param repeatCount
+	 * @param repeatInterval
 	 */
-	public static void addJob(String jobName, Class<?> jobClass, String time) {
+	public static void addSimpleJob(String jobName, String jobGroupName, String triggerName, String triggerGroupName, 
+			Class<?> jobClass, Date startTime, Date endTime, int repeatCount, long repeatInterval) {
+		if(StringUtil.isEmpty(jobGroupName))
+			jobGroupName = DEFAULT_JOB_GROUP;
+		if(StringUtil.isEmpty(triggerName))
+			triggerName = jobName;
+		if(StringUtil.isEmpty(triggerGroupName))
+			triggerGroupName = DEFAULT_TRIGGER_GROUP;
 		try {
-			JobDetail jobDetail = new JobDetail(jobName, DEFAULT_JOB_GROUP, jobClass);// 任务名，任务组，任务执行类
-			CronTrigger trigger = new CronTrigger(jobName, DEFAULT_TRIGGER_GROUP);// 触发器名,触发器组
-			trigger.setCronExpression(time);// 触发器时间设定
+			JobDetail jobDetail = new JobDetail(jobName, jobGroupName, jobClass);// 任务名，任务组，任务执行类
+			SimpleTrigger trigger = new SimpleTrigger(triggerName,triggerGroupName);
+			if(startTime != null){
+				trigger.setStartTime(startTime);
+			}
+			if(endTime != null){
+				trigger.setEndTime(endTime);
+			}
+			trigger.setRepeatCount(repeatCount);
+			trigger.setRepeatInterval(repeatInterval);
 			scheduler.scheduleJob(jobDetail, trigger);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
@@ -129,17 +148,16 @@ public class QuartzManager {
 	}
 
 	/**
-	 * @Description: 添加一个定时任务
+	 * @Description: 添加一个cronExpression表达式定时任务
 	 * @param jobName
 	 * @param jobGroupName
 	 * @param triggerName
 	 * @param triggerGroupName
 	 * @param jobClass
-	 * @param time
+	 * @param cronExpression
 	 */
-	public static void addJob(String jobName, String jobGroupName, 
-			String triggerName, String triggerGroupName, Class<?> jobClass, 
-			String time) {
+	public static void addCronExpJob(String jobName, String jobGroupName, String triggerName, String triggerGroupName, 
+			Class<?> jobClass, String cronExpression) {
 		if(StringUtil.isEmpty(jobGroupName))
 			jobGroupName = DEFAULT_JOB_GROUP;
 		if(StringUtil.isEmpty(triggerName))
@@ -149,7 +167,7 @@ public class QuartzManager {
 		try {
 			JobDetail jobDetail = new JobDetail(jobName, jobGroupName, jobClass);// 任务名，任务组，任务执行类
 			CronTrigger trigger = new CronTrigger(triggerName, triggerGroupName);// 触发器名,触发器组
-			trigger.setCronExpression(time);// 触发器时间设定
+			trigger.setCronExpression(cronExpression);// 触发器时间设定
 			scheduler.scheduleJob(jobDetail, trigger);
 		} catch (Exception e) {
 			throw new RuntimeException(e);

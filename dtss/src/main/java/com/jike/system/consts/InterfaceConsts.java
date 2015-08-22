@@ -19,6 +19,8 @@ import java.util.Map;
 public class InterfaceConsts {
 
 	public static boolean MASTER_SWITCH_OPEN = false; // 接口检测总开关：false-关闭；true-开启
+	// 接口检测默认组
+	public static final String DEFAULT_GROUP = "DETECT_INTERFACE_DEFAULT_GROUP";
 
 	// 接口参数变量
 	public static String ITF_PARAMS_DATE = "${date}"; // 接口参数变量:日期（new Date(),需处理为当日零点）

@@ -34,6 +34,13 @@ public class QuartzTest {
 			   System.out.println(result.getString("INPUT_PARAMS"));
 		   DBUtils.closeResources(conn, pre, result);
 	   }
+/*	   System.out.println("start time:"+new Date());
+	   QuartzManager.addSimpleJob("testJob", "testJobGroup", "testTrigger", "testTriggerGroup", QuartzJob.class, null, null, 3, 5000);
+	   QuartzManager.start();
+	   System.out.println("sleep: 30 second");
+	   Thread.sleep(30000);
+	   System.out.println("stop time:"+new Date());
+	   QuartzManager.shutdown();*/
    }  
  
 }  

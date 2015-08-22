@@ -675,73 +675,63 @@ public class DetectInterfaceExample {
             return (Criteria) this;
         }
 
-        public Criteria andCronExpressionIsNull() {
-            addCriterion("CRON_EXPRESSION is null");
+        public Criteria andFrequencyIsNull() {
+            addCriterion("FREQUENCY is null");
             return (Criteria) this;
         }
 
-        public Criteria andCronExpressionIsNotNull() {
-            addCriterion("CRON_EXPRESSION is not null");
+        public Criteria andFrequencyIsNotNull() {
+            addCriterion("FREQUENCY is not null");
             return (Criteria) this;
         }
 
-        public Criteria andCronExpressionEqualTo(String value) {
-            addCriterion("CRON_EXPRESSION =", value, "cronExpression");
+        public Criteria andFrequencyEqualTo(Long value) {
+            addCriterion("FREQUENCY =", value, "frequency");
             return (Criteria) this;
         }
 
-        public Criteria andCronExpressionNotEqualTo(String value) {
-            addCriterion("CRON_EXPRESSION <>", value, "cronExpression");
+        public Criteria andFrequencyNotEqualTo(Long value) {
+            addCriterion("FREQUENCY <>", value, "frequency");
             return (Criteria) this;
         }
 
-        public Criteria andCronExpressionGreaterThan(String value) {
-            addCriterion("CRON_EXPRESSION >", value, "cronExpression");
+        public Criteria andFrequencyGreaterThan(Long value) {
+            addCriterion("FREQUENCY >", value, "frequency");
             return (Criteria) this;
         }
 
-        public Criteria andCronExpressionGreaterThanOrEqualTo(String value) {
-            addCriterion("CRON_EXPRESSION >=", value, "cronExpression");
+        public Criteria andFrequencyGreaterThanOrEqualTo(Long value) {
+            addCriterion("FREQUENCY >=", value, "frequency");
             return (Criteria) this;
         }
 
-        public Criteria andCronExpressionLessThan(String value) {
-            addCriterion("CRON_EXPRESSION <", value, "cronExpression");
+        public Criteria andFrequencyLessThan(Long value) {
+            addCriterion("FREQUENCY <", value, "frequency");
             return (Criteria) this;
         }
 
-        public Criteria andCronExpressionLessThanOrEqualTo(String value) {
-            addCriterion("CRON_EXPRESSION <=", value, "cronExpression");
+        public Criteria andFrequencyLessThanOrEqualTo(Long value) {
+            addCriterion("FREQUENCY <=", value, "frequency");
             return (Criteria) this;
         }
 
-        public Criteria andCronExpressionLike(String value) {
-            addCriterion("CRON_EXPRESSION like", value, "cronExpression");
+        public Criteria andFrequencyIn(List<Long> values) {
+            addCriterion("FREQUENCY in", values, "frequency");
             return (Criteria) this;
         }
 
-        public Criteria andCronExpressionNotLike(String value) {
-            addCriterion("CRON_EXPRESSION not like", value, "cronExpression");
+        public Criteria andFrequencyNotIn(List<Long> values) {
+            addCriterion("FREQUENCY not in", values, "frequency");
             return (Criteria) this;
         }
 
-        public Criteria andCronExpressionIn(List<String> values) {
-            addCriterion("CRON_EXPRESSION in", values, "cronExpression");
+        public Criteria andFrequencyBetween(Long value1, Long value2) {
+            addCriterion("FREQUENCY between", value1, value2, "frequency");
             return (Criteria) this;
         }
 
-        public Criteria andCronExpressionNotIn(List<String> values) {
-            addCriterion("CRON_EXPRESSION not in", values, "cronExpression");
-            return (Criteria) this;
-        }
-
-        public Criteria andCronExpressionBetween(String value1, String value2) {
-            addCriterion("CRON_EXPRESSION between", value1, value2, "cronExpression");
-            return (Criteria) this;
-        }
-
-        public Criteria andCronExpressionNotBetween(String value1, String value2) {
-            addCriterion("CRON_EXPRESSION not between", value1, value2, "cronExpression");
+        public Criteria andFrequencyNotBetween(Long value1, Long value2) {
+            addCriterion("FREQUENCY not between", value1, value2, "frequency");
             return (Criteria) this;
         }
 
@@ -1842,11 +1832,6 @@ public class DetectInterfaceExample {
 
         public Criteria andCheckValue2LikeInsensitive(String value) {
             addCriterion("upper(CHECK_VALUE2) like", value.toUpperCase(), "checkValue2");
-            return (Criteria) this;
-        }
-
-        public Criteria andCronExpressionLikeInsensitive(String value) {
-            addCriterion("upper(CRON_EXPRESSION) like", value.toUpperCase(), "cronExpression");
             return (Criteria) this;
         }
 
