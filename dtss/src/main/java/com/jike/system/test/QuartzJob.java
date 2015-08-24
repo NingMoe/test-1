@@ -20,7 +20,7 @@ import org.quartz.JobExecutionException;
 public class QuartzJob implements Job {  
 	  
     public void execute(JobExecutionContext context) throws JobExecutionException {
-    	// job 的名字  
+    	// job 的名字
         String jobName = context.getJobDetail().getKey().getName();  
           
         // 任务执行的时间  

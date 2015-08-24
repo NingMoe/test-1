@@ -1,5 +1,6 @@
 package com.jike.system.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,7 +18,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.jike.system.bean.DetectDatabase;
 import com.jike.system.consts.DatabaseConsts;
+import com.jike.system.consts.SysConsts;
+import com.jike.system.model.DetectDatabaseModel;
 import com.jike.system.service.itf.IDetectDatabaseService;
+import com.jike.system.util.StringUtil;
 import com.jike.system.web.CommonException;
 import com.jike.system.web.JsonResult;
 import com.jike.system.web.ResultRender;
@@ -46,18 +50,43 @@ public class DatabaseDetectController extends BaseController{
 	private Map<String, Object> masterSwitchResult;
 	
 	/**
-	 * 按ID查询
+	 * 按条件查询
 	 * @param request
-	 * @param id
+	 * @param m
 	 * @return
 	 * @throws CommonException
 	 */
-	@RequestMapping(value = "/{taskId}", method = RequestMethod.GET)
+	@RequestMapping(value = "/query", method = RequestMethod.GET)
 	@ResponseBody
-	public JsonResult selectById(HttpServletRequest request,
-			@PathVariable String taskId) throws CommonException {
-		DetectDatabase dd = ddService.selectById(taskId);
-		return ResultRender.renderResult(modelName + "：查询成功", dd);
+	public JsonResult selectByExample(HttpServletRequest request,
+			@ModelAttribute DetectDatabaseModel ddm) throws CommonException {
+		List<Map<String, String>> dds = new ArrayList<Map<String, String>>();
+		if(StringUtil.isNotEmpty(ddm.getTaskId())){
+			dds.add(DatabaseConsts.DETECT_DATABASE.get(ddm.getTaskId()));
+		}else{
+			dds.addAll(DatabaseConsts.DETECT_DATABASE.values());
+		}
+		List<DetectDatabaseModel> ddms = new ArrayList<DetectDatabaseModel>();
+		if(dds.size() > 0){
+			for(Map<String, String> dd : dds){
+				ddm = new DetectDatabaseModel();
+				ddm.setTaskId(dd.get(DatabaseConsts.TASK_ID));
+				ddm.setTaskGroupId(dd.get(DatabaseConsts.TASK_GROUP_ID));
+				ddm.setDbDriver(dd.get(DatabaseConsts.DB_DRIVER));
+				ddm.setDbUrl(dd.get(DatabaseConsts.DB_URL));
+				ddm.setDbUsername(dd.get(DatabaseConsts.DB_USERNAME));
+				ddm.setDbPassword(dd.get(DatabaseConsts.DB_PASSWORD));
+				ddm.setFrequency(dd.get(DatabaseConsts.FREQUENCY));
+				ddm.setThresholdValue(Integer.valueOf(dd.get(DatabaseConsts.THRESHOLD_VALUE)));
+				ddm.setCurrentFailureNum(Integer.valueOf(dd.get(DatabaseConsts.CURRENT_FAILURE_NUM)));
+				ddm.setNoticeLvl(dd.get(DatabaseConsts.NOTICE_LVL));
+				ddm.setNoticeObject(dd.get(DatabaseConsts.NOTICE_OBJECT));
+				ddm.setState(dd.get(DatabaseConsts.STATE));
+				ddm.setCurrentIsNotice(SysConsts.CURRENT_IS_NOTICE.contains(dd.get(DatabaseConsts.TASK_ID)));
+				ddms.add(ddm);
+			}
+		}
+		return ResultRender.renderPagedResult(modelName + "：查询成功", ddms, ddms.size());
 	}
 	
 	/**
@@ -76,22 +105,6 @@ public class DatabaseDetectController extends BaseController{
 			throws CommonException {
 //		ddService.updateById(m, mqId);
 		return ResultRender.renderResult(modelName + "修改成功", dd);
-	}
-	
-	/**
-	 * 按条件查询
-	 * @param request
-	 * @param m
-	 * @return
-	 * @throws CommonException
-	 */
-	@RequestMapping(value = "", method = RequestMethod.GET)
-	@ResponseBody
-	public JsonResult selectByExample(HttpServletRequest request,
-			@ModelAttribute DetectDatabase di) throws CommonException {
-		List<DetectDatabase> dds = ddService.selectAll();
-		return ResultRender.renderPagedResult(modelName + "：查询成功", dds,
-				dds.size());
 	}
 	
 	/**

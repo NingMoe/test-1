@@ -10,7 +10,7 @@
     <result column="REQUEST_METHOD" property="requestMethod" jdbcType="VARCHAR" />
     <result column="CHECK_VALUE1" property="checkValue1" jdbcType="VARCHAR" />
     <result column="CHECK_VALUE2" property="checkValue2" jdbcType="VARCHAR" />
-    <result column="FREQUENCY" property="frequency" jdbcType="NUMERIC" />
+    <result column="FREQUENCY" property="frequency" jdbcType="DECIMAL" />
     <result column="THRESHOLD_VALUE" property="thresholdValue" jdbcType="NUMERIC" />
     <result column="CURRENT_FAILURE_NUM" property="currentFailureNum" jdbcType="NUMERIC" />
     <result column="NOTICE_LVL" property="noticeLvl" jdbcType="CHAR" />
@@ -136,7 +136,7 @@
       GUID)
     values (#{taskId,jdbcType=VARCHAR}, #{taskGroupId,jdbcType=VARCHAR}, #{belongTo,jdbcType=VARCHAR}, 
       #{itfUrl,jdbcType=VARCHAR}, #{itfParams,jdbcType=VARCHAR}, #{requestMethod,jdbcType=VARCHAR}, 
-      #{checkValue1,jdbcType=VARCHAR}, #{checkValue2,jdbcType=VARCHAR}, #{frequency,jdbcType=NUMERIC}, 
+      #{checkValue1,jdbcType=VARCHAR}, #{checkValue2,jdbcType=VARCHAR}, #{frequency,jdbcType=DECIMAL}, 
       #{thresholdValue,jdbcType=NUMERIC}, #{currentFailureNum,jdbcType=NUMERIC}, #{noticeLvl,jdbcType=CHAR}, 
       #{noticeObject,jdbcType=VARCHAR}, #{byProxy,jdbcType=NUMERIC}, #{proxyIp,jdbcType=VARCHAR}, 
       #{proxyPort,jdbcType=NUMERIC}, #{proxyUsername,jdbcType=VARCHAR}, #{proxyPassword,jdbcType=VARCHAR}, 
@@ -249,7 +249,7 @@
         #{checkValue2,jdbcType=VARCHAR},
       </if>
       <if test="frequency != null" >
-        #{frequency,jdbcType=NUMERIC},
+        #{frequency,jdbcType=DECIMAL},
       </if>
       <if test="thresholdValue != null" >
         #{thresholdValue,jdbcType=NUMERIC},
@@ -335,7 +335,7 @@
         CHECK_VALUE2 = #{record.checkValue2,jdbcType=VARCHAR},
       </if>
       <if test="record.frequency != null" >
-        FREQUENCY = #{record.frequency,jdbcType=NUMERIC},
+        FREQUENCY = #{record.frequency,jdbcType=DECIMAL},
       </if>
       <if test="record.thresholdValue != null" >
         THRESHOLD_VALUE = #{record.thresholdValue,jdbcType=NUMERIC},
@@ -400,7 +400,7 @@
       REQUEST_METHOD = #{record.requestMethod,jdbcType=VARCHAR},
       CHECK_VALUE1 = #{record.checkValue1,jdbcType=VARCHAR},
       CHECK_VALUE2 = #{record.checkValue2,jdbcType=VARCHAR},
-      FREQUENCY = #{record.frequency,jdbcType=NUMERIC},
+      FREQUENCY = #{record.frequency,jdbcType=DECIMAL},
       THRESHOLD_VALUE = #{record.thresholdValue,jdbcType=NUMERIC},
       CURRENT_FAILURE_NUM = #{record.currentFailureNum,jdbcType=NUMERIC},
       NOTICE_LVL = #{record.noticeLvl,jdbcType=CHAR},
@@ -446,7 +446,7 @@
         CHECK_VALUE2 = #{checkValue2,jdbcType=VARCHAR},
       </if>
       <if test="frequency != null" >
-        FREQUENCY = #{frequency,jdbcType=NUMERIC},
+        FREQUENCY = #{frequency,jdbcType=DECIMAL},
       </if>
       <if test="thresholdValue != null" >
         THRESHOLD_VALUE = #{thresholdValue,jdbcType=NUMERIC},
@@ -508,7 +508,7 @@
       REQUEST_METHOD = #{requestMethod,jdbcType=VARCHAR},
       CHECK_VALUE1 = #{checkValue1,jdbcType=VARCHAR},
       CHECK_VALUE2 = #{checkValue2,jdbcType=VARCHAR},
-      FREQUENCY = #{frequency,jdbcType=NUMERIC},
+      FREQUENCY = #{frequency,jdbcType=DECIMAL},
       THRESHOLD_VALUE = #{thresholdValue,jdbcType=NUMERIC},
       CURRENT_FAILURE_NUM = #{currentFailureNum,jdbcType=NUMERIC},
       NOTICE_LVL = #{noticeLvl,jdbcType=CHAR},

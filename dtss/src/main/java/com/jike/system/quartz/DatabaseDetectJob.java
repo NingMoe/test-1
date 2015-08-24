@@ -25,7 +25,7 @@ public class DatabaseDetectJob implements Job {
 		// 定时任务总开关与接口检测总开关是否同时开启
 		if(SysConsts.MASTER_SWITCH_OPEN && DatabaseConsts.MASTER_SWITCH_OPEN){
 			// 获取任务名称
-			String jobName = jec.getJobDetail().getName();
+			String jobName = jec.getJobDetail().getKey().getName();
 			if(StringUtil.isNotEmpty(jobName)){
 				// 根据任务名称获取待检测的接口信息
 				Map<String, String> dd = DatabaseConsts.DETECT_DATABASE.get(jobName);

@@ -685,52 +685,52 @@ public class DetectInterfaceExample {
             return (Criteria) this;
         }
 
-        public Criteria andFrequencyEqualTo(Long value) {
+        public Criteria andFrequencyEqualTo(Integer value) {
             addCriterion("FREQUENCY =", value, "frequency");
             return (Criteria) this;
         }
 
-        public Criteria andFrequencyNotEqualTo(Long value) {
+        public Criteria andFrequencyNotEqualTo(Integer value) {
             addCriterion("FREQUENCY <>", value, "frequency");
             return (Criteria) this;
         }
 
-        public Criteria andFrequencyGreaterThan(Long value) {
+        public Criteria andFrequencyGreaterThan(Integer value) {
             addCriterion("FREQUENCY >", value, "frequency");
             return (Criteria) this;
         }
 
-        public Criteria andFrequencyGreaterThanOrEqualTo(Long value) {
+        public Criteria andFrequencyGreaterThanOrEqualTo(Integer value) {
             addCriterion("FREQUENCY >=", value, "frequency");
             return (Criteria) this;
         }
 
-        public Criteria andFrequencyLessThan(Long value) {
+        public Criteria andFrequencyLessThan(Integer value) {
             addCriterion("FREQUENCY <", value, "frequency");
             return (Criteria) this;
         }
 
-        public Criteria andFrequencyLessThanOrEqualTo(Long value) {
+        public Criteria andFrequencyLessThanOrEqualTo(Integer value) {
             addCriterion("FREQUENCY <=", value, "frequency");
             return (Criteria) this;
         }
 
-        public Criteria andFrequencyIn(List<Long> values) {
+        public Criteria andFrequencyIn(List<Integer> values) {
             addCriterion("FREQUENCY in", values, "frequency");
             return (Criteria) this;
         }
 
-        public Criteria andFrequencyNotIn(List<Long> values) {
+        public Criteria andFrequencyNotIn(List<Integer> values) {
             addCriterion("FREQUENCY not in", values, "frequency");
             return (Criteria) this;
         }
 
-        public Criteria andFrequencyBetween(Long value1, Long value2) {
+        public Criteria andFrequencyBetween(Integer value1, Integer value2) {
             addCriterion("FREQUENCY between", value1, value2, "frequency");
             return (Criteria) this;
         }
 
-        public Criteria andFrequencyNotBetween(Long value1, Long value2) {
+        public Criteria andFrequencyNotBetween(Integer value1, Integer value2) {
             addCriterion("FREQUENCY not between", value1, value2, "frequency");
             return (Criteria) this;
         }

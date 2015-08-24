@@ -1,11 +1,8 @@
 package com.jike.system.test;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.util.Date;
 
-import com.jike.system.util.DBUtils;
+import com.jike.system.core.QuartzManager;
 
 
 
@@ -16,7 +13,7 @@ import com.jike.system.util.DBUtils;
 public class QuartzTest {  
  
    public static void main(String[] args) throws Exception {
-
+/*
 	   String driver = "oracle.jdbc.OracleDriver"; 
 	   String url = "jdbc:oracle:thin:@112.80.51.78:1621:traveldb";   
 	   String user = "jike";  
@@ -33,14 +30,20 @@ public class QuartzTest {
 		   while (result.next())
 			   System.out.println(result.getString("INPUT_PARAMS"));
 		   DBUtils.closeResources(conn, pre, result);
-	   }
-/*	   System.out.println("start time:"+new Date());
-	   QuartzManager.addSimpleJob("testJob", "testJobGroup", "testTrigger", "testTriggerGroup", QuartzJob.class, null, null, 3, 5000);
+	   }*/
+	   
+	   System.out.println("start time:"+new Date());
+//	   QuartzManager.addSimpleJob("testJob", "testJobGroup", "testTrigger", "testTriggerGroup", QuartzJob.class, null, null, -1, 3000);
+	   QuartzManager.addCronJob("testJob", "testJobGroup", "testTrigger", "testTriggerGroup", QuartzJob.class, null, null, "0/5 * * * * ?");
 	   QuartzManager.start();
-	   System.out.println("sleep: 30 second");
-	   Thread.sleep(30000);
+	   System.out.println("sleep: 25 second");
+	   Thread.sleep(25000);
+//	   QuartzManager.updateSimpleJob("testTrigger", "testTriggerGroup", 6000);
+	   QuartzManager.updateCronJob("testTrigger", "testTriggerGroup", "0/10 * * * * ?");
+	   System.out.println("sleep: 35 second");
+	   Thread.sleep(35000);
 	   System.out.println("stop time:"+new Date());
-	   QuartzManager.shutdown();*/
+	   QuartzManager.shutdown();
    }  
  
 }  

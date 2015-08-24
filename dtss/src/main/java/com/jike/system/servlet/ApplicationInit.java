@@ -56,7 +56,7 @@ public class ApplicationInit implements ApplicationContextAware {
 		if(!dis.isEmpty()){
 			for(DetectInterface di: dis){
 				// 获取执行频率
-				Long frequency = di.getFrequency()*1000L;
+				int frequency = di.getFrequency();
 				// 获取任务名称
 				String jobName = di.getTaskId();
 				// 获取任务组名称
@@ -114,7 +114,7 @@ public class ApplicationInit implements ApplicationContextAware {
 		// 若数据库检测数据从系统静态数据取得
 		for(Map<String, String> dd : DatabaseConsts.DETECT_DATABASE.values()){
 			// 获取执行频率
-			Long frequency = Long.parseLong(dd.get(DatabaseConsts.FREQUENCY))*1000L;
+			int frequency = Integer.parseInt(dd.get(DatabaseConsts.FREQUENCY));
 			// 获取任务名称
 			String jobName = dd.get(DatabaseConsts.TASK_ID);
 			// 获取任务组名称
@@ -144,7 +144,7 @@ public class ApplicationInit implements ApplicationContextAware {
 		String cronExpression = ResertNoticeJob.RESET_CRON_EXPRESSION;
 		// 添加定时任务
 		try {
-			QuartzManager.addCronExpJob(jobName, null, jobName, null, InterfaceDetectJob.class, cronExpression);
+			QuartzManager.addCronJob(jobName, null, jobName, null, InterfaceDetectJob.class, null, null, cronExpression);
 		} catch (RuntimeException e) {
 			e.printStackTrace();
 			log.info("开启重置警报对象任务出错：", e);

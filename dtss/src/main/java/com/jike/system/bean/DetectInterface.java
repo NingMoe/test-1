@@ -20,7 +20,7 @@ public class DetectInterface implements Serializable {
 
     private String checkValue2;
 
-    private Long frequency;
+    private Integer frequency;
 
     private Integer thresholdValue;
 
@@ -120,11 +120,11 @@ public class DetectInterface implements Serializable {
         this.checkValue2 = checkValue2 == null ? null : checkValue2.trim();
     }
 
-    public Long getFrequency() {
+    public Integer getFrequency() {
         return frequency;
     }
 
-    public void setFrequency(Long frequency) {
+    public void setFrequency(Integer frequency) {
         this.frequency = frequency;
     }
 

@@ -1,7 +1,7 @@
 package com.jike.system.core;
 
 /**
- * Title: Job
+ * Title: JobInfo
  *
  * Description: Job的相关信息
  *
@@ -12,7 +12,7 @@ package com.jike.system.core;
  * @date Aug 20, 2015
  *
  */
-public class Job {
+public class JobInfo {
 	
 	private String jobName;
 	
