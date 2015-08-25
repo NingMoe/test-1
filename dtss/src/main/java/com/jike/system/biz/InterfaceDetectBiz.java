@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.http.client.CookieStore;
+import org.quartz.SimpleTrigger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,37 +15,129 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.jike.system.bean.DetectInterface;
 import com.jike.system.bean.DetectLog;
+import com.jike.system.biz.itf.IInterfaceDetectBiz;
 import com.jike.system.consts.InterfaceConsts;
 import com.jike.system.consts.SysConsts;
+import com.jike.system.core.QuartzManager;
+import com.jike.system.model.DetectInterfaceModel;
+import com.jike.system.quartz.InterfaceDetectJob;
 import com.jike.system.service.itf.IDetectInterfaceService;
 import com.jike.system.service.itf.IDetectLogService;
 import com.jike.system.util.DateUtils;
 import com.jike.system.util.HttpClientUtil;
+import com.jike.system.util.MD5Util;
 import com.jike.system.util.StringUtil;
 import com.jike.system.web.CommonException;
 
-@Service("interfaceDetectHandler")
+@Service("interfaceDetectBiz")
 @Transactional
-public class InterfaceDetectHandler{
+public class InterfaceDetectBiz implements IInterfaceDetectBiz {
 
-	private static Logger log = LoggerFactory.getLogger(InterfaceDetectHandler.class);
+	private static Logger log = LoggerFactory.getLogger(InterfaceDetectBiz.class);
 
 	@Autowired
 	private IDetectInterfaceService diService;
 	@Autowired
 	private IDetectLogService dlService;
-	
+
+	@Override
 	public DetectInterface selectById(String id) throws CommonException {
 		return diService.selectById(id);
 	}
-	
+
+	@Override
 	public List<DetectInterface> selectAll() throws CommonException {
 		return diService.selectAll();
+	}
+
+	@Override
+	public List<DetectInterfaceModel> selectByExample(DetectInterfaceModel dim) throws CommonException {
+		return diService.selectByExample(dim);
+	}
+	
+	@Override
+	public DetectInterfaceModel insert(DetectInterfaceModel dim) throws CommonException {
+		// 新创建之前验证信息
+		vaildate(dim);
+		// 数据标识符是否重复
+		List<DetectInterface> dims = selectAll();
+		if(dims != null){
+			String newGuid = dim.getItfUrl()+dim.getRequestMethod()+dim.getItfParams();
+			for(DetectInterface dime : dims){
+				String existGuid = dime.getGuid();
+				if(newGuid.equals(existGuid)){
+					new CommonException("该条接口检测数据已经存在");
+				}
+			}
+		}
+		// 初始化时间
+		Date newTime = new Date();
+		// 是否是组任务
+		if(dim.isTaskGroupFlag()){
+			dim.setTaskId(diService.getNextTaskId(InterfaceConsts.TASK_ID_HEAD_GTASK));
+		}else{
+			dim.setTaskId(diService.getNextTaskId(InterfaceConsts.TASK_ID_HEAD_TASKS));
+		}
+		// 初始化当前检测失败次数
+		dim.setCurrentFailureNum(0);
+		// 初始化状态为：关闭
+		dim.setState(SysConsts.DETECT_STATE_CLOSE);
+		// 初始化累计通知次数为：0次
+		dim.setTotalNoticeNum(0);
+		// 初始化新建和修改时间
+		dim.setCreateTime(newTime);
+		dim.setUpdateTime(newTime);
+		// 初始化数据标识符
+		dim.setGuid(MD5Util.md5(dim.getItfUrl()+dim.getRequestMethod()+dim.getItfParams()).toUpperCase());
+		diService.insert(dim);
+		return dim;
+	}
+
+	@Override
+	public DetectInterface updateByPrimaryKey(DetectInterface di) throws CommonException {
+		diService.updateByPrimaryKey(di);
+		return di;
+	}
+
+	@Override
+	public DetectInterfaceModel switchState(DetectInterfaceModel dim, String toState)
+			throws CommonException {
+		DetectInterface di = selectById(dim.getTaskId());
+		String jobName = di.getTaskId();
+		String jobGroupName = (di.getTaskGroupId()==null?InterfaceConsts.DEFAULT_GROUP:di.getTaskGroupId());
+		String triggerName =  di.getTaskId();
+		String triggerGroupName = InterfaceConsts.DEFAULT_GROUP;
+		di.setState(toState);
+		updateByPrimaryKey(di);
+		try {
+			if(SysConsts.DETECT_STATE_CLOSE.equals(toState)){
+				QuartzManager.removeJob(jobName, jobGroupName, triggerName, triggerGroupName);
+			}
+			else if(SysConsts.DETECT_STATE_RUN.equals(toState)){
+				if(QuartzManager.vaildateTriggerExist(triggerName, triggerGroupName)){
+					QuartzManager.resume(triggerName, triggerGroupName);
+				}else{
+					QuartzManager.addSimpleJob(jobName, jobGroupName, triggerName, triggerGroupName, 
+							InterfaceDetectJob.class, null, null, SimpleTrigger.REPEAT_INDEFINITELY, di.getFrequency());
+					// 添加job连续失败次数
+					InterfaceConsts.FAILURE_TIME.put(jobName, 0);
+				}
+			}
+			else if(SysConsts.DETECT_STATE_STOP.equals(toState)){
+				QuartzManager.pause(triggerName, triggerGroupName);
+			}
+		} catch (RuntimeException e) {
+			e.printStackTrace();
+			new CommonException("开启接口检测["+jobName+"]定时任务出错：", e);
+			log.info("开启接口检测["+jobName+"]定时任务出错：", e);
+		}
+		return dim;
 	}
 	
 	/*
 	 * 主要执行方法
 	 */
+	@Override
 	public void execute(DetectInterface di) throws CommonException {
 		log.debug("主要执行方法");
 		// 定义任务列表
@@ -224,12 +317,31 @@ public class InterfaceDetectHandler{
 	/*
 	 * 验证待检测数据合法性
 	 */
-	public static boolean vaildate(DetectInterface di){
-		boolean isLegal = false;
-		
-		// 待验证条件
-		
-		return isLegal;
+	public void vaildate(DetectInterfaceModel dim){
+		if(StringUtil.isEmpty(dim.getTaskId())){
+			new CommonException("接口检测数据--任务编号不能为空");
+		}
+		if(StringUtil.isEmpty(dim.getItfUrl())){
+			new CommonException("接口检测数据--接口地址不能为空");
+		}
+		if(StringUtil.isEmpty(dim.getItfParams())){
+			new CommonException("接口检测数据--接口参数不能为空");
+		}
+		if(StringUtil.isEmpty(dim.getRequestMethod())){
+			new CommonException("接口检测数据--请求方式不能为空");
+		}
+		if(StringUtil.isEmpty(dim.getCheckValue1())){
+			new CommonException("接口检测数据--校验值1不能为空");
+		}
+		if(dim.getFrequency() == 0){
+			new CommonException("接口检测数据--检测频率不能为空和0");
+		}
+		if(dim.getThresholdValue() == 0){
+			new CommonException("接口检测数据--阈值不能为空和0");
+		}
+		if(StringUtil.isEmpty(dim.getNoticeObject())){
+			new CommonException("接口检测数据--警报对象不能为空");
+		}
 	}
 	
 }

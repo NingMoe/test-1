@@ -490,4 +490,27 @@ public final class StringUtil {
     	}
     	return value;
     }
+	
+	/**
+	 * 填补字符串
+	 * @param str
+	 * @param fill
+	 * @param len
+	 * @param isEnd
+	 * @return
+	 */
+	public static String fillString(String str,char fill,int len,boolean isEnd) {
+		int fillLen = len - str.getBytes().length;
+		if(len <= 0) {
+			return str;
+		}
+		for(int i = 0; i < fillLen; i++) {
+			if(isEnd) {
+				str += fill;
+			} else {
+				str = fill + str;
+			}
+		}
+		return str;
+	}
 }

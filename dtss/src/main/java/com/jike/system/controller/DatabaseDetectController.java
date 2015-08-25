@@ -1,9 +1,6 @@
 package com.jike.system.controller;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -16,11 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.jike.system.bean.DetectDatabase;
-import com.jike.system.consts.DatabaseConsts;
-import com.jike.system.consts.SysConsts;
+import com.jike.system.biz.itf.IDatabaseDetectBiz;
 import com.jike.system.model.DetectDatabaseModel;
-import com.jike.system.service.itf.IDetectDatabaseService;
 import com.jike.system.util.StringUtil;
 import com.jike.system.web.CommonException;
 import com.jike.system.web.JsonResult;
@@ -45,9 +39,7 @@ public class DatabaseDetectController extends BaseController{
 	private String modelName = "数据库检测数据";
 
 	@Autowired
-	private IDetectDatabaseService ddService;
-	
-	private Map<String, Object> masterSwitchResult;
+	private IDatabaseDetectBiz ddBiz;
 	
 	/**
 	 * 按条件查询
@@ -60,51 +52,8 @@ public class DatabaseDetectController extends BaseController{
 	@ResponseBody
 	public JsonResult selectByExample(HttpServletRequest request,
 			@ModelAttribute DetectDatabaseModel ddm) throws CommonException {
-		List<Map<String, String>> dds = new ArrayList<Map<String, String>>();
-		if(StringUtil.isNotEmpty(ddm.getTaskId())){
-			dds.add(DatabaseConsts.DETECT_DATABASE.get(ddm.getTaskId()));
-		}else{
-			dds.addAll(DatabaseConsts.DETECT_DATABASE.values());
-		}
-		List<DetectDatabaseModel> ddms = new ArrayList<DetectDatabaseModel>();
-		if(dds.size() > 0){
-			for(Map<String, String> dd : dds){
-				ddm = new DetectDatabaseModel();
-				ddm.setTaskId(dd.get(DatabaseConsts.TASK_ID));
-				ddm.setTaskGroupId(dd.get(DatabaseConsts.TASK_GROUP_ID));
-				ddm.setDbDriver(dd.get(DatabaseConsts.DB_DRIVER));
-				ddm.setDbUrl(dd.get(DatabaseConsts.DB_URL));
-				ddm.setDbUsername(dd.get(DatabaseConsts.DB_USERNAME));
-				ddm.setDbPassword(dd.get(DatabaseConsts.DB_PASSWORD));
-				ddm.setFrequency(dd.get(DatabaseConsts.FREQUENCY));
-				ddm.setThresholdValue(Integer.valueOf(dd.get(DatabaseConsts.THRESHOLD_VALUE)));
-				ddm.setCurrentFailureNum(Integer.valueOf(dd.get(DatabaseConsts.CURRENT_FAILURE_NUM)));
-				ddm.setNoticeLvl(dd.get(DatabaseConsts.NOTICE_LVL));
-				ddm.setNoticeObject(dd.get(DatabaseConsts.NOTICE_OBJECT));
-				ddm.setState(dd.get(DatabaseConsts.STATE));
-				ddm.setCurrentIsNotice(SysConsts.CURRENT_IS_NOTICE.contains(dd.get(DatabaseConsts.TASK_ID)));
-				ddms.add(ddm);
-			}
-		}
+		List<DetectDatabaseModel> ddms = ddBiz.selectByExample(ddm);
 		return ResultRender.renderPagedResult(modelName + "：查询成功", ddms, ddms.size());
-	}
-	
-	/**
-	 * 修改
-	 * 
-	 * @param request
-	 * @param id
-	 * @param m
-	 * @return
-	 * @throws CommonException
-	 */
-	@RequestMapping(value = "/{taskId}", method = RequestMethod.PUT)
-	@ResponseBody
-	public JsonResult updateById(HttpServletRequest request,
-			@PathVariable String taskId, @RequestBody DetectDatabase dd)
-			throws CommonException {
-//		ddService.updateById(m, mqId);
-		return ResultRender.renderResult(modelName + "修改成功", dd);
 	}
 	
 	/**
@@ -115,63 +64,33 @@ public class DatabaseDetectController extends BaseController{
 	 * @return
 	 * @throws CommonException
 	 */
-	@RequestMapping(value = "", method = RequestMethod.POST)
+	@RequestMapping(value = "/add", method = RequestMethod.POST)
 	@ResponseBody
 	public JsonResult insert(HttpServletRequest request,
-			@ModelAttribute DetectDatabase dd) throws CommonException {
-		
-		return ResultRender.renderResult(modelName + "添加成功", dd);
-	}
-
-	/**
-	 * 接口检测总开关开启状态查询
-	 * 
-	 * @param request
-	 * @param m
-	 * @return
-	 * @throws CommonException
-	 */
-	@RequestMapping(value = "/masterSwitch", method = RequestMethod.GET)
-	@ResponseBody
-	public JsonResult masterSwitchQuery(HttpServletRequest request) throws CommonException {
-		String flagName = "未知";
-		if(DatabaseConsts.MASTER_SWITCH_OPEN){
-			flagName = "已开启";
-		}else{
-			flagName = "已关闭";
-		}
-		masterSwitchResult = new HashMap<String, Object>();
-		masterSwitchResult.put("flag", DatabaseConsts.MASTER_SWITCH_OPEN);
-		masterSwitchResult.put("flagName", flagName);
-		
-		return ResultRender.renderResult("数据库检测总开关状态查询成功", masterSwitchResult);
+			@ModelAttribute DetectDatabaseModel ddm) throws CommonException {
+		ddBiz.add(ddm);
+		return ResultRender.renderResult(modelName + "添加成功", ddm);
 	}
 	
 	/**
-	 * 开启或关闭接口检测总开关
+	 * 切换任务状态
 	 * 
 	 * @param request
+	 * @param id
 	 * @param m
 	 * @return
 	 * @throws CommonException
 	 */
-	@RequestMapping(value = "/masterSwitch/{flag}", method = RequestMethod.PUT)
+	@RequestMapping(value = "/switch/{toState}", method = RequestMethod.PUT)
 	@ResponseBody
-	public JsonResult switchMaster(HttpServletRequest request,
-			@PathVariable boolean flag) throws CommonException {
-		String flagName = "未知";
-		if(flag){
-			flagName = "已开启";
-		}else{
-			flagName = "已关闭";
+	public JsonResult switchState(HttpServletRequest request,
+			@PathVariable String toState, @RequestBody DetectDatabaseModel ddm)
+			throws CommonException {
+		if(StringUtil.isNotEmpty(ddm.getTaskId())){
+			ddBiz.switchState(ddm.getTaskId(), toState);
+			return ResultRender.renderResult("任务状态切换成功", toState);
 		}
-		if(flag!=DatabaseConsts.MASTER_SWITCH_OPEN)
-			DatabaseConsts.MASTER_SWITCH_OPEN = flag;
-		masterSwitchResult = new HashMap<String, Object>();
-		masterSwitchResult.put("flag", DatabaseConsts.MASTER_SWITCH_OPEN);
-		masterSwitchResult.put("flagName", flagName);
-		
-		return ResultRender.renderResult("数据库检测总开关"+flagName, masterSwitchResult);
+		return ResultRender.renderErrorResult(modelName + "任务编号不能为空");
 	}
 
 }

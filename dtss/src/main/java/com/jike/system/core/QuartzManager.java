@@ -18,6 +18,7 @@ import org.quartz.SchedulerFactory;
 import org.quartz.SimpleTrigger;
 import org.quartz.TriggerKey;
 import org.quartz.impl.StdSchedulerFactory;
+import org.quartz.impl.matchers.GroupMatcher;
 
 import com.jike.system.util.StringUtil;
 
@@ -50,20 +51,20 @@ public class QuartzManager {
 	private static Date getStartTime() {
 		return DateBuilder.nextGivenSecondDate(null, 15);
 	}
+	
 	/**
 	 * @Description: 创建一个调度对象
 	 * @return
-	 * @throws SchedulerException
 	 */
 	private static Scheduler getScheduler() {
-		    SchedulerFactory sf = new StdSchedulerFactory();
-	        Scheduler scheduler=null;
-			try {
-				scheduler = sf.getScheduler();
-			} catch (SchedulerException e) {
-				e.printStackTrace();
-			}
-	        return scheduler;
+	    SchedulerFactory sf = new StdSchedulerFactory();
+        Scheduler scheduler=null;
+		try {
+			scheduler = sf.getScheduler();
+		} catch (SchedulerException e) {
+			e.printStackTrace();
+		}
+        return scheduler;
 	}
 	
 	/**
@@ -105,7 +106,7 @@ public class QuartzManager {
 	}
 
 	/**
-	 * @Description: 添加一个简单定时任务
+	 * @Description: 添加一个Simple定时任务
 	 * @param jobName
 	 * @param jobGroupName
 	 * @param triggerName
@@ -170,20 +171,12 @@ public class QuartzManager {
 		}
 	}
 
-   /**
-    * @Description: 修改一个任务的触发时间
-    *
-    * @param triggerName
-    * @param triggerGroupName
-    * @param time
-    *
-    * @Title: QuartzManager.java
-    * @Copyright: Copyright (c) 2014
-    *
-    * @author Comsys-LZP
-    * @date 2014-6-26 下午03:49:37
-    * @version V2.0
-    */
+	/**
+	 * @Description: 修改一个SimpleJob的触发时间
+	 * @param triggerName
+	 * @param triggerGroupName
+	 * @param newRepeatInterval
+	 */
 	public static void updateSimpleJob(String triggerName, String triggerGroupName, int newRepeatInterval) {
 		try {
 			if(StringUtil.isEmpty(triggerGroupName))
@@ -208,20 +201,12 @@ public class QuartzManager {
 		}
 	}
 
-   /**
-    * @Description: 修改一个任务的触发时间
-    *
-    * @param triggerName
-    * @param triggerGroupName
-    * @param time
-    *
-    * @Title: QuartzManager.java
-    * @Copyright: Copyright (c) 2014
-    *
-    * @author Comsys-LZP
-    * @date 2014-6-26 下午03:49:37
-    * @version V2.0
-    */
+	/**
+	 * @Description: 修改一个CronJob的触发时间
+	 * @param triggerName
+	 * @param triggerGroupName
+	 * @param newCronExpression
+	 */
 	public static void updateCronJob(String triggerName, String triggerGroupName, String newCronExpression) {
 		try {
 			if(StringUtil.isEmpty(triggerGroupName))
@@ -253,23 +238,29 @@ public class QuartzManager {
 	 */
 	public static void removeJob(String jobName, String jobGroupName,
 			String triggerName, String triggerGroupName) {
-/*		try {
+		try {
 			if(StringUtil.isEmpty(jobGroupName))
 				jobGroupName = DEFAULT_JOB_GROUP;
 			if(StringUtil.isEmpty(triggerName))
 				triggerName = jobName;
 			if(StringUtil.isEmpty(triggerGroupName))
 				triggerGroupName = DEFAULT_TRIGGER_GROUP;
-			scheduler.pauseTrigger(triggerName, triggerGroupName);// 停止触发器
-			scheduler.unscheduleJob(triggerName, triggerGroupName);// 移除触发器
-			scheduler.deleteJob(jobName, jobGroupName);// 删除任务
+			JobKey jobKey = new JobKey(jobName, jobGroupName);
+			TriggerKey triggerKey = new TriggerKey(triggerName, triggerGroupName);
+			if(vaildateTriggerExist(triggerName, triggerGroupName)){
+				scheduler.pauseTrigger(triggerKey);// 停止触发器
+				scheduler.unscheduleJob(triggerKey);// 移除触发器
+			}
+			if(vaildateJobExist(jobName, jobGroupName)){
+				scheduler.deleteJob(jobKey);// 删除任务
+			}
 		} catch (Exception e) {
 			throw new RuntimeException(e);
-		}*/
+		}
 	}
 
    /**
-    * @Description:启动所有定时任务
+    * @Description:启动调度
     */
 	public static void start() {
 		try {
@@ -281,7 +272,7 @@ public class QuartzManager {
 	}
 
    /**
-    * @Description:启动所有定时任务
+    * @Description:是否启动调度
     */
 	public static boolean isStart() {
 		try {
@@ -304,6 +295,33 @@ public class QuartzManager {
 	}
 
 	/**
+	 * @Description:暂停指定触发器组定时任务
+	 */
+	public static void pauseGroup(String triggerGroupName) {
+		try {
+			if (scheduler.isStarted()){
+				GroupMatcher<TriggerKey> matcher = GroupMatcher.triggerGroupEquals(triggerGroupName);
+				scheduler.pauseTriggers(matcher);
+			}
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	/**
+	 * @Description:暂停定时任务
+	 */
+	public static void pause(String triggerName, String triggerGroupName) {
+		TriggerKey triggerKey = new TriggerKey(triggerName, triggerGroupName);
+		try {
+			if (scheduler.isStarted()&&scheduler.checkExists(triggerKey))
+				scheduler.pauseTrigger(triggerKey);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	/**
 	 * @Description:恢复所有定时任务
 	 */
 	public static void resumeAll() {
@@ -316,7 +334,34 @@ public class QuartzManager {
 	}
 
 	/**
-	 * @Description:关闭所有定时任务
+	 * @Description:恢复指定触发器组定时任务
+	 */
+	public static void resumeGroup(String triggerGroupName) {
+		try {
+			if (scheduler.isStarted()){
+				GroupMatcher<TriggerKey> matcher = GroupMatcher.triggerGroupEquals(triggerGroupName);
+				scheduler.resumeTriggers(matcher);
+			}
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	/**
+	 * @Description:恢复定时任务
+	 */
+	public static void resume(String triggerName, String triggerGroupName) {
+		TriggerKey triggerKey = new TriggerKey(triggerName, triggerGroupName);
+		try {
+			if (scheduler.isStarted()&&scheduler.checkExists(triggerKey))
+				scheduler.resumeTrigger(triggerKey);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	/**
+	 * @Description:关闭调度
 	 */
 	public static void shutdown() {
 		try {
@@ -329,7 +374,7 @@ public class QuartzManager {
 
 
    /**
-    * @Description:启动所有定时任务
+    * @Description:是否关闭调度
     */
 	public static boolean isShutdown() {
 		try {

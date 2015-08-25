@@ -18,7 +18,7 @@ public class DetectDatabaseModel extends BaseModel {
 
     private String dbPassword;
 
-    private String frequency;
+    private Integer frequency;
 
     private Integer thresholdValue;
 
@@ -90,11 +90,11 @@ public class DetectDatabaseModel extends BaseModel {
 		this.dbPassword = dbPassword;
 	}
 
-	public String getFrequency() {
+	public Integer getFrequency() {
 		return frequency;
 	}
 
-	public void setFrequency(String frequency) {
+	public void setFrequency(Integer frequency) {
 		this.frequency = frequency;
 	}
 

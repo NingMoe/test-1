@@ -1,9 +1,6 @@
 package com.jike.system.controller;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,8 +13,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.jike.system.bean.DetectInterface;
+import com.jike.system.biz.itf.IInterfaceDetectBiz;
 import com.jike.system.consts.InterfaceConsts;
-import com.jike.system.service.itf.IDetectInterfaceService;
+import com.jike.system.consts.SysConsts;
+import com.jike.system.model.DetectInterfaceModel;
+import com.jike.system.util.BeanUtils;
 import com.jike.system.web.CommonException;
 import com.jike.system.web.JsonResult;
 import com.jike.system.web.ResultRender;
@@ -41,124 +41,94 @@ public class InterfaceDetectController extends BaseController{
 	private String modelName = "接口检测数据";
 
 	@Autowired
-	private IDetectInterfaceService diService;
-	
-	private Map<String, Object> masterSwitchResult;
+	private IInterfaceDetectBiz idBiz;
 	
 	/**
 	 * 按ID查询
-	 * @param request
-	 * @param id
-	 * @return
-	 * @throws CommonException
-	 */
-	@RequestMapping(value = "/{taskId}", method = RequestMethod.GET)
-	@ResponseBody
-	public JsonResult selectById(HttpServletRequest request,
-			@PathVariable String taskId) throws CommonException {
-		DetectInterface di = diService.selectById(taskId);
-		return ResultRender.renderResult(modelName + "：查询成功", di);
-	}
-	
-	/**
-	 * 修改
 	 * 
 	 * @param request
 	 * @param id
-	 * @param m
 	 * @return
 	 * @throws CommonException
 	 */
-	@RequestMapping(value = "/{taskId}", method = RequestMethod.PUT)
+	@RequestMapping(value = "/query/{taskId}", method = RequestMethod.GET)
 	@ResponseBody
-	public JsonResult updateById(HttpServletRequest request,
-			@PathVariable String taskId, @RequestBody DetectInterface di)
-			throws CommonException {
-//		diService.updateById(m, mqId);
-		return ResultRender.renderResult(modelName + "修改成功", di);
+	public JsonResult selectById(HttpServletRequest request,
+			@PathVariable String taskId) throws CommonException {
+		DetectInterface di = idBiz.selectById(taskId);
+		DetectInterfaceModel dim = new DetectInterfaceModel();
+		BeanUtils.copyProperties(di, dim);
+		dim.setCurrentFailureNum(InterfaceConsts.FAILURE_TIME.get(dim.getTaskId()));
+		dim.setCurrentIsNotice(SysConsts.CURRENT_IS_NOTICE.contains(dim.getTaskId()));
+		return ResultRender.renderResult(modelName + "：查询成功", dim);
 	}
 	
 	/**
 	 * 按条件查询
+	 * 
 	 * @param request
 	 * @param m
 	 * @return
 	 * @throws CommonException
 	 */
-	@RequestMapping(value = "", method = RequestMethod.GET)
+	@RequestMapping(value = "/query", method = RequestMethod.GET)
 	@ResponseBody
 	public JsonResult selectByExample(HttpServletRequest request,
-			@ModelAttribute DetectInterface di) throws CommonException {
-		List<DetectInterface> dis = diService.selectAll();
-		return ResultRender.renderPagedResult(modelName + "：查询成功", dis,
-				dis.size());
+			@ModelAttribute DetectInterfaceModel dim) throws CommonException {
+		List<DetectInterfaceModel> dims = idBiz.selectByExample(dim);
+		return ResultRender.renderPagedResult(modelName + "：查询成功", dims,
+				dims.size());
 	}
 	
 	/**
 	 * 添加
 	 * 
 	 * @param request
-	 * @param m
+	 * @param dim
 	 * @return
 	 * @throws CommonException
 	 */
-	@RequestMapping(value = "", method = RequestMethod.POST)
+	@RequestMapping(value = "/add", method = RequestMethod.POST)
 	@ResponseBody
 	public JsonResult insert(HttpServletRequest request,
-			@ModelAttribute DetectInterface di) throws CommonException {
-		
-		return ResultRender.renderResult(modelName + "添加成功", di);
-	}
-
-	/**
-	 * 接口检测总开关开启状态查询
-	 * 
-	 * @param request
-	 * @param m
-	 * @return
-	 * @throws CommonException
-	 */
-	@RequestMapping(value = "/masterSwitch", method = RequestMethod.GET)
-	@ResponseBody
-	public JsonResult masterSwitchQuery(HttpServletRequest request) throws CommonException {
-		String flagName = "未知";
-		if(InterfaceConsts.MASTER_SWITCH_OPEN){
-			flagName = "已开启";
-		}else{
-			flagName = "已关闭";
-		}
-		masterSwitchResult = new HashMap<String, Object>();
-		masterSwitchResult.put("flag", InterfaceConsts.MASTER_SWITCH_OPEN);
-		masterSwitchResult.put("flagName", flagName);
-		
-		return ResultRender.renderResult("接口检测总开关状态查询成功", masterSwitchResult);
+			@ModelAttribute DetectInterfaceModel dim) throws CommonException {
+		idBiz.insert(dim);
+		return ResultRender.renderResult(modelName + "添加成功", dim);
 	}
 	
 	/**
-	 * 开启或关闭接口检测总开关
+	 * 修改
 	 * 
 	 * @param request
-	 * @param m
+	 * @param di
 	 * @return
 	 * @throws CommonException
 	 */
-	@RequestMapping(value = "/masterSwitch/{flag}", method = RequestMethod.PUT)
+	@RequestMapping(value = "/update", method = RequestMethod.PUT)
 	@ResponseBody
-	public JsonResult switchMaster(HttpServletRequest request,
-			@PathVariable boolean flag) throws CommonException {
-		String flagName = "未知";
-		if(flag){
-			flagName = "已开启";
-		}else{
-			flagName = "已关闭";
-		}
-		if(flag!=InterfaceConsts.MASTER_SWITCH_OPEN)
-			InterfaceConsts.MASTER_SWITCH_OPEN = flag;
-		masterSwitchResult = new HashMap<String, Object>();
-		masterSwitchResult.put("flag", InterfaceConsts.MASTER_SWITCH_OPEN);
-		masterSwitchResult.put("flagName", flagName);
-		
-		return ResultRender.renderResult("接口检测总开关"+flagName, masterSwitchResult);
+	public JsonResult updateById(HttpServletRequest request,
+			@RequestBody DetectInterface di)
+			throws CommonException {
+		idBiz.updateByPrimaryKey(di);
+		return ResultRender.renderResult(modelName + "修改成功", di);
+	}
+	
+	/**
+	 * 切换任务状态
+	 * 
+	 * @param request
+	 * @param toState
+	 * @param dim
+	 * @return
+	 * @throws CommonException
+	 */
+	@RequestMapping(value = "/switch/{toState}", method = RequestMethod.PUT)
+	@ResponseBody
+	public JsonResult switchState(HttpServletRequest request,
+			@PathVariable String toState, @RequestBody DetectInterfaceModel dim)
+			throws CommonException {
+		idBiz.switchState(dim, toState);
+		return ResultRender.renderResult(modelName + "修改成功", dim);
 	}
 
 }

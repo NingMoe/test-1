@@ -18,7 +18,6 @@ import java.util.Map;
  */
 public class InterfaceConsts {
 
-	public static boolean MASTER_SWITCH_OPEN = false; // 接口检测总开关：false-关闭；true-开启
 	// 接口检测默认组
 	public static final String DEFAULT_GROUP = "DETECT_INTERFACE_DEFAULT_GROUP";
 
@@ -31,6 +30,9 @@ public class InterfaceConsts {
 	public static String REQUEST_METHOD_GET = "GET";
 	public static String REQUEST_METHOD_POST = "POST";
 	public static String REQUEST_METHOD_WEBSERVICE = "WEBSERVICE";
+	// 任务编号头字符串
+	public static String TASK_ID_HEAD_TASKS = "DI-TASKS";
+	public static String TASK_ID_HEAD_GTASK = "DI-GTASK";
 
 	// 当前接口检测各job连续失败次数(写在内存中是防止job执行频率太高时导致数据库表被锁，隔天调零)
 	public static Map<String, Integer> FAILURE_TIME = new HashMap<String, Integer>();

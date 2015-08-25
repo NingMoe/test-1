@@ -1,7 +1,5 @@
 package com.jike.system.quartz;
 
-import java.util.Map;
-
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
@@ -11,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import com.jike.system.consts.DatabaseConsts;
 import com.jike.system.consts.InterfaceConsts;
 import com.jike.system.consts.SysConsts;
+import com.jike.system.model.DetectDatabaseModel;
 
 /** 
  *  
@@ -45,8 +44,8 @@ public class ResertNoticeJob implements Job {
 			InterfaceConsts.FAILURE_TIME.put(key, 0);
 		}
 		// 隔天调零job连续失败次数(Database)
-		for(Map<String, String> dd : DatabaseConsts.DETECT_DATABASE.values()){
-			dd.put(DatabaseConsts.CURRENT_FAILURE_NUM, "0");
+		for(DetectDatabaseModel ddm : DatabaseConsts.DETECT_DATABASE.values()){
+			ddm.setCurrentFailureNum(0);
 		}
 	}
 } 

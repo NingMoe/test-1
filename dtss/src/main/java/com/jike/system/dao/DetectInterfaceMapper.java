@@ -27,4 +27,6 @@ public interface DetectInterfaceMapper {
     int updateByPrimaryKeySelective(DetectInterface record);
 
     int updateByPrimaryKey(DetectInterface record);
+
+    int getNextTaskId(String taskIdHead);
 }
