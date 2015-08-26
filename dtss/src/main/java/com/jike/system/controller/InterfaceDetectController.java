@@ -1,6 +1,7 @@
 package com.jike.system.controller;
 
 import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,12 +13,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.jike.system.bean.DetectInterface;
 import com.jike.system.biz.itf.IInterfaceDetectBiz;
 import com.jike.system.consts.InterfaceConsts;
 import com.jike.system.consts.SysConsts;
 import com.jike.system.model.DetectInterfaceModel;
-import com.jike.system.util.BeanUtils;
 import com.jike.system.web.CommonException;
 import com.jike.system.web.JsonResult;
 import com.jike.system.web.ResultRender;
@@ -55,9 +54,7 @@ public class InterfaceDetectController extends BaseController{
 	@ResponseBody
 	public JsonResult selectById(HttpServletRequest request,
 			@PathVariable String taskId) throws CommonException {
-		DetectInterface di = idBiz.selectById(taskId);
-		DetectInterfaceModel dim = new DetectInterfaceModel();
-		BeanUtils.copyProperties(di, dim);
+		DetectInterfaceModel dim = idBiz.selectById(taskId);
 		dim.setCurrentFailureNum(InterfaceConsts.FAILURE_TIME.get(dim.getTaskId()));
 		dim.setCurrentIsNotice(SysConsts.CURRENT_IS_NOTICE.contains(dim.getTaskId()));
 		return ResultRender.renderResult(modelName + "：查询成功", dim);
@@ -91,8 +88,8 @@ public class InterfaceDetectController extends BaseController{
 	@RequestMapping(value = "/add", method = RequestMethod.POST)
 	@ResponseBody
 	public JsonResult insert(HttpServletRequest request,
-			@ModelAttribute DetectInterfaceModel dim) throws CommonException {
-		idBiz.insert(dim);
+			@RequestBody DetectInterfaceModel dim) throws CommonException {
+		dim = idBiz.insert(dim);
 		return ResultRender.renderResult(modelName + "添加成功", dim);
 	}
 	
@@ -107,10 +104,10 @@ public class InterfaceDetectController extends BaseController{
 	@RequestMapping(value = "/update", method = RequestMethod.PUT)
 	@ResponseBody
 	public JsonResult updateById(HttpServletRequest request,
-			@RequestBody DetectInterface di)
+			@RequestBody DetectInterfaceModel dim)
 			throws CommonException {
-		idBiz.updateByPrimaryKey(di);
-		return ResultRender.renderResult(modelName + "修改成功", di);
+		dim = idBiz.updateByPrimaryKey(dim);
+		return ResultRender.renderResult(modelName + "修改成功", dim);
 	}
 	
 	/**
@@ -122,13 +119,12 @@ public class InterfaceDetectController extends BaseController{
 	 * @return
 	 * @throws CommonException
 	 */
-	@RequestMapping(value = "/switch/{toState}", method = RequestMethod.PUT)
+	@RequestMapping(value = "/switch", method = RequestMethod.PUT)
 	@ResponseBody
-	public JsonResult switchState(HttpServletRequest request,
-			@PathVariable String toState, @RequestBody DetectInterfaceModel dim)
+	public JsonResult switchState(HttpServletRequest request, @RequestBody DetectInterfaceModel dim)
 			throws CommonException {
-		idBiz.switchState(dim, toState);
-		return ResultRender.renderResult(modelName + "修改成功", dim);
+		dim = idBiz.switchState(dim);
+		return ResultRender.renderResult("任务状态切换成功", dim);
 	}
 
 }

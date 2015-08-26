@@ -48,6 +48,8 @@ public class DetectInterfaceModel extends BaseModel {
 
     private String state;
 
+    private String toState;
+
     private boolean currentIsNotice ;
 
     private Integer totalNoticeNum;
@@ -232,6 +234,14 @@ public class DetectInterfaceModel extends BaseModel {
 
 	public void setState(String state) {
 		this.state = state;
+	}
+
+	public String getToState() {
+		return toState;
+	}
+
+	public void setToState(String toState) {
+		this.toState = toState;
 	}
 
 	public boolean isCurrentIsNotice() {

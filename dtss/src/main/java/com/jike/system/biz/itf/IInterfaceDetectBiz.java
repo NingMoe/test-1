@@ -2,7 +2,6 @@ package com.jike.system.biz.itf;
 
 import java.util.List;
 
-import com.jike.system.bean.DetectInterface;
 import com.jike.system.model.DetectInterfaceModel;
 import com.jike.system.web.CommonException;
 
@@ -20,17 +19,21 @@ import com.jike.system.web.CommonException;
  */
 public interface IInterfaceDetectBiz {
 
-	DetectInterface selectById(String id) throws CommonException;
+	DetectInterfaceModel selectById(String id) throws CommonException;
 	
-	List<DetectInterface> selectAll() throws CommonException;
+	List<DetectInterfaceModel> selectAll() throws CommonException;
 	
-	void execute(DetectInterface di) throws CommonException;
+	void execute(DetectInterfaceModel dim) throws CommonException;
 
 	List<DetectInterfaceModel> selectByExample(DetectInterfaceModel dim) throws CommonException;
 
 	DetectInterfaceModel insert(DetectInterfaceModel dim) throws CommonException;
 
-	DetectInterface updateByPrimaryKey(DetectInterface di) throws CommonException;
+	DetectInterfaceModel updateByPrimaryKey(DetectInterfaceModel dim) throws CommonException;
 
-	DetectInterfaceModel switchState(DetectInterfaceModel dim, String toState) throws CommonException;
+	DetectInterfaceModel updateByPrimaryKeySelective(DetectInterfaceModel dim) throws CommonException;
+
+	DetectInterfaceModel switchState(DetectInterfaceModel dim) throws CommonException;
+
+	void closeAllTask() throws CommonException;
 }

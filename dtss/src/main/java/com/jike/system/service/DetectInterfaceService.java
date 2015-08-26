@@ -28,14 +28,15 @@ public class DetectInterfaceService extends BaseService implements IDetectInterf
 		return di;
 	}
 	
-/*	private DetectInterfaceModel copyBeanToModel(DetectInterface di) throws CommonException {
+	private DetectInterfaceModel copyBeanToModel(DetectInterface di) throws CommonException {
 		DetectInterfaceModel dim = (DetectInterfaceModel) super.copyProperties(di, DetectInterfaceModel.class);
 		return dim;
-	}*/
+	}
 	
 	@Override
-	public DetectInterface selectById(String id) throws CommonException {
-		return detectInterfaceMapper.selectByPrimaryKey(id);
+	public DetectInterfaceModel selectById(String id) throws CommonException {
+		DetectInterface di = detectInterfaceMapper.selectByPrimaryKey(id);
+		return copyBeanToModel(di);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -62,10 +63,14 @@ public class DetectInterfaceService extends BaseService implements IDetectInterf
 		return dims;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public List<DetectInterface> selectAll() throws CommonException {
+	public List<DetectInterfaceModel> selectAll() throws CommonException {
 		List<DetectInterface> dis = detectInterfaceMapper.selectByExample(null);
-		return dis;
+		List<DetectInterfaceModel> dims = 
+				(List<DetectInterfaceModel>) copyListProperties(dis,
+						DetectInterfaceModel.class);
+		return dims;
 	}
 
 	@Override
@@ -76,9 +81,17 @@ public class DetectInterfaceService extends BaseService implements IDetectInterf
 	}
 
 	@Override
-	public DetectInterface updateByPrimaryKey(DetectInterface di) throws CommonException {
+	public DetectInterfaceModel updateByPrimaryKey(DetectInterfaceModel dim) throws CommonException {
+		DetectInterface di = copyModelToBean(dim);
+		detectInterfaceMapper.updateByPrimaryKey(di);
+		return dim;
+	}
+
+	@Override
+	public DetectInterfaceModel updateByPrimaryKeySelective(DetectInterfaceModel dim) throws CommonException {
+		DetectInterface di = copyModelToBean(dim);
 		detectInterfaceMapper.updateByPrimaryKeySelective(di);
-		return di;
+		return dim;
 	}
 
 	@Override

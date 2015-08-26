@@ -6,9 +6,9 @@ import org.quartz.JobExecutionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.jike.system.bean.DetectInterface;
 import com.jike.system.biz.itf.IInterfaceDetectBiz;
 import com.jike.system.consts.SysConsts;
+import com.jike.system.model.DetectInterfaceModel;
 import com.jike.system.util.ContextUtil;
 import com.jike.system.util.StringUtil;
 
@@ -38,14 +38,14 @@ public class InterfaceDetectJob implements Job {
 		if(StringUtil.isNotEmpty(jobName)){
 			try {
 				// 根据任务名称获取待检测的接口信息
-				DetectInterface di = idBiz.selectById(jobName);
-				if(di != null){
+				DetectInterfaceModel dim = idBiz.selectById(jobName);
+				if(dim != null){
 					// 获取此接口是否需要启用检测
-					boolean state = SysConsts.DETECT_STATE_RUN.equals(di.getState());
+					boolean state = SysConsts.DETECT_STATE_RUN.equals(dim.getState());
 					// 如果启用，则进行检测
 					if(state){
 						log.info("执行任务："+jobName);
-						idBiz.execute(di);
+						idBiz.execute(dim);
 					}
 				}
 			} catch (Exception e) {

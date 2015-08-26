@@ -309,7 +309,7 @@
   </select>
   
   <select id="getNextTaskId" parameterType="java.lang.String" resultType="java.lang.Integer" >
-    select nvl(max(SUBSTR(TASK_ID,9,3)) +1,1) from T_SYSTEM_DETECT_INTERFACE where SUBSTR(TASK_ID,1,8) = #{taskIdHead,jdbcType=VARCHAR}
+    select nvl(max(SUBSTR(TASK_ID,9,4)) +1,1) from T_SYSTEM_DETECT_INTERFACE where SUBSTR(TASK_ID,1,8) = #{taskIdHead,jdbcType=VARCHAR}
   </select>
   
   <update id="updateByExampleSelective" parameterType="map" >

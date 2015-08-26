@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.jike.system.bean.DetectInterface;
 import com.jike.system.bean.DetectLog;
 import com.jike.system.biz.itf.IInterfaceDetectBiz;
 import com.jike.system.consts.InterfaceConsts;
@@ -41,12 +40,12 @@ public class InterfaceDetectBiz implements IInterfaceDetectBiz {
 	private IDetectLogService dlService;
 
 	@Override
-	public DetectInterface selectById(String id) throws CommonException {
+	public DetectInterfaceModel selectById(String id) throws CommonException {
 		return diService.selectById(id);
 	}
 
 	@Override
-	public List<DetectInterface> selectAll() throws CommonException {
+	public List<DetectInterfaceModel> selectAll() throws CommonException {
 		return diService.selectAll();
 	}
 
@@ -60,13 +59,12 @@ public class InterfaceDetectBiz implements IInterfaceDetectBiz {
 		// 新创建之前验证信息
 		vaildate(dim);
 		// 数据标识符是否重复
-		List<DetectInterface> dims = selectAll();
+		List<DetectInterfaceModel> dims = selectAll();
+		String newGuid = MD5Util.md5(dim.getItfUrl()+dim.getRequestMethod()+dim.getItfParams()).toUpperCase();
 		if(dims != null){
-			String newGuid = dim.getItfUrl()+dim.getRequestMethod()+dim.getItfParams();
-			for(DetectInterface dime : dims){
-				String existGuid = dime.getGuid();
-				if(newGuid.equals(existGuid)){
-					new CommonException("该条接口检测数据已经存在");
+			for(DetectInterfaceModel dime : dims){
+				if(newGuid.equals(dime.getGuid())){
+					throw new CommonException("该条接口检测数据已经存在");
 				}
 			}
 		}
@@ -80,6 +78,11 @@ public class InterfaceDetectBiz implements IInterfaceDetectBiz {
 		}
 		// 初始化当前检测失败次数
 		dim.setCurrentFailureNum(0);
+		// 初始化当前检测失败次数
+		if(StringUtil.isEmpty(dim.getNoticeLvl())){
+			dim.setNoticeLvl("1");
+		}
+		dim.setCurrentFailureNum(0);
 		// 初始化状态为：关闭
 		dim.setState(SysConsts.DETECT_STATE_CLOSE);
 		// 初始化累计通知次数为：0次
@@ -88,94 +91,147 @@ public class InterfaceDetectBiz implements IInterfaceDetectBiz {
 		dim.setCreateTime(newTime);
 		dim.setUpdateTime(newTime);
 		// 初始化数据标识符
-		dim.setGuid(MD5Util.md5(dim.getItfUrl()+dim.getRequestMethod()+dim.getItfParams()).toUpperCase());
+		dim.setGuid(newGuid);
 		diService.insert(dim);
 		return dim;
 	}
 
 	@Override
-	public DetectInterface updateByPrimaryKey(DetectInterface di) throws CommonException {
-		diService.updateByPrimaryKey(di);
-		return di;
+	public DetectInterfaceModel updateByPrimaryKeySelective(DetectInterfaceModel dim) throws CommonException {
+		diService.updateByPrimaryKeySelective(dim);
+		return dim;
 	}
 
 	@Override
-	public DetectInterfaceModel switchState(DetectInterfaceModel dim, String toState)
-			throws CommonException {
-		DetectInterface di = selectById(dim.getTaskId());
-		String jobName = di.getTaskId();
-		String jobGroupName = (di.getTaskGroupId()==null?InterfaceConsts.DEFAULT_GROUP:di.getTaskGroupId());
-		String triggerName =  di.getTaskId();
-		String triggerGroupName = InterfaceConsts.DEFAULT_GROUP;
-		di.setState(toState);
-		updateByPrimaryKey(di);
-		try {
-			if(SysConsts.DETECT_STATE_CLOSE.equals(toState)){
-				QuartzManager.removeJob(jobName, jobGroupName, triggerName, triggerGroupName);
-			}
-			else if(SysConsts.DETECT_STATE_RUN.equals(toState)){
-				if(QuartzManager.vaildateTriggerExist(triggerName, triggerGroupName)){
-					QuartzManager.resume(triggerName, triggerGroupName);
-				}else{
-					QuartzManager.addSimpleJob(jobName, jobGroupName, triggerName, triggerGroupName, 
-							InterfaceDetectJob.class, null, null, SimpleTrigger.REPEAT_INDEFINITELY, di.getFrequency());
-					// 添加job连续失败次数
-					InterfaceConsts.FAILURE_TIME.put(jobName, 0);
+	public DetectInterfaceModel updateByPrimaryKey(DetectInterfaceModel dim) throws CommonException {
+		// 更新之前验证信息
+		if(StringUtil.isEmpty(dim.getTaskId())){
+			throw new CommonException("接口检测数据--任务编号不能为空");
+		}
+		// 数据标识符是否重复
+		DetectInterfaceModel dimg = selectById(dim.getTaskId());
+		String newGuid = StringUtil.isEmpty(dim.getItfUrl())?dimg.getItfUrl():dim.getItfUrl();
+		newGuid += StringUtil.isEmpty(dim.getRequestMethod())?dimg.getRequestMethod():dim.getRequestMethod();
+		newGuid += StringUtil.isEmpty(dim.getItfParams())?dimg.getItfParams():dim.getItfParams();
+		newGuid = MD5Util.md5(newGuid).toUpperCase();
+		List<DetectInterfaceModel> dims = selectAll();
+		if(dims != null){
+			for(DetectInterfaceModel dime : dims){
+				if(newGuid.equals(dime.getGuid())&&dim.getTaskId().equals(dimg.getTaskId())){
+					throw new CommonException("该条接口检测数据已经存在");
 				}
 			}
-			else if(SysConsts.DETECT_STATE_STOP.equals(toState)){
-				QuartzManager.pause(triggerName, triggerGroupName);
-			}
-		} catch (RuntimeException e) {
-			e.printStackTrace();
-			new CommonException("开启接口检测["+jobName+"]定时任务出错：", e);
-			log.info("开启接口检测["+jobName+"]定时任务出错：", e);
 		}
+		// 初始化时间
+		Date newTime = new Date();
+		// 禁止修改状态(状态有方法switchState控制)
+		dim.setState(null);
+		// 禁止直接修改Guid
+		dim.setGuid(newGuid);
+		// 记录修改时间
+		dim.setUpdateTime(newTime);
+		updateByPrimaryKeySelective(dim);
 		return dim;
+	}
+
+	@Override
+	public DetectInterfaceModel switchState(DetectInterfaceModel dim)
+			throws CommonException {
+		if(StringUtil.isEmpty(dim.getTaskId())){
+			throw new CommonException("接口检测数据--任务编号不能为空");
+		}
+		DetectInterfaceModel dime = selectById(dim.getTaskId());
+		String jobName = dime.getTaskId();
+		String jobGroupName = (dime.getTaskGroupId()==null?InterfaceConsts.DEFAULT_GROUP:dime.getTaskGroupId());
+		String triggerName =  dime.getTaskId();
+		String triggerGroupName = InterfaceConsts.DEFAULT_GROUP;
+		// 获取当前检测状态
+		String currentState = dime.getState();
+		// 获取转换状态
+		String toState = dim.getToState();
+		dime.setState(toState);
+		updateByPrimaryKeySelective(dime);
+		// 切换为关闭，前提：当前状态不为关闭
+		if(SysConsts.DETECT_STATE_CLOSE.equals(toState)){
+			if(SysConsts.DETECT_STATE_CLOSE.equals(currentState))
+				throw new CommonException("接口检测任务["+jobName+"]--已关闭，请刷新！");
+			QuartzManager.removeJob(jobName, jobGroupName, triggerName, triggerGroupName);
+		}
+		// 切换为启动，前提：当前状态不为启动
+		else if(SysConsts.DETECT_STATE_RUN.equals(toState)){
+			if(SysConsts.DETECT_STATE_RUN.equals(currentState))
+				throw new CommonException("接口检测任务["+jobName+"]--已启动，请刷新！");
+			if(QuartzManager.vaildateTriggerExist(triggerName, triggerGroupName)){
+				QuartzManager.resume(triggerName, triggerGroupName);
+			}else{
+				QuartzManager.addSimpleJob(jobName, jobGroupName, triggerName, triggerGroupName, 
+						InterfaceDetectJob.class, null, null, SimpleTrigger.REPEAT_INDEFINITELY, dime.getFrequency());
+				// 添加job连续失败次数
+				InterfaceConsts.FAILURE_TIME.put(jobName, 0);
+			}
+		}
+		// 切换为暂停，前提：当前状为启动
+		else if(SysConsts.DETECT_STATE_STOP.equals(toState)){
+			if(!SysConsts.DETECT_STATE_RUN.equals(currentState))
+				throw new CommonException("接口检测任务["+jobName+"]--未启动，请刷新！");
+			QuartzManager.pause(triggerName, triggerGroupName);
+		}
+		return dime;
+	}
+
+	@Override
+	public void closeAllTask() throws CommonException {
+		List<DetectInterfaceModel> dims = selectAll();
+		if(dims != null){
+			for(DetectInterfaceModel dim : dims){
+				dim.setState(SysConsts.DETECT_STATE_CLOSE);
+				updateByPrimaryKeySelective(dim);
+			}
+		}
 	}
 	
 	/*
 	 * 主要执行方法
 	 */
 	@Override
-	public void execute(DetectInterface di) throws CommonException {
+	public void execute(DetectInterfaceModel dim) throws CommonException {
 		log.debug("主要执行方法");
 		// 定义任务列表
-		List<DetectInterface> dis = new ArrayList<DetectInterface>();
+		List<DetectInterfaceModel> dims = new ArrayList<DetectInterfaceModel>();
 		// 获取任务组编号
-		String taskGroupId = di.getTaskGroupId();
+		String taskGroupId = dim.getTaskGroupId();
 		if(StringUtil.isNotEmpty(taskGroupId)){
-			DetectInterface diGroup = selectById(taskGroupId);
-			if(diGroup != null){
+			DetectInterfaceModel dimGroup = selectById(taskGroupId);
+			if(dimGroup != null){
 				// 添加组任务
-				dis.add(diGroup);
+				dims.add(dimGroup);
 			}
 		}
 		// 添加子任务
-		dis.add(di);
+		dims.add(dim);
 		// 执行任务列表
-		executeTaskList(dis);
+		executeTaskList(dims);
 	}
 	
 	/*
 	 * 执行任务列表，并进行数据库，通知等操作
 	 */
-	private void executeTaskList(List<DetectInterface> dis) {
+	private void executeTaskList(List<DetectInterfaceModel> dims) {
 		log.debug("执行任务列表，并进行数据库，通知等操作");
 		// 最先请求无cookieStore对象，设为空
 		CookieStore cookieStore = null;
 		// 遍历任务列表
-		for(DetectInterface di: dis){
+		for(DetectInterfaceModel dim: dims){
 			//Http请求接收返回对象
 			Map<String, Object> respObject = null;
 			// 获取待发送URL
-			String url = di.getItfUrl();
+			String url = dim.getItfUrl();
 			// 获取参数
-			String params = analyzeParams(di.getItfParams());
+			String params = analyzeParams(dim.getItfParams());
 			// 设置编码
 			String encodeCharset = InterfaceConsts.REQUEST_ENCODECHARSET;
 			// 获取请求方式
-			String requestMethod = di.getRequestMethod();
+			String requestMethod = dim.getRequestMethod();
 			// 不同请求方式不同方法
 			if(InterfaceConsts.REQUEST_METHOD_GET.equals(requestMethod)){
 				// GET请求
@@ -189,7 +245,7 @@ public class InterfaceDetectBiz implements IInterfaceDetectBiz {
 			// 获取Http请求返回值
 			String respContent = (String) respObject.get(HttpClientUtil.RESPONSE_CONTENT);
 			// 校验返回信息，并进行数据库，通知等操作
-			boolean checkSuccess = vaildateRespContent(respContent, di);
+			boolean checkSuccess = vaildateRespContent(respContent, dim);
 			// 记录此次检测数据
 			DetectLog dl = new DetectLog();
 			// 记录检测类型
@@ -197,7 +253,7 @@ public class InterfaceDetectBiz implements IInterfaceDetectBiz {
 			// 记录检测时间
 			dl.setLogTime(new Date());
 			// 记录检测编号
-			dl.setTaskId(di.getTaskId());
+			dl.setTaskId(dim.getTaskId());
 			// 记录传递参数
 			try {
 				dl.setInputParams(StringUtil.subStrb(params, 500, SysConsts.DATABASE_ENCODING));
@@ -208,34 +264,34 @@ public class InterfaceDetectBiz implements IInterfaceDetectBiz {
 			if(checkSuccess){
 				// 初始化当前检测失败次数
 //				di.setCurrentFailureNum(0);
-				InterfaceConsts.FAILURE_TIME.put(di.getTaskId(), 0);
+				InterfaceConsts.FAILURE_TIME.put(dim.getTaskId(), 0);
 				// 记录接口检测结果:成功
 				dl.setDetectResult(SysConsts.DETECT_RESULT_SUCCESS);
 			}else{
 				// 当前检测失败次数+1
-				int failureNum = InterfaceConsts.FAILURE_TIME.get(di.getTaskId()) + 1;
+				int failureNum = InterfaceConsts.FAILURE_TIME.get(dim.getTaskId()) + 1;
 				// 当前失败次数是否超过阈值
-				if(failureNum > di.getThresholdValue()){
+				if(failureNum > dim.getThresholdValue()){
 					// 如果当日该接口未发送警报
-					if(!SysConsts.CURRENT_IS_NOTICE.contains(di.getTaskId())){
+					if(!SysConsts.CURRENT_IS_NOTICE.contains(dim.getTaskId())){
 						log.info("当前失败次数已超过阈值，将发送短信提示相关人员……");
 						// 发送警报
-						String[] message = createSms(di);
+						String[] message = createSms(dim);
 						SmsHandler.sendMessage(message);
 						log.info("提示短信已发送");
 						// 记录当日该接口已发送警报
-						SysConsts.CURRENT_IS_NOTICE.add(di.getTaskId());
+						SysConsts.CURRENT_IS_NOTICE.add(dim.getTaskId());
 						// 累计警报次数+1
-						di.setTotalNoticeNum(di.getTotalNoticeNum() + 1);
+						dim.setTotalNoticeNum(dim.getTotalNoticeNum() + 1);
 						// 设置接口检测状态为：暂停
-						di.setState(SysConsts.DETECT_STATE_STOP);
+						dim.setState(SysConsts.DETECT_STATE_STOP);
 						// 更新到数据库
-						diService.updateByPrimaryKey(di);
+						diService.updateByPrimaryKey(dim);
 					}
 				}else{
 					// 当前失败次数超过阈值不记录
 //					di.setCurrentFailureNum(failureNum);
-					InterfaceConsts.FAILURE_TIME.put(di.getTaskId(), failureNum);
+					InterfaceConsts.FAILURE_TIME.put(dim.getTaskId(), failureNum);
 				}
 				// 记录接口检测结果:失败
 				dl.setDetectResult(SysConsts.DETECT_RESULT_FAILURE);
@@ -259,14 +315,14 @@ public class InterfaceDetectBiz implements IInterfaceDetectBiz {
 	/*
 	 * 校验返回信息
 	 */
-	private boolean vaildateRespContent(String respContent, DetectInterface di) {
+	private boolean vaildateRespContent(String respContent, DetectInterfaceModel dim) {
 		log.debug("校验返回信息");
 		// 定义是否校验成功
 		boolean checkSuccess = true;
 		// 获取校验值1
-		String checkValue1 = di.getCheckValue1();
+		String checkValue1 = dim.getCheckValue1();
 		// 获取校验值2
-		String checkValue2 = di.getCheckValue2();
+		String checkValue2 = dim.getCheckValue2();
 		// 默认第一个校验值不为空
 		if(StringUtil.isEmpty(checkValue1)||!respContent.contains(checkValue1)){
 			checkSuccess = false;
@@ -280,9 +336,9 @@ public class InterfaceDetectBiz implements IInterfaceDetectBiz {
 	/*
 	 * 解析通知对象
 	 */
-	public static String[] createSms(DetectInterface di) {
+	public static String[] createSms(DetectInterfaceModel dim) {
 		String[] message = new String[2];
-		String noticeObject = di.getNoticeObject();
+		String noticeObject = dim.getNoticeObject();
 		if(StringUtil.isNotEmpty(noticeObject)){
 			noticeObject = noticeObject.replace(SysConsts.NOTICE_OBJECT_SPLIT, SmsHandler.MOBILE_SPLIT);
 		}
@@ -290,11 +346,11 @@ public class InterfaceDetectBiz implements IInterfaceDetectBiz {
 		message[0] = noticeObject;
 		// 组装警报内容
 		StringBuffer sb = new  StringBuffer();
-		sb.append("系统["+di.getBelongTo()+"]接口-->");
-		sb.append(" URL:"+di.getItfUrl());
-		sb.append(" 参数:"+analyzeParams(di.getItfParams()));
-		sb.append(" 通过"+di.getRequestMethod()+"请求");
-		sb.append("连续访问"+di.getThresholdValue()+"次失败！请及时查看并解决！");
+		sb.append("系统["+dim.getBelongTo()+"]接口-->");
+		sb.append(" URL:"+dim.getItfUrl());
+		sb.append(" 参数:"+analyzeParams(dim.getItfParams()));
+		sb.append(" 通过"+dim.getRequestMethod()+"请求");
+		sb.append("连续访问"+dim.getThresholdValue()+"次失败！请及时查看并解决！");
 		message[1] = sb.toString();
 		return message;
 	}
@@ -318,29 +374,26 @@ public class InterfaceDetectBiz implements IInterfaceDetectBiz {
 	 * 验证待检测数据合法性
 	 */
 	public void vaildate(DetectInterfaceModel dim){
-		if(StringUtil.isEmpty(dim.getTaskId())){
-			new CommonException("接口检测数据--任务编号不能为空");
-		}
 		if(StringUtil.isEmpty(dim.getItfUrl())){
-			new CommonException("接口检测数据--接口地址不能为空");
+			throw new CommonException("接口检测数据--接口地址不能为空");
 		}
 		if(StringUtil.isEmpty(dim.getItfParams())){
-			new CommonException("接口检测数据--接口参数不能为空");
+			throw new CommonException("接口检测数据--接口参数不能为空");
 		}
 		if(StringUtil.isEmpty(dim.getRequestMethod())){
-			new CommonException("接口检测数据--请求方式不能为空");
+			throw new CommonException("接口检测数据--请求方式不能为空");
 		}
 		if(StringUtil.isEmpty(dim.getCheckValue1())){
-			new CommonException("接口检测数据--校验值1不能为空");
+			throw new CommonException("接口检测数据--校验值1不能为空");
 		}
-		if(dim.getFrequency() == 0){
-			new CommonException("接口检测数据--检测频率不能为空和0");
+		if(dim.getFrequency() == null){
+			throw new CommonException("接口检测数据--检测频率不能为空");
 		}
-		if(dim.getThresholdValue() == 0){
-			new CommonException("接口检测数据--阈值不能为空和0");
+		if(dim.getThresholdValue() == null){
+			throw new CommonException("接口检测数据--阈值不能为空");
 		}
 		if(StringUtil.isEmpty(dim.getNoticeObject())){
-			new CommonException("接口检测数据--警报对象不能为空");
+			throw new CommonException("接口检测数据--警报对象不能为空");
 		}
 	}
 	

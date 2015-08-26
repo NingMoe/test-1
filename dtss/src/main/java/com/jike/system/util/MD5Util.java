@@ -1,9 +1,5 @@
 package com.jike.system.util;
 
-import org.apache.commons.codec.binary.Hex;
-import org.apache.commons.codec.digest.DigestUtils;
-import org.apache.log4j.Logger;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -11,18 +7,25 @@ import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+import org.apache.commons.codec.binary.Hex;
+import org.apache.commons.codec.digest.DigestUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * md5算法工具
  */
 public class MD5Util {
-    private final static Logger logger = Logger.getLogger(MD5Util.class);
+	
+	static Logger log = LoggerFactory.getLogger(MD5Util.class);
+	
     static MessageDigest md = null;
 
     static {
         try {
             md = MessageDigest.getInstance("MD5");
         } catch (NoSuchAlgorithmException ne) {
-            logger.error("NoSuchAlgorithmException: md5", ne);
+        	log.info("NoSuchAlgorithmException: md5", ne);
         }
     }
 
@@ -44,14 +47,14 @@ public class MD5Util {
                 loopCount++;
             }
             
-            logger.debug("read file to buffer loopCount:"+loopCount);
+            log.debug("read file to buffer loopCount:"+loopCount);
 
             return new String(Hex.encodeHex(md.digest()));
         } catch (FileNotFoundException e) {
-            logger.error("md5 file " + f.getAbsolutePath() + " failed:" + e.getMessage());
+        	log.error("md5 file " + f.getAbsolutePath() + " failed:" + e.getMessage());
             return null;
         } catch (IOException e) {
-            logger.error("md5 file " + f.getAbsolutePath() + " failed:" + e.getMessage());
+        	log.error("md5 file " + f.getAbsolutePath() + " failed:" + e.getMessage());
             return null;
         } finally {
             try {
@@ -81,7 +84,7 @@ public class MD5Util {
 //    	String b = "POST";
 //    	String c = "{\"employeename\": \"1\",\"password\": \"1\"}";
 
-    	String a = "http://10.0.1.4:8009/api/msgQueues";
+    	String a = "http://www.jiketravel.com:8084/api/msgQueues";
     	String b = "GET";
     	String c = "isCollapsed=1&limit=5&no=1";
     	

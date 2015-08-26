@@ -19,12 +19,12 @@ import com.jike.system.web.CommonException;
  */
 public interface IDatabaseDetectBiz {
 
-	void execute(DetectDatabaseModel dd) throws CommonException;
+	void execute(DetectDatabaseModel ddm) throws CommonException;
 	
 	List<DetectDatabaseModel> selectByExample(DetectDatabaseModel ddm) throws CommonException;
 
 	DetectDatabaseModel add(DetectDatabaseModel ddm) throws CommonException;
 	
-	void switchState(String taskId, String toState) throws CommonException;
+	DetectDatabaseModel switchState(DetectDatabaseModel ddm) throws CommonException;
 	
 }

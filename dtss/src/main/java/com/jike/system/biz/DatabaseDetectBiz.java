@@ -60,34 +60,48 @@ public class DatabaseDetectBiz implements IDatabaseDetectBiz {
 	}
 
 	@Override
-	public void switchState(String taskId, String toState) throws CommonException {
-		DetectDatabaseModel ddm = DatabaseConsts.DETECT_DATABASE.get(taskId);
-		String jobName = ddm.getTaskId();
-		String jobGroupName = (ddm.getTaskGroupId()==null?DatabaseConsts.DEFAULT_GROUP:ddm.getTaskGroupId());
-		String triggerName =  ddm.getTaskId();
-		String triggerGroupName = DatabaseConsts.DEFAULT_GROUP;
-		try {
-			if(SysConsts.DETECT_STATE_CLOSE.equals(toState)){
-				QuartzManager.removeJob(jobName, jobGroupName, triggerName, triggerGroupName);
-			}
-			else if(SysConsts.DETECT_STATE_RUN.equals(toState)){
-				if(QuartzManager.vaildateTriggerExist(triggerName, triggerGroupName)){
-					QuartzManager.resume(triggerName, triggerGroupName);
-				}else{
-					QuartzManager.addSimpleJob(jobName, jobGroupName, triggerName, triggerGroupName, 
-							DatabaseDetectJob.class, null, null, SimpleTrigger.REPEAT_INDEFINITELY, ddm.getFrequency());
-					// 添加job连续失败次数
-					InterfaceConsts.FAILURE_TIME.put(jobName, 0);
-				}
-			}
-			else if(SysConsts.DETECT_STATE_STOP.equals(toState)){
-				QuartzManager.pause(triggerName, triggerGroupName);
-			}
-		} catch (RuntimeException e) {
-			e.printStackTrace();
-			new CommonException("开启数据库检测["+jobName+"]定时任务出错：", e);
-			log.info("开启数据库检测["+jobName+"]定时任务出错：", e);
+	public DetectDatabaseModel switchState(DetectDatabaseModel ddm) throws CommonException {
+		if(StringUtil.isEmpty(ddm.getTaskId())){
+			throw new CommonException("数据库检测数据--任务编号不能为空");
 		}
+		DetectDatabaseModel ddme = DatabaseConsts.DETECT_DATABASE.get(ddm.getTaskId());
+		String jobName = ddme.getTaskId();
+		String jobGroupName = (ddme.getTaskGroupId()==null?DatabaseConsts.DEFAULT_GROUP:ddme.getTaskGroupId());
+		String triggerName =  ddme.getTaskId();
+		String triggerGroupName = DatabaseConsts.DEFAULT_GROUP;
+		// 获取当前检测状态
+		String currentState = ddme.getState();
+		// 获取转换检测状态
+		String toState = ddm.getToState();
+		if(SysConsts.DETECT_STATE_CLOSE.equals(toState)){
+			if(SysConsts.DETECT_STATE_CLOSE.equals(currentState))
+				throw new CommonException("接口检测任务["+jobName+"]--已关闭，请刷新！");
+			// 关闭任务
+			ddme.setState(toState);
+			QuartzManager.removeJob(jobName, jobGroupName, triggerName, triggerGroupName);
+		}
+		else if(SysConsts.DETECT_STATE_RUN.equals(toState)){
+			if(SysConsts.DETECT_STATE_RUN.equals(currentState))
+				throw new CommonException("接口检测任务["+jobName+"]--已启动，请刷新！");
+			// 启动任务
+			ddme.setState(toState);
+			if(QuartzManager.vaildateTriggerExist(triggerName, triggerGroupName)){
+				QuartzManager.resume(triggerName, triggerGroupName);
+			}else{
+				QuartzManager.addSimpleJob(jobName, jobGroupName, triggerName, triggerGroupName, 
+						DatabaseDetectJob.class, null, null, SimpleTrigger.REPEAT_INDEFINITELY, ddme.getFrequency());
+				// 添加job连续失败次数
+				InterfaceConsts.FAILURE_TIME.put(jobName, 0);
+			}
+		}
+		else if(SysConsts.DETECT_STATE_STOP.equals(toState)){
+			if(!SysConsts.DETECT_STATE_RUN.equals(currentState))
+				throw new CommonException("接口检测任务["+jobName+"]--未启动，请刷新！");
+			// 暂停任务
+			ddme.setState(toState);
+			QuartzManager.pause(triggerName, triggerGroupName);
+		}
+		return ddme;
 	}
 	
 	/*
@@ -198,28 +212,28 @@ public class DatabaseDetectBiz implements IDatabaseDetectBiz {
 	 */
 	public void vaildate(DetectDatabaseModel ddm){
 		if(StringUtil.isEmpty(ddm.getTaskId())){
-			new CommonException("数据库检测数据--任务编号不能为空");
+			throw new CommonException("数据库检测数据--任务编号不能为空");
 		}
 		if(StringUtil.isEmpty(ddm.getDbDriver())){
-			new CommonException("数据库检测数据--数据库连接驱动不能为空");
+			throw new CommonException("数据库检测数据--数据库连接驱动不能为空");
 		}
 		if(StringUtil.isEmpty(ddm.getDbUrl())){
-			new CommonException("数据库检测数据--数据库连接URL不能为空");
+			throw new CommonException("数据库检测数据--数据库连接URL不能为空");
 		}
 		if(StringUtil.isEmpty(ddm.getDbUsername())){
-			new CommonException("数据库检测数据--数据库连接用户名不能为空");
+			throw new CommonException("数据库检测数据--数据库连接用户名不能为空");
 		}
 		if(StringUtil.isEmpty(ddm.getDbPassword())){
-			new CommonException("数据库检测数据--数据库连接密码不能为空");
+			throw new CommonException("数据库检测数据--数据库连接密码不能为空");
 		}
-		if(ddm.getFrequency() == 0){
-			new CommonException("数据库检测数据--检测频率不能为空和0不能为空");
+		if(ddm.getFrequency() == null){
+			throw new CommonException("数据库检测数据--检测频率不能为空");
 		}
-		if(ddm.getThresholdValue() == 0){
-			new CommonException("数据库检测数据--阈值不能为空和0");
+		if(ddm.getThresholdValue() == null){
+			throw new CommonException("数据库检测数据--阈值不能为空");
 		}
 		if(StringUtil.isEmpty(ddm.getNoticeObject())){
-			new CommonException("数据库检测数据--警报对象不能为空");
+			throw new CommonException("数据库检测数据--警报对象不能为空");
 		}
 	}
 	
