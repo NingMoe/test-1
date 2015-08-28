@@ -53,6 +53,11 @@ public class InterfaceDetectBiz implements IInterfaceDetectBiz {
 	public List<DetectInterfaceModel> selectByExample(DetectInterfaceModel dim) throws CommonException {
 		return diService.selectByExample(dim);
 	}
+
+	@Override
+	public int countByExample(DetectInterfaceModel dim) throws CommonException {
+		return diService.countByExample(dim);
+	}
 	
 	@Override
 	public DetectInterfaceModel insert(DetectInterfaceModel dim) throws CommonException {

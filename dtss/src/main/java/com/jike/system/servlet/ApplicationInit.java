@@ -11,6 +11,7 @@ import org.springframework.context.ApplicationContextAware;
 import com.jike.system.consts.DatabaseConsts;
 import com.jike.system.core.QuartzManager;
 import com.jike.system.model.DetectDatabaseModel;
+import com.jike.system.quartz.ClearExpireLogJob;
 import com.jike.system.quartz.ResertNoticeJob;
 import com.jike.system.util.ContextUtil;
 import com.jike.system.util.ParamControlUtil;
@@ -34,12 +35,14 @@ public class ApplicationInit implements ApplicationContextAware {
 		// 启动重置警报对象定时任务
 		startResertNotice();
 		
+		// 启动清除过期日志定时任务
+		startClearExpireLog();
+		
 		// 启动调度
 		QuartzManager.start();
 	}
 	
 	private void databaseDetectInit(){
-		log.info("初始化数据库检测数据……");
 		List<String> ddList = ParamControlUtil.getDetectDbParam();
 		if(!ddList.isEmpty()){
 			DetectDatabaseModel dd = null;
@@ -67,19 +70,33 @@ public class ApplicationInit implements ApplicationContextAware {
 	}
 	
 	private void startResertNotice(){
-		log.info("启动重置警报对象定时任务……");
 		// 获取任务名称
 		String jobName = ResertNoticeJob.JOB_NAME;
 		// 执行频率
-		String cronExpression = ResertNoticeJob.RESET_CRON_EXPRESSION;
+		String cronExpression = ParamControlUtil.getCommonParam("RESERT_NOTICE_CRON_EXPRESSION");
 		// 添加定时任务
 		try {
 			QuartzManager.addCronJob(jobName, null, jobName, null, ResertNoticeJob.class, null, null, cronExpression);
+			log.info("重置警报对象任务已启动");
 		} catch (RuntimeException e) {
 			e.printStackTrace();
 			log.info("开启重置警报对象任务出错：", e);
 		}
-		log.info("重置警报对象任务已启动");
+	}
+	
+	private void startClearExpireLog(){
+		// 获取任务名称
+		String jobName = ClearExpireLogJob.JOB_NAME;
+		// 执行频率
+		String cronExpression = ParamControlUtil.getCommonParam("CLEAR_EXPIRE_LOG_CRON_EXPRESSION");
+		// 添加定时任务
+		try {
+			QuartzManager.addCronJob(jobName, null, jobName, null, ClearExpireLogJob.class, null, null, cronExpression);
+			log.info("清除过期日志任务已启动");
+		} catch (RuntimeException e) {
+			e.printStackTrace();
+			log.info("开启清除过期日志任务出错：", e);
+		}
 	}
 	
 }

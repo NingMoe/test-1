@@ -73,8 +73,8 @@ public class InterfaceDetectController extends BaseController{
 	public JsonResult selectByExample(HttpServletRequest request,
 			@ModelAttribute DetectInterfaceModel dim) throws CommonException {
 		List<DetectInterfaceModel> dims = idBiz.selectByExample(dim);
-		return ResultRender.renderPagedResult(modelName + "：查询成功", dims,
-				dims.size());
+		int count = idBiz.countByExample(dim);
+		return ResultRender.renderPagedResult(modelName + "：查询成功", dims, count);
 	}
 	
 	/**

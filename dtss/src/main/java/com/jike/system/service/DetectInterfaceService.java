@@ -63,6 +63,16 @@ public class DetectInterfaceService extends BaseService implements IDetectInterf
 		return dims;
 	}
 
+	@Override
+	public int countByExample(DetectInterfaceModel dim) throws CommonException {
+		DetectInterfaceExample diex = null;
+		if (dim != null) {
+			diex = (DetectInterfaceExample) getExample(DetectInterfaceExample.class, dim.getPage());
+			this.createExample(dim, diex);
+		}
+		return detectInterfaceMapper.countByExample(diex);
+	}
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<DetectInterfaceModel> selectAll() throws CommonException {

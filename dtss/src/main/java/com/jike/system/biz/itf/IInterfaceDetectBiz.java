@@ -27,6 +27,8 @@ public interface IInterfaceDetectBiz {
 
 	List<DetectInterfaceModel> selectByExample(DetectInterfaceModel dim) throws CommonException;
 
+	int countByExample(DetectInterfaceModel dim) throws CommonException;
+
 	DetectInterfaceModel insert(DetectInterfaceModel dim) throws CommonException;
 
 	DetectInterfaceModel updateByPrimaryKey(DetectInterfaceModel dim) throws CommonException;

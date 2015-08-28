@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.jike.system.biz.itf.IDetectLogBiz;
 import com.jike.system.model.DetectLogModel;
-import com.jike.system.service.itf.IDetectLogService;
 import com.jike.system.web.CommonException;
 import com.jike.system.web.JsonResult;
 import com.jike.system.web.ResultRender;
@@ -36,7 +36,7 @@ public class DetectLogController extends BaseController{
 	private String modelName = "检测日志";
 
 	@Autowired
-	private IDetectLogService dlService;
+	private IDetectLogBiz dlBiz;
 	
 	/**
 	 * 查询检测日志信息
@@ -50,8 +50,9 @@ public class DetectLogController extends BaseController{
 	@ResponseBody
 	public JsonResult query(HttpServletRequest request, 
 			@ModelAttribute DetectLogModel dlm) throws CommonException {
-		List<DetectLogModel> dlms = dlService.selectByExample(dlm);
-		return ResultRender.renderPagedResult(modelName+"查询成功", dlms, dlms.size());
+		List<DetectLogModel> dlms = dlBiz.selectByExample(dlm);
+		int count = dlBiz.countByExample(dlm);
+		return ResultRender.renderPagedResult(modelName+"查询成功", dlms, count);
 	}
 
 }

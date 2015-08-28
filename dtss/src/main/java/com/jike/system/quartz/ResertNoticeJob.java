@@ -30,9 +30,6 @@ public class ResertNoticeJob implements Job {
 	
 	// 重置警报对象任务名称
 	public static String JOB_NAME = "RESERT_NOTICE";
-
-	// 隔天清空
-	public static String RESET_CRON_EXPRESSION= "59 59 23 * * ?";
 	
 	@Override  
 	public void execute(JobExecutionContext jec) throws JobExecutionException {

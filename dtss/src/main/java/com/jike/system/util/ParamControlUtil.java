@@ -7,10 +7,22 @@ import java.util.ResourceBundle;
 
 public class ParamControlUtil {
 
+	// 通用配置文件
+	private static String COMMON_PARAM = "config/commonParam";
 	// 短信发送配置文件
 	private static String SMS_PARAM = "config/smsParam";
 	// 数据库检测数据配置文件
 	private static String DETECT_DB_PARAM = "config/detectDbParam";
+
+	
+	/**
+	 * 获得通用配置参数
+	 * @param key
+	 * @return
+	 */
+	public static String getCommonParam(String key) {
+		return ResourceBundle.getBundle(COMMON_PARAM).getString(key);
+	}
 	
 	/**
 	 * 获得短信参数
