@@ -291,7 +291,11 @@ public class InterfaceDetectBiz implements IInterfaceDetectBiz {
 						// 设置接口检测状态为：暂停
 						dim.setState(SysConsts.DETECT_STATE_STOP);
 						// 更新到数据库
-						diService.updateByPrimaryKey(dim);
+						updateByPrimaryKeySelective(dim);
+						// 切换状态
+						String triggerName =  dim.getTaskId();
+						String triggerGroupName = InterfaceConsts.DEFAULT_GROUP;
+						QuartzManager.pause(triggerName, triggerGroupName);
 					}
 				}else{
 					// 当前失败次数超过阈值不记录
