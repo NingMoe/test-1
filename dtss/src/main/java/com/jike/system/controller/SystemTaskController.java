@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.jike.system.consts.SysConsts;
-import com.jike.system.core.QuartzManager;
 import com.jike.system.web.CommonException;
 import com.jike.system.web.JsonResult;
 import com.jike.system.web.ResultRender;
@@ -53,7 +52,7 @@ public class SystemTaskController extends BaseController{
 		if(SysConsts.MASTER_SWITCH_OPEN){
 			flagName = "已开启";
 		}else{
-			flagName = "已关闭";
+			flagName = "已暂停";
 		}
 		masterSwitchResult = new HashMap<String, Object>();
 		masterSwitchResult.put("flag", SysConsts.MASTER_SWITCH_OPEN);
@@ -63,7 +62,7 @@ public class SystemTaskController extends BaseController{
 	}
 	
 	/**
-	 * 开启或关闭接口检测总开关
+	 * 开启或关闭系统检测总开关
 	 * 
 	 * @param request
 	 * @param m
@@ -75,15 +74,12 @@ public class SystemTaskController extends BaseController{
 	public JsonResult switchMaster(HttpServletRequest request,
 			@PathVariable boolean flag) throws CommonException {
 		String flagName = "未知";
-		if(!QuartzManager.isStart()){
-			QuartzManager.start();
-		}
 		if(flag){
-			QuartzManager.resumeAll();
+//			QuartzManager.resumeAll();
 			flagName = "已开启";
 		}else{
-			QuartzManager.pauseAll();
-			flagName = "已关闭";
+//			QuartzManager.pauseAll();
+			flagName = "已暂停";
 		}
 		if(flag!=SysConsts.MASTER_SWITCH_OPEN)
 			SysConsts.MASTER_SWITCH_OPEN = flag;

@@ -115,6 +115,9 @@ public class InterfaceDetectBiz implements IInterfaceDetectBiz {
 		}
 		// 数据标识符是否重复
 		DetectInterfaceModel dimg = selectById(dim.getTaskId());
+		if(!SysConsts.DETECT_STATE_CLOSE.equals(dimg.getState())){
+			throw new CommonException("修改接口检测数据前请先关闭此检测任务");
+		}
 		String newGuid = StringUtil.isEmpty(dim.getItfUrl())?dimg.getItfUrl():dim.getItfUrl();
 		newGuid += StringUtil.isEmpty(dim.getRequestMethod())?dimg.getRequestMethod():dim.getRequestMethod();
 		newGuid += StringUtil.isEmpty(dim.getItfParams())?dimg.getItfParams():dim.getItfParams();
@@ -122,7 +125,7 @@ public class InterfaceDetectBiz implements IInterfaceDetectBiz {
 		List<DetectInterfaceModel> dims = selectAll();
 		if(dims != null){
 			for(DetectInterfaceModel dime : dims){
-				if(newGuid.equals(dime.getGuid())&&dim.getTaskId().equals(dimg.getTaskId())){
+				if(newGuid.equals(dime.getGuid())&&!dim.getTaskId().equals(dimg.getTaskId())){
 					throw new CommonException("该条接口检测数据已经存在");
 				}
 			}
