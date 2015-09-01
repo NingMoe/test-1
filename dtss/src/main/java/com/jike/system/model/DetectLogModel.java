@@ -28,6 +28,9 @@ public class DetectLogModel extends BaseModel {
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date logEndTime;
 
+	// 到期日志的时间
+    private Date expireDate;
+
 	public String getLogId() {
 		return logId;
 	}
@@ -98,6 +101,14 @@ public class DetectLogModel extends BaseModel {
 
 	public void setLogEndTime(Date logEndTime) {
 		this.logEndTime = logEndTime;
+	}
+
+	public Date getExpireDate() {
+		return expireDate;
+	}
+
+	public void setExpireDate(Date expireDate) {
+		this.expireDate = expireDate;
 	}
     
 }

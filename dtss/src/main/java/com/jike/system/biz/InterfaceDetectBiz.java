@@ -53,6 +53,11 @@ public class InterfaceDetectBiz implements IInterfaceDetectBiz {
 	public List<DetectInterfaceModel> selectByExample(DetectInterfaceModel dim) throws CommonException {
 		return diService.selectByExample(dim);
 	}
+
+	@Override
+	public int countByExample(DetectInterfaceModel dim) throws CommonException {
+		return diService.countByExample(dim);
+	}
 	
 	@Override
 	public DetectInterfaceModel insert(DetectInterfaceModel dim) throws CommonException {
@@ -110,6 +115,9 @@ public class InterfaceDetectBiz implements IInterfaceDetectBiz {
 		}
 		// 数据标识符是否重复
 		DetectInterfaceModel dimg = selectById(dim.getTaskId());
+		if(!SysConsts.DETECT_STATE_CLOSE.equals(dimg.getState())){
+			throw new CommonException("修改接口检测数据前请先关闭此检测任务");
+		}
 		String newGuid = StringUtil.isEmpty(dim.getItfUrl())?dimg.getItfUrl():dim.getItfUrl();
 		newGuid += StringUtil.isEmpty(dim.getRequestMethod())?dimg.getRequestMethod():dim.getRequestMethod();
 		newGuid += StringUtil.isEmpty(dim.getItfParams())?dimg.getItfParams():dim.getItfParams();
@@ -117,7 +125,7 @@ public class InterfaceDetectBiz implements IInterfaceDetectBiz {
 		List<DetectInterfaceModel> dims = selectAll();
 		if(dims != null){
 			for(DetectInterfaceModel dime : dims){
-				if(newGuid.equals(dime.getGuid())&&dim.getTaskId().equals(dimg.getTaskId())){
+				if(newGuid.equals(dime.getGuid())&&!dim.getTaskId().equals(dimg.getTaskId())){
 					throw new CommonException("该条接口检测数据已经存在");
 				}
 			}
@@ -286,7 +294,11 @@ public class InterfaceDetectBiz implements IInterfaceDetectBiz {
 						// 设置接口检测状态为：暂停
 						dim.setState(SysConsts.DETECT_STATE_STOP);
 						// 更新到数据库
-						diService.updateByPrimaryKey(dim);
+						updateByPrimaryKeySelective(dim);
+						// 切换状态
+						String triggerName =  dim.getTaskId();
+						String triggerGroupName = InterfaceConsts.DEFAULT_GROUP;
+						QuartzManager.pause(triggerName, triggerGroupName);
 					}
 				}else{
 					// 当前失败次数超过阈值不记录

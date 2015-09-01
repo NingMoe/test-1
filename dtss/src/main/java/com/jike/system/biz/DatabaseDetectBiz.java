@@ -158,17 +158,21 @@ public class DatabaseDetectBiz implements IDatabaseDetectBiz {
 			int failureNum = ddm.getCurrentFailureNum() + 1;
 			// 当前失败次数是否超过阈值
 			if(failureNum > ddm.getThresholdValue()){
-				// 如果当日该接口未发送警报
+				// 如果当日该数据库检测未发送警报
 				if(!SysConsts.CURRENT_IS_NOTICE.contains(taskId)){
 					log.info("当前失败次数已超过阈值，将发送短信提示相关人员……");
 					// 发送警报
 					String[] message = createSms(ddm);
 					SmsHandler.sendMessage(message);
 					log.info("提示短信已发送");
-					// 记录当日该接口已发送警报
+					// 记录当日该数据库检测已发送警报
 					SysConsts.CURRENT_IS_NOTICE.add(taskId);
-					// 设置接口检测状态为：暂停
+					// 设置数据库检测状态为：暂停
 					ddm.setState(SysConsts.DETECT_STATE_STOP);
+					// 切换数据库检测状态
+					String triggerName =  ddm.getTaskId();
+					String triggerGroupName = DatabaseConsts.DEFAULT_GROUP;
+					QuartzManager.pause(triggerName, triggerGroupName);
 				}
 			}else{
 				// 当前失败次数超过阈值不记录

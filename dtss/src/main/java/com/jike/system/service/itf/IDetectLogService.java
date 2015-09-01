@@ -12,7 +12,11 @@ public interface IDetectLogService {
 
 	List<DetectLogModel> selectByExample(DetectLogModel dlm) throws CommonException;
 
+	int countByExample(DetectLogModel dlm) throws CommonException;
+
 	DetectLog insert(DetectLog dl) throws CommonException;
+	
+	DetectLogModel deleteByExample(DetectLogModel dlm) throws CommonException;
 	
 }
 

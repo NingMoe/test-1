@@ -44,9 +44,30 @@ public class DetectLogService extends BaseService implements IDetectLogService {
 	}
 
 	@Override
+	public int countByExample(DetectLogModel dlm) throws CommonException {
+		DetectLogExample dlex = null;
+		if (dlm != null) {
+			dlex = (DetectLogExample) getExample(DetectLogExample.class, dlm.getPage());
+			this.createExample(dlm, dlex);
+		}
+		return detectLogMapper.countByExample(dlex);
+	}
+
+	@Override
 	public DetectLog insert(DetectLog dl) throws CommonException {
 		detectLogMapper.insert(dl);
 		return dl;
+	}
+
+	@Override
+	public DetectLogModel deleteByExample(DetectLogModel dlm) throws CommonException {
+		DetectLogExample dlex = null;
+		if (dlm != null) {
+			dlex = (DetectLogExample) getExample(DetectLogExample.class, dlm.getPage());
+			this.createExample(dlm, dlex);
+		}
+		detectLogMapper.deleteByExample(dlex);
+		return dlm;
 	}
 	
 	private void createExample(DetectLogModel dlm, DetectLogExample dlex){
@@ -68,6 +89,9 @@ public class DetectLogService extends BaseService implements IDetectLogService {
 		}
 		if(dlm.getLogEndTime()!=null){
 			c.andLogTimeLessThan(dlm.getLogEndTime());
+		}
+		if(dlm.getExpireDate()!=null){
+			c.andLogTimeLessThan(dlm.getExpireDate());
 		}
 	}
 	
