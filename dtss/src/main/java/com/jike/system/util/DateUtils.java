@@ -272,6 +272,20 @@ public class DateUtils {
 		Date dateAfter = new Date(calendar.getTimeInMillis());
 		return dateAfter;
 	} 
+	
+	/**
+	 * @Title: getSpecifiedDayAfter
+	 * @Description: 获得指定日期的后几个月
+	 * @param specifiedDay
+	 * @return String
+	 */
+	public static Date getMonthAfter(Date date, int num){
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(date);
+		calendar.add(Calendar.MONTH, num);
+		Date dateAfter = new Date(calendar.getTimeInMillis());
+		return dateAfter;
+	}
 
 	/**
 	 * Adds a number of days to a date returning a new object. The original date

@@ -24,12 +24,12 @@ import com.jike.system.model.DetectDatabaseModel;
  * @date Aug 14, 2015
  *
  */
-public class ResertNoticeJob implements Job {
+public class ResetNoticeJob implements Job {
 
-	Logger log = LoggerFactory.getLogger(ResertNoticeJob.class);
+	Logger log = LoggerFactory.getLogger(ResetNoticeJob.class);
 	
 	// 重置警报对象任务名称
-	public static String JOB_NAME = "RESERT_NOTICE";
+	public static String JOB_NAME = "RESET_NOTICE";
 	
 	@Override  
 	public void execute(JobExecutionContext jec) throws JobExecutionException {

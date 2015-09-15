@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -85,6 +86,23 @@ public class DatabaseDetectController extends BaseController{
 			throws CommonException {
 		ddm = ddBiz.switchState(ddm);
 		return ResultRender.renderResult("任务状态切换成功", ddm);
+	}
+	
+	/**
+	 * 重置任务警报和失败次数
+	 * 
+	 * @param request
+	 * @param toState
+	 * @param dim
+	 * @return
+	 * @throws CommonException
+	 */
+	@RequestMapping(value = "/reset/{taskId}", method = RequestMethod.PUT)
+	@ResponseBody
+	public JsonResult reset(HttpServletRequest request, @PathVariable String taskId)
+			throws CommonException {
+		ddBiz.reset(taskId);
+		return ResultRender.renderResult("任务重置成功");
 	}
 
 }

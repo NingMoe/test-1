@@ -103,6 +103,12 @@ public class DatabaseDetectBiz implements IDatabaseDetectBiz {
 		}
 		return ddme;
 	}
+
+	@Override
+	public void reset(String id) throws CommonException {
+		SysConsts.CURRENT_IS_NOTICE.remove(id);
+		InterfaceConsts.FAILURE_TIME.put(id, 0);
+	}
 	
 	/*
 	 * 主要执行方法
@@ -167,12 +173,14 @@ public class DatabaseDetectBiz implements IDatabaseDetectBiz {
 					log.info("提示短信已发送");
 					// 记录当日该数据库检测已发送警报
 					SysConsts.CURRENT_IS_NOTICE.add(taskId);
-					// 设置数据库检测状态为：暂停
-					ddm.setState(SysConsts.DETECT_STATE_STOP);
+					// 设置数据库检测状态为：关闭
+					ddm.setState(SysConsts.DETECT_STATE_CLOSE);
 					// 切换数据库检测状态
+					String jobName = ddm.getTaskId();
+					String jobGroupName = (ddm.getTaskGroupId()==null?DatabaseConsts.DEFAULT_GROUP:ddm.getTaskGroupId());
 					String triggerName =  ddm.getTaskId();
 					String triggerGroupName = DatabaseConsts.DEFAULT_GROUP;
-					QuartzManager.pause(triggerName, triggerGroupName);
+					QuartzManager.removeJob(jobName, jobGroupName, triggerName, triggerGroupName);
 				}
 			}else{
 				// 当前失败次数超过阈值不记录

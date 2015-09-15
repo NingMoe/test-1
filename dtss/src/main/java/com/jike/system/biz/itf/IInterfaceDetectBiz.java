@@ -37,5 +37,7 @@ public interface IInterfaceDetectBiz {
 
 	DetectInterfaceModel switchState(DetectInterfaceModel dim) throws CommonException;
 
+	void reset(String id) throws CommonException;
+
 	void closeAllTask() throws CommonException;
 }

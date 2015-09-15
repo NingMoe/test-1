@@ -126,5 +126,22 @@ public class InterfaceDetectController extends BaseController{
 		dim = idBiz.switchState(dim);
 		return ResultRender.renderResult("任务状态切换成功", dim);
 	}
+	
+	/**
+	 * 重置任务警报和失败次数
+	 * 
+	 * @param request
+	 * @param toState
+	 * @param dim
+	 * @return
+	 * @throws CommonException
+	 */
+	@RequestMapping(value = "/reset/{taskId}", method = RequestMethod.PUT)
+	@ResponseBody
+	public JsonResult reset(HttpServletRequest request, @PathVariable String taskId)
+			throws CommonException {
+		idBiz.reset(taskId);
+		return ResultRender.renderResult("任务重置成功");
+	}
 
 }

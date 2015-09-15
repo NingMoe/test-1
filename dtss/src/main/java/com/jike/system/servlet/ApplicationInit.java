@@ -12,7 +12,7 @@ import com.jike.system.consts.DatabaseConsts;
 import com.jike.system.core.QuartzManager;
 import com.jike.system.model.DetectDatabaseModel;
 import com.jike.system.quartz.ClearExpireLogJob;
-import com.jike.system.quartz.ResertNoticeJob;
+import com.jike.system.quartz.ResetNoticeJob;
 import com.jike.system.util.ContextUtil;
 import com.jike.system.util.ParamControlUtil;
 import com.jike.system.util.StringUtil;
@@ -71,12 +71,12 @@ public class ApplicationInit implements ApplicationContextAware {
 	
 	private void startResertNotice(){
 		// 获取任务名称
-		String jobName = ResertNoticeJob.JOB_NAME;
+		String jobName = ResetNoticeJob.JOB_NAME;
 		// 执行频率
 		String cronExpression = ParamControlUtil.getCommonParam("RESERT_NOTICE_CRON_EXPRESSION");
 		// 添加定时任务
 		try {
-			QuartzManager.addCronJob(jobName, null, jobName, null, ResertNoticeJob.class, null, null, cronExpression);
+			QuartzManager.addCronJob(jobName, null, jobName, null, ResetNoticeJob.class, null, null, cronExpression);
 			log.info("重置警报对象任务已启动");
 		} catch (RuntimeException e) {
 			e.printStackTrace();

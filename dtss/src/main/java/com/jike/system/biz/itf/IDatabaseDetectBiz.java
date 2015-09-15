@@ -26,5 +26,7 @@ public interface IDatabaseDetectBiz {
 	DetectDatabaseModel add(DetectDatabaseModel ddm) throws CommonException;
 	
 	DetectDatabaseModel switchState(DetectDatabaseModel ddm) throws CommonException;
+
+	void reset(String id) throws CommonException;
 	
 }

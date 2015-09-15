@@ -119,6 +119,9 @@ public class DetectInterfaceService extends BaseService implements IDetectInterf
 		if(StringUtil.isNotEmpty(dim.getState())){
 			c.andStateEqualTo(dim.getState());
 		}
+		if(StringUtil.isNotEmpty(dim.getTaskGroupId())){
+			c.andTaskGroupIdEqualTo(dim.getTaskGroupId());
+		}
 		if(dim.getCreateStartTime()!=null){
 			c.andCreateTimeGreaterThanOrEqualTo(dim.getCreateStartTime());
 		}

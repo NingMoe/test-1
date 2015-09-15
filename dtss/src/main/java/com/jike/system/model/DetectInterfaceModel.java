@@ -12,7 +12,7 @@ public class DetectInterfaceModel extends BaseModel {
 
     private String taskGroupId;
     
-    private boolean taskGroupFlag;
+    private Boolean taskGroupFlag;
 
     private String belongTo;
 
@@ -50,7 +50,7 @@ public class DetectInterfaceModel extends BaseModel {
 
     private String toState;
 
-    private boolean currentIsNotice ;
+    private Boolean currentIsNotice ;
 
     private Integer totalNoticeNum;
 
@@ -92,11 +92,11 @@ public class DetectInterfaceModel extends BaseModel {
 		this.taskGroupId = taskGroupId;
 	}
 
-	public boolean isTaskGroupFlag() {
+	public Boolean getTaskGroupFlag() {
 		return taskGroupFlag;
 	}
 
-	public void setTaskGroupFlag(boolean taskGroupFlag) {
+	public void setTaskGroupFlag(Boolean taskGroupFlag) {
 		this.taskGroupFlag = taskGroupFlag;
 	}
 
@@ -244,11 +244,11 @@ public class DetectInterfaceModel extends BaseModel {
 		this.toState = toState;
 	}
 
-	public boolean isCurrentIsNotice() {
+	public Boolean getCurrentIsNotice() {
 		return currentIsNotice;
 	}
 
-	public void setCurrentIsNotice(boolean currentIsNotice) {
+	public void setCurrentIsNotice(Boolean currentIsNotice) {
 		this.currentIsNotice = currentIsNotice;
 	}
 

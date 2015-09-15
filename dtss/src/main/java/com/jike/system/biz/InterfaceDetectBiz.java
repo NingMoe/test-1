@@ -76,7 +76,7 @@ public class InterfaceDetectBiz implements IInterfaceDetectBiz {
 		// 初始化时间
 		Date newTime = new Date();
 		// 是否是组任务
-		if(dim.isTaskGroupFlag()){
+		if(dim.getTaskGroupFlag()){
 			dim.setTaskId(diService.getNextTaskId(InterfaceConsts.TASK_ID_HEAD_GTASK));
 		}else{
 			dim.setTaskId(diService.getNextTaskId(InterfaceConsts.TASK_ID_HEAD_TASKS));
@@ -149,24 +149,29 @@ public class InterfaceDetectBiz implements IInterfaceDetectBiz {
 			throw new CommonException("接口检测数据--任务编号不能为空");
 		}
 		DetectInterfaceModel dime = selectById(dim.getTaskId());
+		// 获取任务组编号
+		String taskGroupId = dime.getTaskGroupId();
 		String jobName = dime.getTaskId();
-		String jobGroupName = (dime.getTaskGroupId()==null?InterfaceConsts.DEFAULT_GROUP:dime.getTaskGroupId());
+		String jobGroupName = (taskGroupId==null?InterfaceConsts.DEFAULT_GROUP:taskGroupId);
 		String triggerName =  dime.getTaskId();
-		String triggerGroupName = InterfaceConsts.DEFAULT_GROUP;
+		String triggerGroupName = jobGroupName;
 		// 获取当前检测状态
 		String currentState = dime.getState();
 		// 获取转换状态
 		String toState = dim.getToState();
 		dime.setState(toState);
 		updateByPrimaryKeySelective(dime);
-		// 切换为关闭，前提：当前状态不为关闭
 		if(SysConsts.DETECT_STATE_CLOSE.equals(toState)){
-			if(SysConsts.DETECT_STATE_CLOSE.equals(currentState))
-				throw new CommonException("接口检测任务["+jobName+"]--已关闭，请刷新！");
 			QuartzManager.removeJob(jobName, jobGroupName, triggerName, triggerGroupName);
 		}
 		// 切换为启动，前提：当前状态不为启动
 		else if(SysConsts.DETECT_STATE_RUN.equals(toState)){
+			if(taskGroupId != null&&SysConsts.CURRENT_IS_NOTICE.contains(taskGroupId)){
+				throw new CommonException("启动前请确认[组]任务已修复");
+			}
+			if(jobName != null&&SysConsts.CURRENT_IS_NOTICE.contains(jobName)){
+				throw new CommonException("启动前请确认任务已修复");
+			}
 			if(SysConsts.DETECT_STATE_RUN.equals(currentState))
 				throw new CommonException("接口检测任务["+jobName+"]--已启动，请刷新！");
 			if(QuartzManager.vaildateTriggerExist(triggerName, triggerGroupName)){
@@ -188,12 +193,21 @@ public class InterfaceDetectBiz implements IInterfaceDetectBiz {
 	}
 
 	@Override
+	public void reset(String id) throws CommonException {
+		SysConsts.CURRENT_IS_NOTICE.remove(id);
+		InterfaceConsts.FAILURE_TIME.put(id, 0);
+		switchGroup(id, SysConsts.DETECT_STATE_RUN);
+	}
+
+	@Override
 	public void closeAllTask() throws CommonException {
 		List<DetectInterfaceModel> dims = selectAll();
-		if(dims != null){
+		if(dims != null&&dims.size() > 0){
 			for(DetectInterfaceModel dim : dims){
-				dim.setState(SysConsts.DETECT_STATE_CLOSE);
-				updateByPrimaryKeySelective(dim);
+				if(!SysConsts.DETECT_STATE_CLOSE.equals(dim.getState())){
+					dim.setState(SysConsts.DETECT_STATE_CLOSE);
+					updateByPrimaryKeySelective(dim);
+				}
 			}
 		}
 	}
@@ -212,10 +226,12 @@ public class InterfaceDetectBiz implements IInterfaceDetectBiz {
 			DetectInterfaceModel dimGroup = selectById(taskGroupId);
 			if(dimGroup != null){
 				// 添加组任务
+				dimGroup.setTaskGroupFlag(true);
 				dims.add(dimGroup);
 			}
 		}
 		// 添加子任务
+		dim.setTaskGroupFlag(false);
 		dims.add(dim);
 		// 执行任务列表
 		executeTaskList(dims);
@@ -276,8 +292,10 @@ public class InterfaceDetectBiz implements IInterfaceDetectBiz {
 				// 记录接口检测结果:成功
 				dl.setDetectResult(SysConsts.DETECT_RESULT_SUCCESS);
 			}else{
+				// 当前检测失败次数
+				int currentFailureNum = InterfaceConsts.FAILURE_TIME.get(dim.getTaskId())==null?0:InterfaceConsts.FAILURE_TIME.get(dim.getTaskId());
 				// 当前检测失败次数+1
-				int failureNum = InterfaceConsts.FAILURE_TIME.get(dim.getTaskId()) + 1;
+				int failureNum = currentFailureNum + 1;
 				// 当前失败次数是否超过阈值
 				if(failureNum > dim.getThresholdValue()){
 					// 如果当日该接口未发送警报
@@ -291,14 +309,16 @@ public class InterfaceDetectBiz implements IInterfaceDetectBiz {
 						SysConsts.CURRENT_IS_NOTICE.add(dim.getTaskId());
 						// 累计警报次数+1
 						dim.setTotalNoticeNum(dim.getTotalNoticeNum() + 1);
-						// 设置接口检测状态为：暂停
-						dim.setState(SysConsts.DETECT_STATE_STOP);
 						// 更新到数据库
 						updateByPrimaryKeySelective(dim);
+						// 设置接口检测状态为：关闭
+						dim.setToState(SysConsts.DETECT_STATE_CLOSE);
 						// 切换状态
-						String triggerName =  dim.getTaskId();
-						String triggerGroupName = InterfaceConsts.DEFAULT_GROUP;
-						QuartzManager.pause(triggerName, triggerGroupName);
+						switchState(dim);
+						// 若是组任务，则暂停下属任务
+						if(dim.getTaskGroupFlag()){
+							switchGroup(dim.getTaskId(), SysConsts.DETECT_STATE_STOP);
+						}
 					}
 				}else{
 					// 当前失败次数超过阈值不记录
@@ -321,6 +341,30 @@ public class InterfaceDetectBiz implements IInterfaceDetectBiz {
 				break;
 			// 设置下次执行请求的cookieStore
 			cookieStore = (CookieStore)respObject.get(HttpClientUtil.RESPONSE_COOKIESTORE);
+		}
+	}
+	
+	/*
+	 * 切换组任务状态
+	 */
+	public void switchGroup(String triggerGroupName, String toState){
+		DetectInterfaceModel dimQ = new DetectInterfaceModel();
+		dimQ.setTaskGroupId(triggerGroupName);
+		if(SysConsts.DETECT_STATE_STOP.equals(toState)){
+			QuartzManager.pauseGroup(triggerGroupName);
+			dimQ.setState(SysConsts.DETECT_STATE_RUN);
+		}else if(SysConsts.DETECT_STATE_RUN.equals(toState)){
+			QuartzManager.resumeGroup(triggerGroupName);
+			dimQ.setState(SysConsts.DETECT_STATE_STOP);
+		}else{
+			throw new CommonException("状态不存在，切换组任务状态失败");
+		}
+		List<DetectInterfaceModel> dims = selectByExample(dimQ);
+		if(dims != null&&dims.size() > 0){
+			for(DetectInterfaceModel dim : dims){
+				dim.setState(toState);
+				updateByPrimaryKeySelective(dim);
+			}
 		}
 	}
 	
@@ -373,8 +417,9 @@ public class InterfaceDetectBiz implements IInterfaceDetectBiz {
 	private static String analyzeParams(String params) {
 		if(StringUtil.isNotEmpty(params)){
 			Date newDate = new Date();
-			String date = DateUtils.formatDayDate(newDate);
-			String time = DateUtils.formatFullDate(newDate);
+			// 系统后一个月日期
+			String date = DateUtils.formatDayDate(DateUtils.getMonthAfter(newDate, 1));
+			String time = DateUtils.formatFullDate(DateUtils.getMonthAfter(newDate, 1));
 			params = params.replace(InterfaceConsts.ITF_PARAMS_DATE, date);
 			params = params.replace(InterfaceConsts.ITF_PARAMS_TIME, time);
 			return params;

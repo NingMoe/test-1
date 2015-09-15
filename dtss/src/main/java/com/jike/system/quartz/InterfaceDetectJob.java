@@ -42,6 +42,11 @@ public class InterfaceDetectJob implements Job {
 					// 根据任务名称获取待检测的接口信息
 					DetectInterfaceModel dim = idBiz.selectById(jobName);
 					if(dim != null){
+						// 获取任务组编号
+						String taskGroupId = dim.getTaskGroupId();
+						if(taskGroupId != null&&SysConsts.CURRENT_IS_NOTICE.contains(taskGroupId)){
+							return;
+						}
 						// 获取此接口是否需要启用检测
 						boolean state = SysConsts.DETECT_STATE_RUN.equals(dim.getState());
 						// 如果启用，则进行检测
