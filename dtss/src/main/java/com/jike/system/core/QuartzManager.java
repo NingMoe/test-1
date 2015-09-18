@@ -7,6 +7,7 @@ import static org.quartz.TriggerBuilder.newTrigger;
 
 import java.util.Date;
 
+import org.quartz.Calendar;
 import org.quartz.CronTrigger;
 import org.quartz.DateBuilder;
 import org.quartz.Job;
@@ -18,6 +19,7 @@ import org.quartz.SchedulerFactory;
 import org.quartz.SimpleTrigger;
 import org.quartz.TriggerKey;
 import org.quartz.impl.StdSchedulerFactory;
+import org.quartz.impl.calendar.DailyCalendar;
 import org.quartz.impl.matchers.GroupMatcher;
 
 import com.jike.system.util.StringUtil;
@@ -91,6 +93,21 @@ public class QuartzManager {
 	}
 	
 	/**
+	 * @Description: 验证一个Calendar是否存在
+	 * @param jobName
+	 * @param jobGroupName
+	 * @return
+	 */
+	public static boolean vaildateCalendarExist(String calendarName) {
+		try {
+			Calendar calendar = scheduler.getCalendar(calendarName);
+			return calendar != null;
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+	
+	/**
 	 * @Description: 验证一个触发器是否存在
 	 * @param jobName
 	 * @param jobGroupName
@@ -118,7 +135,7 @@ public class QuartzManager {
 	 * @param repeatInterval
 	 */
 	public static void addSimpleJob(String jobName, String jobGroupName, String triggerName, String triggerGroupName, 
-			Class<? extends Job> jobClass, Date startTime, Date endTime, int repeatCount, int repeatInterval) {
+			Class<? extends Job> jobClass, Date startTime, Date endTime, int repeatCount, int repeatInterval ,String calName) {
 		if(StringUtil.isEmpty(jobGroupName))
 			jobGroupName = DEFAULT_JOB_GROUP;
 		if(StringUtil.isEmpty(triggerName))
@@ -132,6 +149,7 @@ public class QuartzManager {
 						simpleSchedule()
 						.withRepeatCount(repeatCount)
 						.withIntervalInSeconds(repeatInterval))
+						.modifiedByCalendar(calName)
 				.build();
 		try {
 			scheduler.scheduleJob(jobDetail, trigger);
@@ -170,6 +188,20 @@ public class QuartzManager {
 			throw new RuntimeException(e);
 		}
 	}
+	
+	/**
+	 * @Description: 创建一个DailyCalendar
+	 * @return
+	 */
+	public static void addCalendar(String calendarName, String startTime, String endTime) {
+		DailyCalendar dailyCalendar = new DailyCalendar(startTime,endTime);
+		dailyCalendar.setInvertTimeRange(true); 
+		try {
+			scheduler.addCalendar(calendarName,dailyCalendar,false,false);
+		} catch (SchedulerException e) {
+			e.printStackTrace();
+		}
+	}
 
 	/**
 	 * @Description: 修改一个SimpleJob的触发时间
@@ -177,7 +209,7 @@ public class QuartzManager {
 	 * @param triggerGroupName
 	 * @param newRepeatInterval
 	 */
-	public static void updateSimpleJob(String triggerName, String triggerGroupName, int newRepeatInterval) {
+	public static void updateSimpleJob(String triggerName, String triggerGroupName, int newRepeatInterval ,String calName) {
 		try {
 			if(StringUtil.isEmpty(triggerGroupName))
 				triggerGroupName = DEFAULT_TRIGGER_GROUP;
@@ -193,6 +225,7 @@ public class QuartzManager {
 								simpleSchedule()
 								.withIntervalInSeconds(newRepeatInterval)
 								.withRepeatCount(trigger.getRepeatCount()))
+								.modifiedByCalendar(calName)
 						.build();
 				scheduler.rescheduleJob(triggerKey, newTrigger);
 			}
@@ -231,13 +264,15 @@ public class QuartzManager {
 
 	/**
 	 * @Description: 移除一个任务
+	 * 
 	 * @param jobName
 	 * @param jobGroupName
 	 * @param triggerName
 	 * @param triggerGroupName
+	 * @param calendarName
 	 */
 	public static void removeJob(String jobName, String jobGroupName,
-			String triggerName, String triggerGroupName) {
+			String triggerName, String triggerGroupName, String calendarName) {
 		try {
 			if(StringUtil.isEmpty(jobGroupName))
 				jobGroupName = DEFAULT_JOB_GROUP;
@@ -253,6 +288,23 @@ public class QuartzManager {
 			}
 			if(vaildateJobExist(jobName, jobGroupName)){
 				scheduler.deleteJob(jobKey);// 删除任务
+			}
+			if(vaildateCalendarExist(calendarName)){
+				removeCalendar(calendarName);// 删除任务执行时段
+			}
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	/**
+	 * @Description: 移除一个Calendar
+	 * @param calendarName
+	 */
+	public static void removeCalendar(String calendarName) {
+		try {
+			if(vaildateCalendarExist(calendarName)){
+				scheduler.deleteCalendar(calendarName);
 			}
 		} catch (Exception e) {
 			throw new RuntimeException(e);

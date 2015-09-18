@@ -33,16 +33,19 @@ public class QuartzTest {
 	   }*/
 	   
 	   System.out.println("start time:"+new Date());
-//	   QuartzManager.addSimpleJob("testJob", "testJobGroup", "testTrigger", "testTriggerGroup", QuartzJob.class, null, null, -1, 3000);
-	   QuartzManager.addCronJob("testJob", "testJobGroup", "testTrigger", "testTriggerGroup", QuartzJob.class, null, null, "0/5 * * * * ?");
+	   QuartzManager.addCalendar("testTrigger", "16:07", "16:08");
+	   QuartzManager.addSimpleJob("testJob", "testJobGroup", "testTrigger", "testTriggerGroup", QuartzJob.class, null, null, -1, 5, "123");
+//	   QuartzManager.addCronJob("testJob", "testJobGroup", "testTrigger", "testTriggerGroup", QuartzJob.class, null, null, "0/5 * * * * ?");
 	   QuartzManager.start();
-	   System.out.println("sleep: 25 second");
-	   Thread.sleep(25000);
+	   System.out.println("sleep: 90 second");
+	   Thread.sleep(90000);
+//	   QuartzManager.addCalendar("testTrigger", "15:58", "15:59");
 //	   QuartzManager.updateSimpleJob("testTrigger", "testTriggerGroup", 6000);
-	   QuartzManager.updateCronJob("testTrigger", "testTriggerGroup", "0/10 * * * * ?");
-	   System.out.println("sleep: 35 second");
-	   Thread.sleep(35000);
-	   System.out.println("stop time:"+new Date());
+//	   QuartzManager.updateCronJob("testTrigger", "testTriggerGroup", "0/10 * * * * ?");
+//	   System.out.println("sleep: 35 second");
+//	   Thread.sleep(35000);
+	   Thread.sleep(180000);
+	   System.out.println("no stop time:"+new Date());
 	   QuartzManager.shutdown();
    }  
  

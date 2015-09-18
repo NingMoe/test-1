@@ -26,7 +26,13 @@ public class DetectInterfaceModel extends BaseModel {
 
     private String checkValue2;
 
+    private String detectMode;
+
     private Integer frequency;
+
+    private String startTime;
+
+    private String endTime;
 
     private Integer thresholdValue;
 
@@ -148,12 +154,36 @@ public class DetectInterfaceModel extends BaseModel {
 		this.checkValue2 = checkValue2;
 	}
 
+	public String getDetectMode() {
+		return detectMode;
+	}
+
+	public void setDetectMode(String detectMode) {
+		this.detectMode = detectMode;
+	}
+
 	public Integer getFrequency() {
 		return frequency;
 	}
 
 	public void setFrequency(Integer frequency) {
 		this.frequency = frequency;
+	}
+
+	public String getStartTime() {
+		return startTime;
+	}
+
+	public void setStartTime(String startTime) {
+		this.startTime = startTime;
+	}
+
+	public String getEndTime() {
+		return endTime;
+	}
+
+	public void setEndTime(String endTime) {
+		this.endTime = endTime;
 	}
 
 	public Integer getThresholdValue() {

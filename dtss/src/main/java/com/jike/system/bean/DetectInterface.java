@@ -54,6 +54,12 @@ public class DetectInterface implements Serializable {
 
     private String guid;
 
+    private String detectMode;
+
+    private String staetTime;
+
+    private String endTime;
+
     private static final long serialVersionUID = 1L;
 
     public String getTaskId() {
@@ -254,5 +260,29 @@ public class DetectInterface implements Serializable {
 
     public void setGuid(String guid) {
         this.guid = guid == null ? null : guid.trim();
+    }
+
+    public String getDetectMode() {
+        return detectMode;
+    }
+
+    public void setDetectMode(String detectMode) {
+        this.detectMode = detectMode == null ? null : detectMode.trim();
+    }
+
+    public String getStaetTime() {
+        return staetTime;
+    }
+
+    public void setStaetTime(String staetTime) {
+        this.staetTime = staetTime == null ? null : staetTime.trim();
+    }
+
+    public String getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(String endTime) {
+        this.endTime = endTime == null ? null : endTime.trim();
     }
 }

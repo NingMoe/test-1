@@ -81,6 +81,12 @@ public class InterfaceDetectBiz implements IInterfaceDetectBiz {
 		}else{
 			dim.setTaskId(diService.getNextTaskId(InterfaceConsts.TASK_ID_HEAD_TASKS));
 		}
+		// 检测模式
+		if(InterfaceConsts.DETECT_MODE_2.equals(dim.getDetectMode())){
+			if(StringUtil.isEmpty(dim.getStartTime())||StringUtil.isEmpty(dim.getEndTime())){
+				throw new CommonException("该条接口检测数据包含执行时间段");
+			}
+		}
 		// 初始化当前检测失败次数
 		dim.setCurrentFailureNum(0);
 		// 初始化当前检测失败次数
@@ -130,6 +136,12 @@ public class InterfaceDetectBiz implements IInterfaceDetectBiz {
 				}
 			}
 		}
+		// 检测模式
+		if(InterfaceConsts.DETECT_MODE_2.equals(dim.getDetectMode())){
+			if(StringUtil.isEmpty(dim.getStartTime())||StringUtil.isEmpty(dim.getEndTime())){
+				throw new CommonException("该条接口检测数据包含执行时间段");
+			}
+		}
 		// 初始化时间
 		Date newTime = new Date();
 		// 禁止修改状态(状态有方法switchState控制)
@@ -162,7 +174,7 @@ public class InterfaceDetectBiz implements IInterfaceDetectBiz {
 		dime.setState(toState);
 		updateByPrimaryKeySelective(dime);
 		if(SysConsts.DETECT_STATE_CLOSE.equals(toState)){
-			QuartzManager.removeJob(jobName, jobGroupName, triggerName, triggerGroupName);
+			QuartzManager.removeJob(jobName, jobGroupName, triggerName, triggerGroupName, jobName);
 		}
 		// 切换为启动，前提：当前状态不为启动
 		else if(SysConsts.DETECT_STATE_RUN.equals(toState)){
@@ -177,8 +189,14 @@ public class InterfaceDetectBiz implements IInterfaceDetectBiz {
 			if(QuartzManager.vaildateTriggerExist(triggerName, triggerGroupName)){
 				QuartzManager.resume(triggerName, triggerGroupName);
 			}else{
+				String calendarName = null;
+				// 检测模式
+				if(InterfaceConsts.DETECT_MODE_2.equals(dime.getDetectMode())){
+					QuartzManager.addCalendar(jobName, dime.getStartTime(), dime.getEndTime());
+					calendarName = jobName;
+				}
 				QuartzManager.addSimpleJob(jobName, jobGroupName, triggerName, triggerGroupName, 
-						InterfaceDetectJob.class, null, null, SimpleTrigger.REPEAT_INDEFINITELY, dime.getFrequency());
+						InterfaceDetectJob.class, null, null, SimpleTrigger.REPEAT_INDEFINITELY, dime.getFrequency(), calendarName);
 				// 添加job连续失败次数
 				InterfaceConsts.FAILURE_TIME.put(jobName, 0);
 			}
@@ -337,8 +355,21 @@ public class InterfaceDetectBiz implements IInterfaceDetectBiz {
 			// 更新到数据库
 			dlService.insert(dl);
 			// 如果验证不通过就跳出循环
-			if(!checkSuccess)
+			if(!checkSuccess){
+				boolean intervalFlag = InterfaceConsts.FAILURE_TIME.get(dim.getTaskId()) <= dim.getThresholdValue();
+				// 检测模式
+				if(InterfaceConsts.DETECT_MODE_2.equals(dim.getDetectMode())&&intervalFlag){
+					try {
+						Thread.sleep(90000);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+						throw new CommonException(e);
+					}
+					// 执行任务列表
+					executeTaskList(dims);
+				}
 				break;
+			}
 			// 设置下次执行请求的cookieStore
 			cookieStore = (CookieStore)respObject.get(HttpClientUtil.RESPONSE_COOKIESTORE);
 		}

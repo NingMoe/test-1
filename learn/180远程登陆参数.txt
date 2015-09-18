@@ -1,0 +1,4 @@
+ip: 180.97.80.177
+port: 2001
+username: Administrator
+password: 1qaz2wsxcde3!@#1
