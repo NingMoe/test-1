@@ -25,6 +25,7 @@ import com.jike.system.service.itf.IDetectLogService;
 import com.jike.system.util.DateUtils;
 import com.jike.system.util.HttpClientUtil;
 import com.jike.system.util.MD5Util;
+import com.jike.system.util.ParamControlUtil;
 import com.jike.system.util.StringUtil;
 import com.jike.system.web.CommonException;
 
@@ -360,7 +361,8 @@ public class InterfaceDetectBiz implements IInterfaceDetectBiz {
 				// 检测模式
 				if(InterfaceConsts.DETECT_MODE_2.equals(dim.getDetectMode())&&intervalFlag){
 					try {
-						Thread.sleep(90000);
+						String sleepTime = ParamControlUtil.getCommonParam("FAILURE_TIME_INTERVAL");
+						Thread.sleep(Long.valueOf(sleepTime));
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 						throw new CommonException(e);
