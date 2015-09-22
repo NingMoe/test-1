@@ -56,7 +56,7 @@ public class DetectInterface implements Serializable {
 
     private String detectMode;
 
-    private String staetTime;
+    private String startTime;
 
     private String endTime;
 
@@ -270,12 +270,12 @@ public class DetectInterface implements Serializable {
         this.detectMode = detectMode == null ? null : detectMode.trim();
     }
 
-    public String getStaetTime() {
-        return staetTime;
+    public String getStartTime() {
+        return startTime;
     }
 
-    public void setStaetTime(String staetTime) {
-        this.staetTime = staetTime == null ? null : staetTime.trim();
+    public void setStartTime(String startTime) {
+        this.startTime = startTime == null ? null : startTime.trim();
     }
 
     public String getEndTime() {

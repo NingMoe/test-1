@@ -28,7 +28,7 @@
     <result column="UPDATE_TIME" property="updateTime" jdbcType="TIMESTAMP" />
     <result column="GUID" property="guid" jdbcType="VARCHAR" />
     <result column="DETECT_MODE" property="detectMode" jdbcType="CHAR" />
-    <result column="STAET_TIME" property="staetTime" jdbcType="VARCHAR" />
+    <result column="START_TIME" property="startTime" jdbcType="VARCHAR" />
     <result column="END_TIME" property="endTime" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Example_Where_Clause" >
@@ -93,7 +93,7 @@
     TASK_ID, TASK_GROUP_ID, BELONG_TO, ITF_URL, ITF_PARAMS, REQUEST_METHOD, CHECK_VALUE1, 
     CHECK_VALUE2, FREQUENCY, THRESHOLD_VALUE, CURRENT_FAILURE_NUM, NOTICE_LVL, NOTICE_OBJECT, 
     BY_PROXY, PROXY_IP, PROXY_PORT, PROXY_USERNAME, PROXY_PASSWORD, STATE, TOTAL_NOTICE_NUM, 
-    CREATE_USER, CREATE_TIME, UPDATE_USER, UPDATE_TIME, GUID, DETECT_MODE, STAET_TIME, 
+    CREATE_USER, CREATE_TIME, UPDATE_USER, UPDATE_TIME, GUID, DETECT_MODE, START_TIME, 
     END_TIME
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.jike.system.bean.DetectInterfaceExample" >
@@ -137,7 +137,7 @@
       PROXY_PORT, PROXY_USERNAME, PROXY_PASSWORD, 
       STATE, TOTAL_NOTICE_NUM, CREATE_USER, 
       CREATE_TIME, UPDATE_USER, UPDATE_TIME, 
-      GUID, DETECT_MODE, STAET_TIME, 
+      GUID, DETECT_MODE, START_TIME, 
       END_TIME)
     values (#{taskId,jdbcType=VARCHAR}, #{taskGroupId,jdbcType=VARCHAR}, #{belongTo,jdbcType=VARCHAR}, 
       #{itfUrl,jdbcType=VARCHAR}, #{itfParams,jdbcType=VARCHAR}, #{requestMethod,jdbcType=VARCHAR}, 
@@ -147,7 +147,7 @@
       #{proxyPort,jdbcType=NUMERIC}, #{proxyUsername,jdbcType=VARCHAR}, #{proxyPassword,jdbcType=VARCHAR}, 
       #{state,jdbcType=CHAR}, #{totalNoticeNum,jdbcType=DECIMAL}, #{createUser,jdbcType=VARCHAR}, 
       #{createTime,jdbcType=TIMESTAMP}, #{updateUser,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, 
-      #{guid,jdbcType=VARCHAR}, #{detectMode,jdbcType=CHAR}, #{staetTime,jdbcType=VARCHAR}, 
+      #{guid,jdbcType=VARCHAR}, #{detectMode,jdbcType=CHAR}, #{startTime,jdbcType=VARCHAR}, 
       #{endTime,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.jike.system.bean.DetectInterface" >
@@ -231,8 +231,8 @@
       <if test="detectMode != null" >
         DETECT_MODE,
       </if>
-      <if test="staetTime != null" >
-        STAET_TIME,
+      <if test="startTime != null" >
+        START_TIME,
       </if>
       <if test="endTime != null" >
         END_TIME,
@@ -317,8 +317,8 @@
       <if test="detectMode != null" >
         #{detectMode,jdbcType=CHAR},
       </if>
-      <if test="staetTime != null" >
-        #{staetTime,jdbcType=VARCHAR},
+      <if test="startTime != null" >
+        #{startTime,jdbcType=VARCHAR},
       </if>
       <if test="endTime != null" >
         #{endTime,jdbcType=VARCHAR},
@@ -418,8 +418,8 @@
       <if test="record.detectMode != null" >
         DETECT_MODE = #{record.detectMode,jdbcType=CHAR},
       </if>
-      <if test="record.staetTime != null" >
-        STAET_TIME = #{record.staetTime,jdbcType=VARCHAR},
+      <if test="record.startTime != null" >
+        START_TIME = #{record.startTime,jdbcType=VARCHAR},
       </if>
       <if test="record.endTime != null" >
         END_TIME = #{record.endTime,jdbcType=VARCHAR},
@@ -457,7 +457,7 @@
       UPDATE_TIME = #{record.updateTime,jdbcType=TIMESTAMP},
       GUID = #{record.guid,jdbcType=VARCHAR},
       DETECT_MODE = #{record.detectMode,jdbcType=CHAR},
-      STAET_TIME = #{record.staetTime,jdbcType=VARCHAR},
+      START_TIME = #{record.startTime,jdbcType=VARCHAR},
       END_TIME = #{record.endTime,jdbcType=VARCHAR}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -541,8 +541,8 @@
       <if test="detectMode != null" >
         DETECT_MODE = #{detectMode,jdbcType=CHAR},
       </if>
-      <if test="staetTime != null" >
-        STAET_TIME = #{staetTime,jdbcType=VARCHAR},
+      <if test="startTime != null" >
+        START_TIME = #{startTime,jdbcType=VARCHAR},
       </if>
       <if test="endTime != null" >
         END_TIME = #{endTime,jdbcType=VARCHAR},
@@ -577,7 +577,7 @@
       UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP},
       GUID = #{guid,jdbcType=VARCHAR},
       DETECT_MODE = #{detectMode,jdbcType=CHAR},
-      STAET_TIME = #{staetTime,jdbcType=VARCHAR},
+      START_TIME = #{startTime,jdbcType=VARCHAR},
       END_TIME = #{endTime,jdbcType=VARCHAR}
     where TASK_ID = #{taskId,jdbcType=VARCHAR}
   </update>

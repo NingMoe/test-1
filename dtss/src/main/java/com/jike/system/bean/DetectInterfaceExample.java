@@ -1865,73 +1865,73 @@ public class DetectInterfaceExample {
             return (Criteria) this;
         }
 
-        public Criteria andStaetTimeIsNull() {
-            addCriterion("STAET_TIME is null");
+        public Criteria andStartTimeIsNull() {
+            addCriterion("START_TIME is null");
             return (Criteria) this;
         }
 
-        public Criteria andStaetTimeIsNotNull() {
-            addCriterion("STAET_TIME is not null");
+        public Criteria andStartTimeIsNotNull() {
+            addCriterion("START_TIME is not null");
             return (Criteria) this;
         }
 
-        public Criteria andStaetTimeEqualTo(String value) {
-            addCriterion("STAET_TIME =", value, "staetTime");
+        public Criteria andStartTimeEqualTo(String value) {
+            addCriterion("START_TIME =", value, "startTime");
             return (Criteria) this;
         }
 
-        public Criteria andStaetTimeNotEqualTo(String value) {
-            addCriterion("STAET_TIME <>", value, "staetTime");
+        public Criteria andStartTimeNotEqualTo(String value) {
+            addCriterion("START_TIME <>", value, "startTime");
             return (Criteria) this;
         }
 
-        public Criteria andStaetTimeGreaterThan(String value) {
-            addCriterion("STAET_TIME >", value, "staetTime");
+        public Criteria andStartTimeGreaterThan(String value) {
+            addCriterion("START_TIME >", value, "startTime");
             return (Criteria) this;
         }
 
-        public Criteria andStaetTimeGreaterThanOrEqualTo(String value) {
-            addCriterion("STAET_TIME >=", value, "staetTime");
+        public Criteria andStartTimeGreaterThanOrEqualTo(String value) {
+            addCriterion("START_TIME >=", value, "startTime");
             return (Criteria) this;
         }
 
-        public Criteria andStaetTimeLessThan(String value) {
-            addCriterion("STAET_TIME <", value, "staetTime");
+        public Criteria andStartTimeLessThan(String value) {
+            addCriterion("START_TIME <", value, "startTime");
             return (Criteria) this;
         }
 
-        public Criteria andStaetTimeLessThanOrEqualTo(String value) {
-            addCriterion("STAET_TIME <=", value, "staetTime");
+        public Criteria andStartTimeLessThanOrEqualTo(String value) {
+            addCriterion("START_TIME <=", value, "startTime");
             return (Criteria) this;
         }
 
-        public Criteria andStaetTimeLike(String value) {
-            addCriterion("STAET_TIME like", value, "staetTime");
+        public Criteria andStartTimeLike(String value) {
+            addCriterion("START_TIME like", value, "startTime");
             return (Criteria) this;
         }
 
-        public Criteria andStaetTimeNotLike(String value) {
-            addCriterion("STAET_TIME not like", value, "staetTime");
+        public Criteria andStartTimeNotLike(String value) {
+            addCriterion("START_TIME not like", value, "startTime");
             return (Criteria) this;
         }
 
-        public Criteria andStaetTimeIn(List<String> values) {
-            addCriterion("STAET_TIME in", values, "staetTime");
+        public Criteria andStartTimeIn(List<String> values) {
+            addCriterion("START_TIME in", values, "startTime");
             return (Criteria) this;
         }
 
-        public Criteria andStaetTimeNotIn(List<String> values) {
-            addCriterion("STAET_TIME not in", values, "staetTime");
+        public Criteria andStartTimeNotIn(List<String> values) {
+            addCriterion("START_TIME not in", values, "startTime");
             return (Criteria) this;
         }
 
-        public Criteria andStaetTimeBetween(String value1, String value2) {
-            addCriterion("STAET_TIME between", value1, value2, "staetTime");
+        public Criteria andStartTimeBetween(String value1, String value2) {
+            addCriterion("START_TIME between", value1, value2, "startTime");
             return (Criteria) this;
         }
 
-        public Criteria andStaetTimeNotBetween(String value1, String value2) {
-            addCriterion("STAET_TIME not between", value1, value2, "staetTime");
+        public Criteria andStartTimeNotBetween(String value1, String value2) {
+            addCriterion("START_TIME not between", value1, value2, "startTime");
             return (Criteria) this;
         }
 
@@ -2095,8 +2095,8 @@ public class DetectInterfaceExample {
             return (Criteria) this;
         }
 
-        public Criteria andStaetTimeLikeInsensitive(String value) {
-            addCriterion("upper(STAET_TIME) like", value.toUpperCase(), "staetTime");
+        public Criteria andStartTimeLikeInsensitive(String value) {
+            addCriterion("upper(START_TIME) like", value.toUpperCase(), "startTime");
             return (Criteria) this;
         }
 
