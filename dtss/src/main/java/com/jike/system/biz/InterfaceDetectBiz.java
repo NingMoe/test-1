@@ -213,9 +213,13 @@ public class InterfaceDetectBiz implements IInterfaceDetectBiz {
 
 	@Override
 	public void reset(String id) throws CommonException {
-		SysConsts.CURRENT_IS_NOTICE.remove(id);
-		InterfaceConsts.FAILURE_TIME.put(id, 0);
-		switchGroup(id, SysConsts.DETECT_STATE_RUN);
+		if(InterfaceConsts.FAILURE_TIME.get(id) != null){
+			SysConsts.CURRENT_IS_NOTICE.remove(id);
+			InterfaceConsts.FAILURE_TIME.put(id, 0);
+			switchGroup(id, SysConsts.DETECT_STATE_RUN);
+		}else{
+			throw new CommonException("任务不存在");
+		}
 	}
 
 	@Override
