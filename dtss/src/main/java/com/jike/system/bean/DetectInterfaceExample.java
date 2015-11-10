@@ -1795,6 +1795,216 @@ public class DetectInterfaceExample {
             return (Criteria) this;
         }
 
+        public Criteria andDetectModeIsNull() {
+            addCriterion("DETECT_MODE is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDetectModeIsNotNull() {
+            addCriterion("DETECT_MODE is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDetectModeEqualTo(String value) {
+            addCriterion("DETECT_MODE =", value, "detectMode");
+            return (Criteria) this;
+        }
+
+        public Criteria andDetectModeNotEqualTo(String value) {
+            addCriterion("DETECT_MODE <>", value, "detectMode");
+            return (Criteria) this;
+        }
+
+        public Criteria andDetectModeGreaterThan(String value) {
+            addCriterion("DETECT_MODE >", value, "detectMode");
+            return (Criteria) this;
+        }
+
+        public Criteria andDetectModeGreaterThanOrEqualTo(String value) {
+            addCriterion("DETECT_MODE >=", value, "detectMode");
+            return (Criteria) this;
+        }
+
+        public Criteria andDetectModeLessThan(String value) {
+            addCriterion("DETECT_MODE <", value, "detectMode");
+            return (Criteria) this;
+        }
+
+        public Criteria andDetectModeLessThanOrEqualTo(String value) {
+            addCriterion("DETECT_MODE <=", value, "detectMode");
+            return (Criteria) this;
+        }
+
+        public Criteria andDetectModeLike(String value) {
+            addCriterion("DETECT_MODE like", value, "detectMode");
+            return (Criteria) this;
+        }
+
+        public Criteria andDetectModeNotLike(String value) {
+            addCriterion("DETECT_MODE not like", value, "detectMode");
+            return (Criteria) this;
+        }
+
+        public Criteria andDetectModeIn(List<String> values) {
+            addCriterion("DETECT_MODE in", values, "detectMode");
+            return (Criteria) this;
+        }
+
+        public Criteria andDetectModeNotIn(List<String> values) {
+            addCriterion("DETECT_MODE not in", values, "detectMode");
+            return (Criteria) this;
+        }
+
+        public Criteria andDetectModeBetween(String value1, String value2) {
+            addCriterion("DETECT_MODE between", value1, value2, "detectMode");
+            return (Criteria) this;
+        }
+
+        public Criteria andDetectModeNotBetween(String value1, String value2) {
+            addCriterion("DETECT_MODE not between", value1, value2, "detectMode");
+            return (Criteria) this;
+        }
+
+        public Criteria andStartTimeIsNull() {
+            addCriterion("START_TIME is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andStartTimeIsNotNull() {
+            addCriterion("START_TIME is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andStartTimeEqualTo(String value) {
+            addCriterion("START_TIME =", value, "startTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andStartTimeNotEqualTo(String value) {
+            addCriterion("START_TIME <>", value, "startTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andStartTimeGreaterThan(String value) {
+            addCriterion("START_TIME >", value, "startTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andStartTimeGreaterThanOrEqualTo(String value) {
+            addCriterion("START_TIME >=", value, "startTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andStartTimeLessThan(String value) {
+            addCriterion("START_TIME <", value, "startTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andStartTimeLessThanOrEqualTo(String value) {
+            addCriterion("START_TIME <=", value, "startTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andStartTimeLike(String value) {
+            addCriterion("START_TIME like", value, "startTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andStartTimeNotLike(String value) {
+            addCriterion("START_TIME not like", value, "startTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andStartTimeIn(List<String> values) {
+            addCriterion("START_TIME in", values, "startTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andStartTimeNotIn(List<String> values) {
+            addCriterion("START_TIME not in", values, "startTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andStartTimeBetween(String value1, String value2) {
+            addCriterion("START_TIME between", value1, value2, "startTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andStartTimeNotBetween(String value1, String value2) {
+            addCriterion("START_TIME not between", value1, value2, "startTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andEndTimeIsNull() {
+            addCriterion("END_TIME is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andEndTimeIsNotNull() {
+            addCriterion("END_TIME is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andEndTimeEqualTo(String value) {
+            addCriterion("END_TIME =", value, "endTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andEndTimeNotEqualTo(String value) {
+            addCriterion("END_TIME <>", value, "endTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andEndTimeGreaterThan(String value) {
+            addCriterion("END_TIME >", value, "endTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andEndTimeGreaterThanOrEqualTo(String value) {
+            addCriterion("END_TIME >=", value, "endTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andEndTimeLessThan(String value) {
+            addCriterion("END_TIME <", value, "endTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andEndTimeLessThanOrEqualTo(String value) {
+            addCriterion("END_TIME <=", value, "endTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andEndTimeLike(String value) {
+            addCriterion("END_TIME like", value, "endTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andEndTimeNotLike(String value) {
+            addCriterion("END_TIME not like", value, "endTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andEndTimeIn(List<String> values) {
+            addCriterion("END_TIME in", values, "endTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andEndTimeNotIn(List<String> values) {
+            addCriterion("END_TIME not in", values, "endTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andEndTimeBetween(String value1, String value2) {
+            addCriterion("END_TIME between", value1, value2, "endTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andEndTimeNotBetween(String value1, String value2) {
+            addCriterion("END_TIME not between", value1, value2, "endTime");
+            return (Criteria) this;
+        }
+
         public Criteria andTaskIdLikeInsensitive(String value) {
             addCriterion("upper(TASK_ID) like", value.toUpperCase(), "taskId");
             return (Criteria) this;
@@ -1877,6 +2087,21 @@ public class DetectInterfaceExample {
 
         public Criteria andGuidLikeInsensitive(String value) {
             addCriterion("upper(GUID) like", value.toUpperCase(), "guid");
+            return (Criteria) this;
+        }
+
+        public Criteria andDetectModeLikeInsensitive(String value) {
+            addCriterion("upper(DETECT_MODE) like", value.toUpperCase(), "detectMode");
+            return (Criteria) this;
+        }
+
+        public Criteria andStartTimeLikeInsensitive(String value) {
+            addCriterion("upper(START_TIME) like", value.toUpperCase(), "startTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andEndTimeLikeInsensitive(String value) {
+            addCriterion("upper(END_TIME) like", value.toUpperCase(), "endTime");
             return (Criteria) this;
         }
     }

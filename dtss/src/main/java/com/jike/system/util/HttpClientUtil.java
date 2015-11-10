@@ -3,6 +3,7 @@ package com.jike.system.util;
 import java.io.IOException;
 import java.net.SocketTimeoutException;
 import java.nio.charset.Charset;
+import java.security.SecureRandom;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
@@ -28,8 +29,10 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.conn.ClientConnectionManager;
 import org.apache.http.conn.ConnectTimeoutException;
 import org.apache.http.conn.scheme.Scheme;
+import org.apache.http.conn.scheme.SchemeRegistry;
 import org.apache.http.conn.ssl.SSLSocketFactory;
 import org.apache.http.conn.ssl.X509HostnameVerifier;
 import org.apache.http.cookie.Cookie;
@@ -43,7 +46,7 @@ import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.jike.system.core.QuartzManager;
+import com.jike.system.web.CommonException;
 
 /** 
  * 封装了采用HttpClient发送HTTP请求的方法 
@@ -83,6 +86,11 @@ public class HttpClientUtil {
 	
     private HttpClientUtil(){}
     
+	// Http连接超时
+	public static final String CONN_TO = "Http连接超时";
+	// Socket通信超时
+    public static final String SO_TO = "Socket通信超时";
+    
     public static final String RESPONSE_CONTENT = "respContent";
     public static final String RESPONSE_COOKIESTORE = "cookieStore";
       
@@ -100,6 +108,10 @@ public class HttpClientUtil {
         String respContent = "通信失败"; //响应内容 
         Map<String, Object> respObject = new HashMap<String, Object>(); //返回对象
         DefaultHttpClient httpClient = new DefaultHttpClient(); //创建默认的httpClient实例
+        // 如果说https请求，则忽略证书验证
+        if(reqURL.toUpperCase().startsWith("HTTPS:")){
+        	httpClient = getSecuredHttpClient(httpClient);
+        }
         // 如果需要带上第一次请求的Cookie
         if(cookieStoreInit != null){
             CookieStore cookieStore = httpClient.getCookieStore();
@@ -174,7 +186,7 @@ public class HttpClientUtil {
      * @param encodeCharset 编码字符集,编码请求数据时用之,此参数为必填项(不能为""或null) 
      * @return 远程主机响应正文 
      */  
-    public static Map<String, Object> sendPostRequest(String reqURL, String reqData, CookieStore cookieStoreInit, String encodeCharset){
+    public static Map<String, Object> sendPostRequest(String reqURL, String reqData, CookieStore cookieStoreInit, String encodeCharset, Integer connTimeOut, Integer soTimeOut){
         String respContent = "通信失败"; //响应内容  
         Map<String, Object> respObject = new HashMap<String, Object>(); //返回对象
         DefaultHttpClient httpClient = new DefaultHttpClient(); //创建默认的httpClient实例
@@ -187,8 +199,16 @@ public class HttpClientUtil {
     			cookieStore.addCookie(o);
     		}
         }
-        httpClient.getParams().setParameter(CoreConnectionPNames.CONNECTION_TIMEOUT, 10000);  
-        httpClient.getParams().setParameter(CoreConnectionPNames.SO_TIMEOUT, 20000);  
+        if(connTimeOut != null){
+        	httpClient.getParams().setParameter(CoreConnectionPNames.CONNECTION_TIMEOUT, connTimeOut);  
+        }else{
+        	httpClient.getParams().setParameter(CoreConnectionPNames.CONNECTION_TIMEOUT, 10000);  
+        }
+        if(soTimeOut != null){
+        	httpClient.getParams().setParameter(CoreConnectionPNames.SO_TIMEOUT, soTimeOut);  
+        }else{
+        	httpClient.getParams().setParameter(CoreConnectionPNames.SO_TIMEOUT, 20000);  
+        }
         HttpPost httpPost = new HttpPost(reqURL);  
         //由于下面使用的是new StringEntity(....),所以默认发出去的请求报文头中CONTENT_TYPE值为text/plain; charset=ISO-8859-1  
         //这就有可能会导致服务端接收不到POST过去的参数,比如运行在Tomcat6.0.36中的Servlet,所以我们手工指定CONTENT_TYPE头消息  
@@ -205,9 +225,11 @@ public class HttpClientUtil {
             // 返回cookieStore
             respObject.put(RESPONSE_COOKIESTORE, httpClient.getCookieStore());
         } catch (ConnectTimeoutException cte){  
-            log.error("请求通信[" + reqURL + "]时连接超时,堆栈轨迹如下", cte);  
+            log.error("请求通信[" + reqURL + "]时连接超时,堆栈轨迹如下", cte);
+			throw new CommonException(CONN_TO);
         } catch (SocketTimeoutException ste){  
-            log.error("请求通信[" + reqURL + "]时读取超时,堆栈轨迹如下", ste);  
+            log.error("请求通信[" + reqURL + "]时读取超时,堆栈轨迹如下", ste);
+			throw new CommonException(SO_TO);
         }catch(Exception e){  
             log.error("请求通信[" + reqURL + "]时偶遇异常,堆栈轨迹如下", e);  
         }finally{  
@@ -301,6 +323,43 @@ public class HttpClientUtil {
         return responseContent;  
     } 
     
+    /**
+     * 忽略证书验证
+     * 
+     * @param httpClient
+     * @return
+     */
+    private static DefaultHttpClient getSecuredHttpClient(HttpClient httpClient) {
+    	final X509Certificate[] _AcceptedIssuers = new X509Certificate[] {};
+    	try {
+    		SSLContext ctx = SSLContext.getInstance("TLS");
+    		X509TrustManager tm = new X509TrustManager() {
+    			@Override
+    			public X509Certificate[] getAcceptedIssuers() {
+    				return _AcceptedIssuers;
+    			}
+
+    			@Override
+    			public void checkServerTrusted(X509Certificate[] chain,
+    					String authType) throws CertificateException {
+    			}
+
+    			@Override
+    			public void checkClientTrusted(X509Certificate[] chain,
+    					String authType) throws CertificateException {
+    			}
+    		};
+    		ctx.init(null, new TrustManager[] { tm }, new SecureRandom());
+    		SSLSocketFactory ssf = new SSLSocketFactory(ctx, SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
+    		ClientConnectionManager ccm = httpClient.getConnectionManager();
+    		SchemeRegistry sr = ccm.getSchemeRegistry();
+    		sr.register(new Scheme("https", 443, ssf));
+    		return new DefaultHttpClient(ccm, httpClient.getParams());
+    	} catch (Exception e) {
+            log.error("忽略证书验证时偶遇异常", e);  
+    	}
+    	return null;
+    }
 
 	public static void main(String[] args) {
 /*		String url = "http://www.jiketravel.com:8084/api/employees/login";
@@ -325,7 +384,11 @@ public class HttpClientUtil {
 //		Map<String, Object> respObject = HttpClientUtil.sendGetRequest(url, null);
 //		System.out.println("国内机票："+respObject.get(RESPONSE_CONTENT));
 		
-		System.out.println("国内机票："+QuartzManager.getInstanceScheduler());
+
+		String url = "https://kyfw.12306.cn/otn/leftTicket/query?leftTicketDTO.train_date=2015-09-25&leftTicketDTO.from_station=SHH&leftTicketDTO.to_station=SZH&purpose_codes=ADULT";
+		
+		Map<String, Object> respObject = HttpClientUtil.sendGetRequest(url, null);
+		System.out.println("国内机票："+respObject.get(RESPONSE_CONTENT));
 		
 		
 	}

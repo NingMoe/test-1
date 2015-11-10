@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jike.system.dao.DetectAPIMapper" >
+  <resultMap id="BaseResultMap" type="com.jike.system.bean.DetectAPI" >
+    <id column="TASK_ID" property="taskId" jdbcType="VARCHAR" />
+    <result column="TASK_RUN_TIME" property="taskRunTime" jdbcType="TIMESTAMP" />
+    <result column="DEPART_CODE" property="departCode" jdbcType="CHAR" />
+    <result column="ARRIVE_CODE" property="arriveCode" jdbcType="CHAR" />
+    <result column="DEPART_DATE" property="departDate" jdbcType="TIMESTAMP" />
+    <result column="TASK_TIME_COST" property="taskTimeCost" jdbcType="NUMERIC" />
+    <result column="RESULT_TYPE" property="resultType" jdbcType="CHAR" />
+    <result column="TOKEN" property="token" jdbcType="CHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    TASK_ID, TASK_RUN_TIME, DEPART_CODE, ARRIVE_CODE, DEPART_DATE, TASK_TIME_COST, RESULT_TYPE, 
+    TOKEN
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.jike.system.bean.DetectAPIExample" >
+    <include refid="OracleDialectPrefix" />
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from T_API_DETECT
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+    <include refid="OracleDialectSuffix" />
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from T_API_DETECT
+    where TASK_ID = #{taskId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from T_API_DETECT
+    where TASK_ID = #{taskId,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.jike.system.bean.DetectAPIExample" >
+    delete from T_API_DETECT
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.jike.system.bean.DetectAPI" >
+    insert into T_API_DETECT (TASK_ID, TASK_RUN_TIME, DEPART_CODE, 
+      ARRIVE_CODE, DEPART_DATE, TASK_TIME_COST, 
+      RESULT_TYPE, TOKEN)
+    values (#{taskId,jdbcType=VARCHAR}, #{taskRunTime,jdbcType=TIMESTAMP}, #{departCode,jdbcType=CHAR}, 
+      #{arriveCode,jdbcType=CHAR}, #{departDate,jdbcType=TIMESTAMP}, #{taskTimeCost,jdbcType=NUMERIC}, 
+      #{resultType,jdbcType=CHAR}, #{token,jdbcType=CHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.jike.system.bean.DetectAPI" >
+    insert into T_API_DETECT
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="taskId != null" >
+        TASK_ID,
+      </if>
+      <if test="taskRunTime != null" >
+        TASK_RUN_TIME,
+      </if>
+      <if test="departCode != null" >
+        DEPART_CODE,
+      </if>
+      <if test="arriveCode != null" >
+        ARRIVE_CODE,
+      </if>
+      <if test="departDate != null" >
+        DEPART_DATE,
+      </if>
+      <if test="taskTimeCost != null" >
+        TASK_TIME_COST,
+      </if>
+      <if test="resultType != null" >
+        RESULT_TYPE,
+      </if>
+      <if test="token != null" >
+        TOKEN,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="taskId != null" >
+        #{taskId,jdbcType=VARCHAR},
+      </if>
+      <if test="taskRunTime != null" >
+        #{taskRunTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="departCode != null" >
+        #{departCode,jdbcType=CHAR},
+      </if>
+      <if test="arriveCode != null" >
+        #{arriveCode,jdbcType=CHAR},
+      </if>
+      <if test="departDate != null" >
+        #{departDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="taskTimeCost != null" >
+        #{taskTimeCost,jdbcType=NUMERIC},
+      </if>
+      <if test="resultType != null" >
+        #{resultType,jdbcType=CHAR},
+      </if>
+      <if test="token != null" >
+        #{token,jdbcType=CHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.jike.system.bean.DetectAPIExample" resultType="java.lang.Integer" >
+    select count(*) from T_API_DETECT
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update T_API_DETECT
+    <set >
+      <if test="record.taskId != null" >
+        TASK_ID = #{record.taskId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.taskRunTime != null" >
+        TASK_RUN_TIME = #{record.taskRunTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.departCode != null" >
+        DEPART_CODE = #{record.departCode,jdbcType=CHAR},
+      </if>
+      <if test="record.arriveCode != null" >
+        ARRIVE_CODE = #{record.arriveCode,jdbcType=CHAR},
+      </if>
+      <if test="record.departDate != null" >
+        DEPART_DATE = #{record.departDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.taskTimeCost != null" >
+        TASK_TIME_COST = #{record.taskTimeCost,jdbcType=NUMERIC},
+      </if>
+      <if test="record.resultType != null" >
+        RESULT_TYPE = #{record.resultType,jdbcType=CHAR},
+      </if>
+      <if test="record.token != null" >
+        TOKEN = #{record.token,jdbcType=CHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update T_API_DETECT
+    set TASK_ID = #{record.taskId,jdbcType=VARCHAR},
+      TASK_RUN_TIME = #{record.taskRunTime,jdbcType=TIMESTAMP},
+      DEPART_CODE = #{record.departCode,jdbcType=CHAR},
+      ARRIVE_CODE = #{record.arriveCode,jdbcType=CHAR},
+      DEPART_DATE = #{record.departDate,jdbcType=TIMESTAMP},
+      TASK_TIME_COST = #{record.taskTimeCost,jdbcType=NUMERIC},
+      RESULT_TYPE = #{record.resultType,jdbcType=CHAR},
+      TOKEN = #{record.token,jdbcType=CHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jike.system.bean.DetectAPI" >
+    update T_API_DETECT
+    <set >
+      <if test="taskRunTime != null" >
+        TASK_RUN_TIME = #{taskRunTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="departCode != null" >
+        DEPART_CODE = #{departCode,jdbcType=CHAR},
+      </if>
+      <if test="arriveCode != null" >
+        ARRIVE_CODE = #{arriveCode,jdbcType=CHAR},
+      </if>
+      <if test="departDate != null" >
+        DEPART_DATE = #{departDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="taskTimeCost != null" >
+        TASK_TIME_COST = #{taskTimeCost,jdbcType=NUMERIC},
+      </if>
+      <if test="resultType != null" >
+        RESULT_TYPE = #{resultType,jdbcType=CHAR},
+      </if>
+      <if test="token != null" >
+        TOKEN = #{token,jdbcType=CHAR},
+      </if>
+    </set>
+    where TASK_ID = #{taskId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jike.system.bean.DetectAPI" >
+    update T_API_DETECT
+    set TASK_RUN_TIME = #{taskRunTime,jdbcType=TIMESTAMP},
+      DEPART_CODE = #{departCode,jdbcType=CHAR},
+      ARRIVE_CODE = #{arriveCode,jdbcType=CHAR},
+      DEPART_DATE = #{departDate,jdbcType=TIMESTAMP},
+      TASK_TIME_COST = #{taskTimeCost,jdbcType=NUMERIC},
+      RESULT_TYPE = #{resultType,jdbcType=CHAR},
+      TOKEN = #{token,jdbcType=CHAR}
+    where TASK_ID = #{taskId,jdbcType=VARCHAR}
+  </update>
+  <sql id="OracleDialectPrefix" >
+    <if test="page != null" >
+      select * from ( select row_.*, rownum rownum_ from ( 
+    </if>
+  </sql>
+  <sql id="OracleDialectSuffix" >
+    <if test="page != null" >
+      <![CDATA[ ) row_ ) where rownum_ > #{page.begin} and rownum_ <= #{page.end} ]]>
+    </if>
+  </sql>
+</mapper>

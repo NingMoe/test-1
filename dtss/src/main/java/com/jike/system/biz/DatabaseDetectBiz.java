@@ -15,7 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.jike.system.bean.DetectLog;
 import com.jike.system.biz.itf.IDatabaseDetectBiz;
 import com.jike.system.consts.DatabaseConsts;
-import com.jike.system.consts.InterfaceConsts;
 import com.jike.system.consts.SysConsts;
 import com.jike.system.core.QuartzManager;
 import com.jike.system.model.DetectDatabaseModel;
@@ -78,7 +77,7 @@ public class DatabaseDetectBiz implements IDatabaseDetectBiz {
 				throw new CommonException("接口检测任务["+jobName+"]--已关闭，请刷新！");
 			// 关闭任务
 			ddme.setState(toState);
-			QuartzManager.removeJob(jobName, jobGroupName, triggerName, triggerGroupName);
+			QuartzManager.removeJob(jobName, jobGroupName, triggerName, triggerGroupName, null);
 		}
 		else if(SysConsts.DETECT_STATE_RUN.equals(toState)){
 			if(SysConsts.DETECT_STATE_RUN.equals(currentState))
@@ -89,9 +88,9 @@ public class DatabaseDetectBiz implements IDatabaseDetectBiz {
 				QuartzManager.resume(triggerName, triggerGroupName);
 			}else{
 				QuartzManager.addSimpleJob(jobName, jobGroupName, triggerName, triggerGroupName, 
-						DatabaseDetectJob.class, null, null, SimpleTrigger.REPEAT_INDEFINITELY, ddme.getFrequency());
+						DatabaseDetectJob.class, null, null, SimpleTrigger.REPEAT_INDEFINITELY, ddme.getFrequency(), null);
 				// 添加job连续失败次数
-				InterfaceConsts.FAILURE_TIME.put(jobName, 0);
+				ddme.setCurrentFailureNum(0);
 			}
 		}
 		else if(SysConsts.DETECT_STATE_STOP.equals(toState)){
@@ -106,8 +105,12 @@ public class DatabaseDetectBiz implements IDatabaseDetectBiz {
 
 	@Override
 	public void reset(String id) throws CommonException {
-		SysConsts.CURRENT_IS_NOTICE.remove(id);
-		InterfaceConsts.FAILURE_TIME.put(id, 0);
+		if(DatabaseConsts.DETECT_DATABASE.get(id) != null){
+			SysConsts.CURRENT_IS_NOTICE.remove(id);
+			DatabaseConsts.DETECT_DATABASE.get(id).setCurrentFailureNum(0);
+		}else{
+			throw new CommonException("任务不存在");
+		}
 	}
 	
 	/*
@@ -174,13 +177,9 @@ public class DatabaseDetectBiz implements IDatabaseDetectBiz {
 					// 记录当日该数据库检测已发送警报
 					SysConsts.CURRENT_IS_NOTICE.add(taskId);
 					// 设置数据库检测状态为：关闭
-					ddm.setState(SysConsts.DETECT_STATE_CLOSE);
+					ddm.setToState(SysConsts.DETECT_STATE_CLOSE);
 					// 切换数据库检测状态
-					String jobName = ddm.getTaskId();
-					String jobGroupName = (ddm.getTaskGroupId()==null?DatabaseConsts.DEFAULT_GROUP:ddm.getTaskGroupId());
-					String triggerName =  ddm.getTaskId();
-					String triggerGroupName = DatabaseConsts.DEFAULT_GROUP;
-					QuartzManager.removeJob(jobName, jobGroupName, triggerName, triggerGroupName);
+					switchState(ddm);
 				}
 			}else{
 				// 当前失败次数超过阈值不记录

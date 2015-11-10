@@ -27,6 +27,9 @@
     <result column="UPDATE_USER" property="updateUser" jdbcType="VARCHAR" />
     <result column="UPDATE_TIME" property="updateTime" jdbcType="TIMESTAMP" />
     <result column="GUID" property="guid" jdbcType="VARCHAR" />
+    <result column="DETECT_MODE" property="detectMode" jdbcType="CHAR" />
+    <result column="START_TIME" property="startTime" jdbcType="VARCHAR" />
+    <result column="END_TIME" property="endTime" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -90,7 +93,8 @@
     TASK_ID, TASK_GROUP_ID, BELONG_TO, ITF_URL, ITF_PARAMS, REQUEST_METHOD, CHECK_VALUE1, 
     CHECK_VALUE2, FREQUENCY, THRESHOLD_VALUE, CURRENT_FAILURE_NUM, NOTICE_LVL, NOTICE_OBJECT, 
     BY_PROXY, PROXY_IP, PROXY_PORT, PROXY_USERNAME, PROXY_PASSWORD, STATE, TOTAL_NOTICE_NUM, 
-    CREATE_USER, CREATE_TIME, UPDATE_USER, UPDATE_TIME, GUID
+    CREATE_USER, CREATE_TIME, UPDATE_USER, UPDATE_TIME, GUID, DETECT_MODE, START_TIME, 
+    END_TIME
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.jike.system.bean.DetectInterfaceExample" >
     <include refid="OracleDialectPrefix" />
@@ -133,7 +137,8 @@
       PROXY_PORT, PROXY_USERNAME, PROXY_PASSWORD, 
       STATE, TOTAL_NOTICE_NUM, CREATE_USER, 
       CREATE_TIME, UPDATE_USER, UPDATE_TIME, 
-      GUID)
+      GUID, DETECT_MODE, START_TIME, 
+      END_TIME)
     values (#{taskId,jdbcType=VARCHAR}, #{taskGroupId,jdbcType=VARCHAR}, #{belongTo,jdbcType=VARCHAR}, 
       #{itfUrl,jdbcType=VARCHAR}, #{itfParams,jdbcType=VARCHAR}, #{requestMethod,jdbcType=VARCHAR}, 
       #{checkValue1,jdbcType=VARCHAR}, #{checkValue2,jdbcType=VARCHAR}, #{frequency,jdbcType=DECIMAL}, 
@@ -142,7 +147,8 @@
       #{proxyPort,jdbcType=NUMERIC}, #{proxyUsername,jdbcType=VARCHAR}, #{proxyPassword,jdbcType=VARCHAR}, 
       #{state,jdbcType=CHAR}, #{totalNoticeNum,jdbcType=DECIMAL}, #{createUser,jdbcType=VARCHAR}, 
       #{createTime,jdbcType=TIMESTAMP}, #{updateUser,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, 
-      #{guid,jdbcType=VARCHAR})
+      #{guid,jdbcType=VARCHAR}, #{detectMode,jdbcType=CHAR}, #{startTime,jdbcType=VARCHAR}, 
+      #{endTime,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.jike.system.bean.DetectInterface" >
     insert into T_SYSTEM_DETECT_INTERFACE
@@ -222,6 +228,15 @@
       <if test="guid != null" >
         GUID,
       </if>
+      <if test="detectMode != null" >
+        DETECT_MODE,
+      </if>
+      <if test="startTime != null" >
+        START_TIME,
+      </if>
+      <if test="endTime != null" >
+        END_TIME,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="taskId != null" >
@@ -299,6 +314,15 @@
       <if test="guid != null" >
         #{guid,jdbcType=VARCHAR},
       </if>
+      <if test="detectMode != null" >
+        #{detectMode,jdbcType=CHAR},
+      </if>
+      <if test="startTime != null" >
+        #{startTime,jdbcType=VARCHAR},
+      </if>
+      <if test="endTime != null" >
+        #{endTime,jdbcType=VARCHAR},
+      </if>
     </trim>
   </insert>
   <select id="countByExample" parameterType="com.jike.system.bean.DetectInterfaceExample" resultType="java.lang.Integer" >
@@ -311,6 +335,7 @@
   <select id="getNextTaskId" parameterType="java.lang.String" resultType="java.lang.Integer" >
     select nvl(max(SUBSTR(TASK_ID,9,4)) +1,1) from T_SYSTEM_DETECT_INTERFACE where SUBSTR(TASK_ID,1,8) = #{taskIdHead,jdbcType=VARCHAR}
   </select>
+  
   
   <update id="updateByExampleSelective" parameterType="map" >
     update T_SYSTEM_DETECT_INTERFACE
@@ -390,6 +415,15 @@
       <if test="record.guid != null" >
         GUID = #{record.guid,jdbcType=VARCHAR},
       </if>
+      <if test="record.detectMode != null" >
+        DETECT_MODE = #{record.detectMode,jdbcType=CHAR},
+      </if>
+      <if test="record.startTime != null" >
+        START_TIME = #{record.startTime,jdbcType=VARCHAR},
+      </if>
+      <if test="record.endTime != null" >
+        END_TIME = #{record.endTime,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -421,7 +455,10 @@
       CREATE_TIME = #{record.createTime,jdbcType=TIMESTAMP},
       UPDATE_USER = #{record.updateUser,jdbcType=VARCHAR},
       UPDATE_TIME = #{record.updateTime,jdbcType=TIMESTAMP},
-      GUID = #{record.guid,jdbcType=VARCHAR}
+      GUID = #{record.guid,jdbcType=VARCHAR},
+      DETECT_MODE = #{record.detectMode,jdbcType=CHAR},
+      START_TIME = #{record.startTime,jdbcType=VARCHAR},
+      END_TIME = #{record.endTime,jdbcType=VARCHAR}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -501,6 +538,15 @@
       <if test="guid != null" >
         GUID = #{guid,jdbcType=VARCHAR},
       </if>
+      <if test="detectMode != null" >
+        DETECT_MODE = #{detectMode,jdbcType=CHAR},
+      </if>
+      <if test="startTime != null" >
+        START_TIME = #{startTime,jdbcType=VARCHAR},
+      </if>
+      <if test="endTime != null" >
+        END_TIME = #{endTime,jdbcType=VARCHAR},
+      </if>
     </set>
     where TASK_ID = #{taskId,jdbcType=VARCHAR}
   </update>
@@ -529,7 +575,10 @@
       CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
       UPDATE_USER = #{updateUser,jdbcType=VARCHAR},
       UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP},
-      GUID = #{guid,jdbcType=VARCHAR}
+      GUID = #{guid,jdbcType=VARCHAR},
+      DETECT_MODE = #{detectMode,jdbcType=CHAR},
+      START_TIME = #{startTime,jdbcType=VARCHAR},
+      END_TIME = #{endTime,jdbcType=VARCHAR}
     where TASK_ID = #{taskId,jdbcType=VARCHAR}
   </update>
   <sql id="OracleDialectPrefix" >

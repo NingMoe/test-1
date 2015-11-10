@@ -13,6 +13,7 @@ import com.jike.system.core.QuartzManager;
 import com.jike.system.model.DetectDatabaseModel;
 import com.jike.system.quartz.ClearExpireLogJob;
 import com.jike.system.quartz.ResetNoticeJob;
+import com.jike.system.util.CityUtils;
 import com.jike.system.util.ContextUtil;
 import com.jike.system.util.ParamControlUtil;
 import com.jike.system.util.StringUtil;
@@ -37,6 +38,9 @@ public class ApplicationInit implements ApplicationContextAware {
 		
 		// 启动清除过期日志定时任务
 		startClearExpireLog();
+		
+		// 初始化城市三字码列表任务
+		CityUtils.initCityCodeList();
 		
 		// 启动调度
 		QuartzManager.start();
