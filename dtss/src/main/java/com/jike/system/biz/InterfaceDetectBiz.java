@@ -287,7 +287,7 @@ public class InterfaceDetectBiz implements IInterfaceDetectBiz {
 			}
 			else if(InterfaceConsts.REQUEST_METHOD_POST.equals(requestMethod)){
 				// POST请求
-				respObject = HttpClientUtil.sendPostRequest(url, params, cookieStore, encodeCharset);
+				respObject = HttpClientUtil.sendPostRequest(url, params, cookieStore, encodeCharset, null, null);
 			}
 			// 获取Http请求返回值
 			String respContent = (String) respObject.get(HttpClientUtil.RESPONSE_CONTENT);

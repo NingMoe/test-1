@@ -57,18 +57,21 @@
 			<property name="enableSubPackages" value="true" />
 		</javaClientGenerator>
 
- 		<table tableName="T_SYSTEM_DETECT_INTERFACE" domainObjectName="DetectInterface" > 
+<!--  		<table tableName="T_SYSTEM_DETECT_INTERFACE" domainObjectName="DetectInterface" > 
 			<columnOverride column="THRESHOLD_VALUE" jdbcType="NUMERIC" javaType="java.lang.Integer" />
 			<columnOverride column="CURRENT_FAILURE_NUM" jdbcType="NUMERIC" javaType="java.lang.Integer" />
 			<columnOverride column="BY_PROXY" jdbcType="NUMERIC" javaType="java.lang.Boolean" />
 			<columnOverride column="PROXY_PORT" jdbcType="NUMERIC" javaType="java.lang.Integer" />
-		</table>
+		</table> -->
 <!--		<table tableName="T_SYSTEM_DETECT_DATABASE" domainObjectName="DetectDatabase" > 
 			<columnOverride column="THRESHOLD_VALUE" jdbcType="NUMERIC" javaType="java.lang.Integer" />
 			<columnOverride column="CURRENT_FAILURE_NUM" jdbcType="NUMERIC" javaType="java.lang.Integer" />
 		</table> -->
 <!--  		<table tableName="T_SYSTEM_DETECT_LOG" domainObjectName="DetectLog" > 
 		</table> -->
+		<table tableName="T_API_DETECT" domainObjectName="DetectAPI" >
+			<columnOverride column="TASK_TIME_COST" jdbcType="NUMERIC" javaType="java.lang.Long" />
+		</table>
 
 	</context>
 

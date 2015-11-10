@@ -1,5 +1,6 @@
 package com.jike.system.util;
 
+import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -10,9 +11,15 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang.StringUtils;
+import org.dom4j.Document;
+import org.dom4j.DocumentException;
+import org.dom4j.Element;
+import org.dom4j.io.SAXReader;
+import org.xml.sax.InputSource;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.jike.system.web.CommonException;
 
 /**
  * @ClassName: StringUtils
@@ -512,5 +519,26 @@ public final class StringUtil {
 			}
 		}
 		return str;
+	}
+	
+	/**
+	 * string转xml
+	 * @param xml
+	 * @return
+	 * @throws DocumentException
+	 */
+	public static Element analyzeRootElement(String xml) {
+		StringReader read = new StringReader(xml);
+		InputSource source = new InputSource(read);
+		SAXReader saxReader = new SAXReader();
+		Document documentRtn = null;
+		try {
+			documentRtn = saxReader.read(source);
+		} catch (DocumentException e) {
+			e.printStackTrace();
+			throw new CommonException("解析xml出错：" + xml);
+		}
+		Element rootElement = documentRtn.getRootElement();
+		return rootElement;
 	}
 }
