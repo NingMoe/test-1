@@ -21,7 +21,7 @@ public interface IDetectAPIService {
 
 	DetectAPIModel insert(DetectAPIModel dapim) throws CommonException;
 
-	DetectAPIModel updateByPrimaryKey(DetectAPIModel dldapimm) throws CommonException;
+	DetectAPIModel updateByPrimaryKey(DetectAPIModel dapim) throws CommonException;
 	
 	List<DetectAPIModel> selectByExample(DetectAPIModel dapim) throws CommonException;
 

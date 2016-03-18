@@ -1,4 +1,9 @@
-ip: 180.97.80.177
-port: 2001
+ip: 180.97.80.177:2001
 username: Administrator
 password: 1qaz2wsxcde3!@#1
+
+ip: 180.97.80.177:2003
+username: Administrator
+password: 1qaz2wsxcde3!@#
+
+DTSS服务器公开地址180.97.80.177:9090

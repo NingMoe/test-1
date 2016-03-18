@@ -2,6 +2,8 @@ package com.jike.system.model;
 
 import java.util.Date;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 /**
  * Title: DetectAPIModel
  *
@@ -40,6 +42,12 @@ public class DetectAPIModel extends BaseModel {
 	private Integer requestSpeed;
 
 	private String token;
+
+	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	private Date taskRunStartTime;
+
+	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	private Date taskRunEndTime;
 
 	public String getTaskId() {
 		return taskId;
@@ -111,6 +119,22 @@ public class DetectAPIModel extends BaseModel {
 
 	public void setToken(String token) {
 		this.token = token == null ? null : token.trim();
+	}
+
+	public Date getTaskRunStartTime() {
+		return taskRunStartTime;
+	}
+
+	public void setTaskRunStartTime(Date taskRunStartTime) {
+		this.taskRunStartTime = taskRunStartTime;
+	}
+
+	public Date getTaskRunEndTime() {
+		return taskRunEndTime;
+	}
+
+	public void setTaskRunEndTime(Date taskRunEndTime) {
+		this.taskRunEndTime = taskRunEndTime;
 	}
 
 	public String toString() {

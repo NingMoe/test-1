@@ -107,14 +107,12 @@ public class DetectAPIBiz implements IDetectAPIBiz {
 	@Override
 	public List<DetectAPIModel> selectByExample(DetectAPIModel dapim)
 			throws CommonException {
-		// TODO Auto-generated method stub
-		return null;
+		return detectAPIService.selectByExample(dapim);
 	}
 
 	@Override
 	public int countByExample(DetectAPIModel dapim) throws CommonException {
-		// TODO Auto-generated method stub
-		return 0;
+		return detectAPIService.countByExample(dapim);
 	}
 	
 	/**

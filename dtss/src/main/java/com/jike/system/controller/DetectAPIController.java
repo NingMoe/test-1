@@ -1,9 +1,13 @@
 package com.jike.system.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -71,8 +75,34 @@ public class DetectAPIController extends BaseController{
 	@ResponseBody
 	public JsonResult configStrategy(HttpServletRequest request, @RequestBody DetectAPIConfigModel dapicm)
 			throws CommonException {
-		detectAPIBiz.configStrategy(dapicm);
+		dapicm = detectAPIBiz.configStrategy(dapicm);
 		return ResultRender.renderResult("配置任务成功", dapicm);
+	}
+	
+
+	@RequestMapping(value = "/query", method = RequestMethod.GET)
+	@ResponseBody
+	public JsonResult query(HttpServletRequest request,@ModelAttribute DetectAPIModel dapim)
+			throws CommonException {
+		List<DetectAPIModel> dapims = detectAPIBiz.selectByExample(dapim);
+		int count = detectAPIBiz.countByExample(dapim);
+		if(count == 0){
+			return ResultRender.renderErrorResult("未查询到检测数据");
+		}else{
+			List<List<Object>> results = formatData(dapims);
+			return ResultRender.renderPagedResult("查询成功", results, count);
+		}
+	}
+	
+	public List<List<Object>> formatData(List<DetectAPIModel> dapims){
+		List<List<Object>> datas = new ArrayList<List<Object>>();
+		for(DetectAPIModel dapim : dapims){
+			List<Object> data = new ArrayList<Object>();
+			data.add(dapim.getTaskRunTime());
+			data.add(dapim.getResultType());
+			datas.add(data);
+		}
+		return datas;
 	}
 
 }
