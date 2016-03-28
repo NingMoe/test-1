@@ -11,6 +11,7 @@ import com.sharefree.bean.ctrip.WebTrip;
 import com.sharefree.model.ctrip.WebTripModel;
 import com.sharefree.service.imp.BaseService;
 import com.sharefree.service.itf.ctrip.IWebTripService;
+import com.sharefree.utils.StringUtil;
 
 /**
  * Title: WebTripService
@@ -29,8 +30,9 @@ public class WebTripService extends BaseService implements IWebTripService {
 
 	@Override
 	public WebTripModel fetch(Integer id) {
-		// TODO Auto-generated method stub
-		return null;
+		WebTrip bean = dao.fetch(WebTrip.class, id);
+		WebTripModel model = (WebTripModel) copyProperties(bean, WebTripModel.class);
+		return model;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -44,6 +46,18 @@ public class WebTripService extends BaseService implements IWebTripService {
 		}
 		if(model.getTripsequence() != null){
 			group.andEquals("tripsequence", model.getTripsequence());
+		}
+		if(StringUtil.isNotEmpty(model.getSegment1())){
+			group.andEquals("segment1", model.getSegment1());
+		}
+		if(StringUtil.isNotEmpty(model.getSegment2())){
+			group.andEquals("segment2", model.getSegment2());
+		}
+		if(StringUtil.isNotEmpty(model.getSegment3())){
+			group.andEquals("segment3", model.getSegment3());
+		}
+		if(StringUtil.isNotEmpty(model.getSegment4())){
+			group.andEquals("segment4", model.getSegment4());
 		}
 		if(model.getExcludeTripid() != null){
 			group.andNotIn("tripid", listTOarray(model.getExcludeTripid()));
@@ -88,7 +102,7 @@ public class WebTripService extends BaseService implements IWebTripService {
 		int[] array = null;
 		if(datas != null && datas.size() > 0){
 			array = new int[datas.size()];
-			for(int i = 1; i < datas.size(); i++){
+			for(int i = 0; i < datas.size(); i++){
 				array[i] = datas.get(i);
 			}
 		}

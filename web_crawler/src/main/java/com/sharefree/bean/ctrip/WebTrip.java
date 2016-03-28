@@ -6,7 +6,7 @@ import org.nutz.dao.entity.annotation.Column;
 import org.nutz.dao.entity.annotation.Id;
 import org.nutz.dao.entity.annotation.Table;
 
-@Table(value = "")
+@Table(value = "web_trip")
 public class WebTrip implements Serializable {
 
     private static final long serialVersionUID = 1L;

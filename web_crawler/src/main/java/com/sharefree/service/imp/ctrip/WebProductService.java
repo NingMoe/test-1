@@ -29,8 +29,9 @@ public class WebProductService extends BaseService implements IWebProductService
 
 	@Override
 	public WebProductModel fetch(Integer id) {
-		// TODO Auto-generated method stub
-		return null;
+		WebProduct bean = dao.fetch(WebProduct.class, id);
+		WebProductModel model = (WebProductModel) copyProperties(bean, WebProductModel.class);
+		return model;
 	}
 
 	@SuppressWarnings("unchecked")

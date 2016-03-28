@@ -40,7 +40,7 @@ public class WebProductDetailService extends BaseService implements IWebProductD
 		// 组装条件
 		SqlExpressionGroup group = cri.where();
 		if(model.getProductid() != null){
-			group.andEquals("tripid", model.getProductid());
+			group.andEquals("productid", model.getProductid());
 		}
 		// 查询
 		List<WebProductDetail> beans = dao.query(WebProductDetail.class, cri);

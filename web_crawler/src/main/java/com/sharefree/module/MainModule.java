@@ -4,6 +4,7 @@ import org.nutz.mvc.adaptor.JsonAdaptor;
 import org.nutz.mvc.annotation.AdaptBy;
 import org.nutz.mvc.annotation.IocBy;
 import org.nutz.mvc.annotation.Modules;
+import org.nutz.mvc.annotation.Ok;
 import org.nutz.mvc.annotation.SetupBy;
 import org.nutz.mvc.ioc.provider.ComboIocProvider;
 
@@ -19,6 +20,7 @@ import com.sharefree.init.MainSetup;
 		"*tx" })
 @Modules(scanPackage = true)
 @AdaptBy(type=JsonAdaptor.class)
+@Ok("json:{quoteName:true, ignoreNull:true}")
 public class MainModule {
 
 }

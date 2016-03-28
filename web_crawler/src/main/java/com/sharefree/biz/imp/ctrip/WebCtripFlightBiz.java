@@ -11,6 +11,7 @@ import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.sharefree.base.constant.WebCtripConsts;
 import com.sharefree.biz.itf.ctrip.IWebCtripFlightBiz;
 import com.sharefree.common.CommonException;
@@ -105,13 +106,21 @@ public class WebCtripFlightBiz implements IWebCtripFlightBiz {
 						String departCityCode = podm.getDepartCityCode();
 						if (StringUtil.isEmpty(departCityCode))
 							throw new CommonException("缺少参数[出发城市三字码：departCityCode]");
-						tripCode = tripCode == null ? departCityCode : tripCode + "/" + departCityCode;
+						if(WebCtripConsts.TRIP_TYPE_ROUND_FREE_COLLOCATION.equals(tripType)){
+							tripCode = tripCode == null ? departCityCode : tripCode;
+						}else{
+							tripCode = tripCode == null ? departCityCode : tripCode + "/" + departCityCode;
+						}
 						
 						// 到达城市三字码
 						String arriveCityCode = podm.getArriveCityCode();
 						if (StringUtil.isEmpty(arriveCityCode))
 							throw new CommonException("缺少参数[到达城市三字码：arriveCityCode]");
-						tripCode += "~" + arriveCityCode;
+						if(WebCtripConsts.TRIP_TYPE_ROUND_FREE_COLLOCATION.equals(tripType)){
+							tripCode = tripCode.indexOf("~") != -1 ? tripCode : tripCode + "~" + arriveCityCode;
+						}else{
+							tripCode += "~" + arriveCityCode;
+						}
 						
 						// 出发日期
 						String departTime = DateUtil.parseDateToString(podm.getDepartTime(), DateUtil.FORMAT1);
@@ -123,12 +132,12 @@ public class WebCtripFlightBiz implements IWebCtripFlightBiz {
 					Date systemDate = systemService.getTime();
 					// 定义查询航班请求数据
 					WebQueryFlightModel wqfm = new WebQueryFlightModel(
-							systemDate, WebCtripConsts.FLIGHT_QUERY_TASK_TEST,
+							systemDate, WebCtripConsts.FLIGHT_QUERY_TASK_TYPE,
 							WebCtripConsts.FLIGHT_QUERY_DATASOURCE, flightType,
 							tripType, tripCode, tripDate,
 							cqfm.getAirlinecode(), cqfm.getCabinclass(),
 							cqfm.getAdtNum(), cqfm.getChdNum(),
-							cqfm.getInfNum(), WebCtripConsts.CTRIP_QUERY_INIT);
+							cqfm.getInfNum(), WebCtripConsts.CTRIP_PROCESS_STATUS_INIT);
 					// 添加查询航班请求
 					wqfm = webQueryFlightService.insert(wqfm);
 					// 规范数据
@@ -137,9 +146,9 @@ public class WebCtripFlightBiz implements IWebCtripFlightBiz {
 					// 新建点击任务
 					clickMapper(cqfm);
 					// 设置返回token
-					result.put(WebCtripConsts.CTRIP_QUERY_TOKEN, cqfm.getAsyncToken());
+					result.put(WebCtripConsts.CTRIP_PROCESS_TOKEN, cqfm.getAsyncToken());
 					// 设置完成状态
-					result.put(WebCtripConsts.CTRIP_QUERY_STATUS, WebCtripConsts.CTRIP_QUERY_INIT);
+					result.put(WebCtripConsts.CTRIP_PROCESS_STATUS, WebCtripConsts.CTRIP_PROCESS_STATUS_INIT);
 				}else{
 					throw new CommonException("缺少参数[异步查询token：asyncToken]");
 				}
@@ -150,76 +159,67 @@ public class WebCtripFlightBiz implements IWebCtripFlightBiz {
 					throw new CommonException("不存在点击任务");
 				// 任务Id
 				Integer taskId = wcm.getTaskid();
-				// 验证查询任务状态
-				WebQueryFlightModel wqfm = webQueryFlightService.fetch(taskId);
-				// 获取任务状态
-				Integer status = wqfm.getStatus();
-				// TODO 判断
-				
-				
-				
-
-				// 获取任务状态
-				status = wcm.getStatus();
-				// TODO 判断
-				
-				
-				
-				
 				// 规范数据
 				cqfm.setTaskId(taskId);
-				
 				// 验证是否为点击任务:
 				if(StringUtil.isEmpty(clickType)){
-					// 定义查询条件参数
-					WebTripModel wtmQ = new WebTripModel();
-					// 同点击任务的航班数据属于同一程（除往返）
-					wtmQ.setClickid(asyncToken);
-					// 设置行程
-					wtmQ.setTripsequence(tripSequence);
-					// 排除已查询数据
-					List<Integer> excludeTripid = pullIncr(taskId, tripSequence);
-					wtmQ.setExcludeTripid(excludeTripid);
-					// 获取增量数据
-					List<WebTripModel> wtmsQ = webTripService.query(wtmQ);
-					if(wtmsQ != null && wtmsQ.size() > 0){
-						// 有效数据
-						wtms = wtmsQ;
-						// 定义缓存增量数据
-						List<Integer> tripIdList = new ArrayList<Integer>();
-						// 遍历航班数据，获取产品数据
-						for(WebTripModel wtm : wtms){
-							// 行程id
-							Integer tripId = wtm.getTripid();
-							WebProductModel wpmQ = new WebProductModel();
-							wpmQ.setTripid(tripId);
-							List<WebProductModel> wpmsQ = webProductService.query(wpmQ);
-							wtm.setProducts(wpmsQ);
-							tripIdList.add(tripId);
+					// 获取任务状态
+					Integer status = wcm.getStatus();
+					if(status != null){
+						// 查询失败
+						if(status == WebCtripConsts.CTRIP_PROCESS_STATUS_ERROR){
+							throw new CommonException("CTRIP国际航班查询失败");
 						}
-						// 缓存增量数据
-						pushIncr(taskId, tripSequence, tripIdList);
+						// 定义查询条件参数
+						WebTripModel wtmQ = new WebTripModel();
+						// 同点击任务的航班数据属于同一程（除往返）
+						wtmQ.setClickid(asyncToken);
+						// 设置行程
+						wtmQ.setTripsequence(tripSequence);
+						// 排除已查询数据
+						List<Integer> excludeTripid = pullIncr(taskId, tripSequence);
+						wtmQ.setExcludeTripid(excludeTripid);
+						// 获取增量数据
+						List<WebTripModel> wtmsQ = webTripService.query(wtmQ);
+						if(wtmsQ != null && wtmsQ.size() > 0){
+							// 有效数据
+							wtms = wtmsQ;
+							// 定义缓存增量数据
+							List<Integer> tripIdList = new ArrayList<Integer>();
+							// 遍历航班数据，获取产品数据
+							for(WebTripModel wtm : wtms){
+								// 行程id
+								Integer tripId = wtm.getTripid();
+								WebProductModel wpmQ = new WebProductModel();
+								wpmQ.setTripid(tripId);
+								List<WebProductModel> wpmsQ = webProductService.query(wpmQ);
+								wtm.setProducts(wpmsQ);
+								tripIdList.add(tripId);
+							}
+							// 缓存增量数据
+							pushIncr(taskId, tripSequence, tripIdList);
+						}
+						// 设置返回token
+						result.put(WebCtripConsts.CTRIP_PROCESS_TOKEN, asyncToken);
+						// 设置点击任务完成状态
+						result.put(WebCtripConsts.CTRIP_PROCESS_STATUS, status);
 					}
-					// 设置返回token
-					result.put(WebCtripConsts.CTRIP_QUERY_TOKEN, asyncToken);
-					// 设置点击任务完成状态
-					result.put(WebCtripConsts.CTRIP_QUERY_STATUS, status);
 				}else{
 					// 新建点击任务
 					clickMapper(cqfm);
 					// 设置返回token
-					result.put(WebCtripConsts.CTRIP_QUERY_TOKEN, cqfm.getAsyncToken());
+					result.put(WebCtripConsts.CTRIP_PROCESS_TOKEN, cqfm.getAsyncToken());
 					// 设置完成状态
-					result.put(WebCtripConsts.CTRIP_QUERY_STATUS, WebCtripConsts.CTRIP_QUERY_INIT);
+					result.put(WebCtripConsts.CTRIP_PROCESS_STATUS, WebCtripConsts.CTRIP_PROCESS_STATUS_INIT);
 				}
 			}
 			// 设置返回data
-			result.put(WebCtripConsts.CTRIP_QUERY_DATA, wtms);
+			result.put(WebCtripConsts.CTRIP_PROCESS_DATA, wtms);
 			
 		} catch (CommonException e) {
 			throw e;
 		} catch (Exception e) {
-			throw new CommonException("CTRIP国际航班查询失败", e);
+			throw new CommonException("CTRIP国际航班查询错误", e);
 		}
 		// 返回结果
 		return result;
@@ -250,64 +250,54 @@ public class WebCtripFlightBiz implements IWebCtripFlightBiz {
 			
 			// 验证点击任务状态
 			WebClickModel wcm = webClickService.fetch(asyncToken);
+			System.out.println(JSONObject.toJSONString(wcm));
 			if(wcm == null)
 				throw new CommonException("不存在点击任务");
-			// 任务Id
-			Integer taskId = wcm.getTaskid();
-			// 验证查询任务状态
-			WebQueryFlightModel wqfm = webQueryFlightService.fetch(taskId);
-			// 获取任务状态
-			Integer status = wqfm.getStatus();
-			// TODO 判断
-			
-			
-			
-
-			// 获取任务状态
-			status = wcm.getStatus();
-			// TODO 判断
-			
-			
-			
-			
 			// 规范数据
-			cqfm.setTaskId(taskId);
-			
+			cqfm.setTaskId(wcm.getTaskid());
 			// 验证是否为点击任务:
 			if(StringUtil.isEmpty(clickType)){
-				// TODO 判断任务状态
-				// 完成核价任务
+				// 获取任务状态
+				Integer status = wcm.getStatus();
+				// 核价任务状态
 				if(status != null){
-					// 定义查询条件参数
-					WebProductDetailModel wpdmQ = new WebProductDetailModel();
-					// 根据产品id获取核价信息
-					wpdmQ.setProductid(wcm.getProductid());
-					List<WebProductDetailModel> wpdmsQ = webProductDetailService.query(wpdmQ);
-					// 获取核价信息
-					if(wpdmsQ != null && wpdmsQ.size() > 0){
-						// 默认核价只有一条数据
-						wpdm = wpdmsQ.get(0);
+					// 核价完成
+					if(status == WebCtripConsts.CTRIP_PROCESS_STATUS_FINISH){
+						// 定义查询条件参数
+						WebProductDetailModel wpdmQ = new WebProductDetailModel();
+						// 根据产品id获取核价信息
+						wpdmQ.setProductid(wcm.getProductid());
+						List<WebProductDetailModel> wpdmsQ = webProductDetailService.query(wpdmQ);
+						// 获取核价信息
+						if(wpdmsQ != null && wpdmsQ.size() > 0){
+							// 默认核价只有一条数据
+							wpdm = wpdmsQ.get(0);
+						}
+					}
+					// 核价失败
+					else if(status == WebCtripConsts.CTRIP_PROCESS_STATUS_ERROR){
+						throw new CommonException("CTRIP国际航班核价失败");
 					}
 				}
 				// 设置返回token
-				result.put(WebCtripConsts.CTRIP_QUERY_TOKEN, asyncToken);
+				result.put(WebCtripConsts.CTRIP_PROCESS_TOKEN, asyncToken);
 				// 设置点击任务完成状态
-				result.put(WebCtripConsts.CTRIP_QUERY_STATUS, status);
+				result.put(WebCtripConsts.CTRIP_PROCESS_STATUS, status);
 			}else{
 				// 新建点击任务
 				clickMapper(cqfm);
 				// 设置返回token
-				result.put(WebCtripConsts.CTRIP_QUERY_TOKEN, cqfm.getAsyncToken());
+				result.put(WebCtripConsts.CTRIP_PROCESS_TOKEN, cqfm.getAsyncToken());
 				// 设置完成状态
-				result.put(WebCtripConsts.CTRIP_QUERY_STATUS, WebCtripConsts.CTRIP_QUERY_INIT);
+				result.put(WebCtripConsts.CTRIP_PROCESS_STATUS, WebCtripConsts.CTRIP_PROCESS_STATUS_INIT);
 			}
 			// 设置返回data
-			result.put(WebCtripConsts.CTRIP_QUERY_DATA, wpdm);
+			result.put(WebCtripConsts.CTRIP_PROCESS_DATA, wpdm);
 			
 		} catch (CommonException e) {
 			throw e;
 		} catch (Exception e) {
-			throw new CommonException("CTRIP国际航班核价失败", e);
+			throw new CommonException("CTRIP国际航班核价错误", e);
 		}
 		// 返回结果
 		return result;
@@ -341,10 +331,6 @@ public class WebCtripFlightBiz implements IWebCtripFlightBiz {
 		Integer taskId = cqfm.getTaskId();
 		if (taskId == null)
 			throw new CommonException("缺少参数[请求id：taskId]");
-		// 行程类型（单程:1，往返:2，多程:3）
-		String tripType = cqfm.getTripType();
-		if (StringUtil.isEmpty(tripType))
-			throw new CommonException("缺少参数[行程类型：tripType]");
 		// 行程序列
 		Integer tripSequence = cqfm.getTripSequence();
 		if (tripSequence == null)
@@ -357,7 +343,7 @@ public class WebCtripFlightBiz implements IWebCtripFlightBiz {
 		if(WebCtripConsts.CLICK_NEW_QUERY_FLIGHT.equals(clickType)){
 			if(tripSequence != 1)
 				throw new CommonException("新建查询行程序列必须为1：tripSequence=1");
-			wcm = new WebClickModel(clickType, taskId, tripSequence, null, null, WebCtripConsts.CTRIP_QUERY_INIT);
+			wcm = new WebClickModel(clickType, taskId, tripSequence, null, null, WebCtripConsts.CTRIP_PROCESS_STATUS_INIT);
 		}
 		
 		// 下一程
@@ -367,14 +353,12 @@ public class WebCtripFlightBiz implements IWebCtripFlightBiz {
 			Integer productId = cqfm.getProductId();
 			if(productId == null)
 				throw new CommonException("缺少参数[产品id：productId]");
-			if(WebCtripConsts.TRIP_TYPE_STOPOVER.equals(tripType))
-				wcm = new WebClickModel(clickType, taskId, tripSequence, null, productId, WebCtripConsts.CTRIP_QUERY_INIT);
+			wcm = new WebClickModel(clickType, taskId, tripSequence, null, productId, WebCtripConsts.CTRIP_PROCESS_STATUS_INIT);
 		}
 		
 		// 修改行程
 		else if(WebCtripConsts.CLICK_MODIFY_TRIP.equals(clickType)){
-			if(WebCtripConsts.TRIP_TYPE_STOPOVER.equals(tripType))
-				wcm = new WebClickModel(clickType, taskId, tripSequence, null, null, WebCtripConsts.CTRIP_QUERY_INIT);
+			wcm = new WebClickModel(clickType, taskId, tripSequence, null, null, WebCtripConsts.CTRIP_PROCESS_STATUS_INIT);
 		}
 		
 		// 核价
@@ -382,7 +366,7 @@ public class WebCtripFlightBiz implements IWebCtripFlightBiz {
 			Integer productId = cqfm.getProductId();
 			if(productId == null)
 				throw new CommonException("缺少参数[产品id：productId]");
-			wcm = new WebClickModel(clickType, taskId, tripSequence, null, productId, WebCtripConsts.CTRIP_QUERY_INIT);
+			wcm = new WebClickModel(clickType, taskId, tripSequence, null, productId, WebCtripConsts.CTRIP_PROCESS_STATUS_INIT);
 		}
 		
 		// 其他抛出异常
@@ -458,14 +442,14 @@ public class WebCtripFlightBiz implements IWebCtripFlightBiz {
 			// 将新增且不重复数据添加到缓存
 			for(Integer value : tripIdList){
 				// 不重复的新增
-				if(incrValues.contains(value)){
+				if(!incrValues.contains(value)){
 					incrValues.add(value);
 				}
 			}
 			incrValue = JSON.toJSONString(incrValues);
 		}
 		// 缓存新数据
-		redisService.setEx(key, incrValue, WebCtripConsts.FLIGHT_INCR_CACHE_TIMELINESS * 60);
+		redisService.setEx(key, incrValue, WebCtripConsts.FLIGHT_INCR_CACHE_TIMELINESS);
 	}
 	
 }
