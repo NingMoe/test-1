@@ -32,6 +32,11 @@ public class WebProductModel extends BaseModel<Object, List<Object[]>> implement
     private String changerefundrule;
 
     private String ticketnotice;
+    
+    /*
+     * 包含的航班
+     */
+    private List<Integer> includeTripid;
 
     public Integer getProductid() {
         return productid;
@@ -127,5 +132,13 @@ public class WebProductModel extends BaseModel<Object, List<Object[]>> implement
 
 	public void setTicketnotice(String ticketnotice) {
 		this.ticketnotice = ticketnotice;
+	}
+
+	public List<Integer> getIncludeTripid() {
+		return includeTripid;
+	}
+
+	public void setIncludeTripid(List<Integer> includeTripid) {
+		this.includeTripid = includeTripid;
 	}
 }

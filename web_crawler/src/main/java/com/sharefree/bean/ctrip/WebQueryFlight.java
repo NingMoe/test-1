@@ -72,14 +72,14 @@ public class WebQueryFlight implements Serializable {
     }
 
     public String getTasktype() {
-        return tasktype;
-    }
+		return tasktype;
+	}
 
-    public void setTasktype(String tasktype) {
-        this.tasktype = tasktype == null ? null : tasktype.trim();
-    }
+	public void setTasktype(String tasktype) {
+		this.tasktype = tasktype;
+	}
 
-    public String getDatasource() {
+	public String getDatasource() {
         return datasource;
     }
 

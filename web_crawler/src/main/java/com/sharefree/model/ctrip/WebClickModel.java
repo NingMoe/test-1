@@ -15,6 +15,8 @@ public class WebClickModel extends BaseModel<Object, List<Object[]>> implements 
 
     private Integer taskid;
 
+    private String tasktype;
+
     private Integer tripsequence;
 
     private Integer tripid;
@@ -25,9 +27,10 @@ public class WebClickModel extends BaseModel<Object, List<Object[]>> implements 
     
     public WebClickModel(){}
     
-    public WebClickModel(String clicktype, Integer taskid, Integer tripsequence, Integer tripid, Integer productid, Integer status){
+    public WebClickModel(String clicktype, Integer taskid, String tasktype, Integer tripsequence, Integer tripid, Integer productid, Integer status){
     	this.clicktype = clicktype;
     	this.taskid = taskid;
+    	this.tasktype = tasktype;
     	this.tripsequence = tripsequence;
     	this.tripid = tripid;
     	this.productid = productid;
@@ -58,7 +61,15 @@ public class WebClickModel extends BaseModel<Object, List<Object[]>> implements 
         this.taskid = taskid;
     }
 
-    public Integer getTripsequence() {
+    public String getTasktype() {
+		return tasktype;
+	}
+
+	public void setTasktype(String tasktype) {
+		this.tasktype = tasktype;
+	}
+
+	public Integer getTripsequence() {
         return tripsequence;
     }
 

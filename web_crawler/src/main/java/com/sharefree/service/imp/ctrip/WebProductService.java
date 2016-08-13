@@ -11,6 +11,7 @@ import com.sharefree.bean.ctrip.WebProduct;
 import com.sharefree.model.ctrip.WebProductModel;
 import com.sharefree.service.imp.BaseService;
 import com.sharefree.service.itf.ctrip.IWebProductService;
+import com.sharefree.utils.StringUtil;
 
 /**
  * Title: WebProductService
@@ -42,6 +43,9 @@ public class WebProductService extends BaseService implements IWebProductService
 		SqlExpressionGroup group = cri.where();
 		if(model.getTripid() != null){
 			group.andEquals("tripid", model.getTripid());
+		}
+		if(model.getIncludeTripid() != null){
+			group.andInIntArray("tripid", StringUtil.listTOarray(model.getIncludeTripid()));
 		}
 		// 查询
 		List<WebProduct> beans = dao.query(WebProduct.class, cri);

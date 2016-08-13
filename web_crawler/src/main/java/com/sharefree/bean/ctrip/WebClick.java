@@ -21,6 +21,9 @@ public class WebClick implements Serializable {
     @Column
     private Integer taskid;
 
+	@Column
+    private String tasktype;
+
     @Column
     private Integer tripsequence;
 
@@ -55,6 +58,14 @@ public class WebClick implements Serializable {
 
     public void setTaskid(Integer taskid) {
         this.taskid = taskid;
+    }
+
+    public String getTasktype() {
+        return tasktype;
+    }
+
+    public void setTasktype(String tasktype) {
+        this.tasktype = tasktype == null ? null : tasktype.trim();
     }
 
     public Integer getTripsequence() {

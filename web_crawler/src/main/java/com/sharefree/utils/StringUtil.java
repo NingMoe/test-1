@@ -514,6 +514,17 @@ public final class StringUtil {
 		return str;
 	}
 	
+	public static int[] listTOarray(List<Integer> datas){
+		int[] array = null;
+		if(datas != null && datas.size() > 0){
+			array = new int[datas.size()];
+			for(int i = 0; i < datas.size(); i++){
+				array[i] = datas.get(i);
+			}
+		}
+		return array;
+	}
+	
 	/**
 	 * string转xml
 	 * @param xml

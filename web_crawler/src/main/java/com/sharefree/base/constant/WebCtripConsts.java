@@ -16,7 +16,7 @@ public class WebCtripConsts {
 
 	
 	// 任务类型：0表示正式任务，1表示测试任务；
-	public static final String FLIGHT_QUERY_TASK_TYPE = "0";
+	public static final String FLIGHT_QUERY_TASK_TYPE = "1";
 	
 	// 查询数据来源
 	public static final String FLIGHT_QUERY_DATASOURCE = "1"; // 携程数据

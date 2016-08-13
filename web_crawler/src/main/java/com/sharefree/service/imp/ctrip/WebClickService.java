@@ -2,6 +2,9 @@ package com.sharefree.service.imp.ctrip;
 
 import java.util.List;
 
+import org.nutz.dao.Cnd;
+import org.nutz.dao.sql.Criteria;
+import org.nutz.dao.util.cri.SqlExpressionGroup;
 import org.nutz.ioc.loader.annotation.IocBean;
 
 import com.sharefree.bean.ctrip.WebClick;
@@ -39,10 +42,28 @@ public class WebClickService extends BaseService implements IWebClickService {
 		return model;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<WebClickModel> query(WebClickModel model) {
-		// TODO Auto-generated method stub
-		return null;
+		Criteria cri = Cnd.cri();
+		// 组装条件
+		SqlExpressionGroup group = cri.where();
+		if(model.getClicktype() != null){
+			group.andEquals("clicktype", model.getClicktype());
+		}
+		if(model.getTaskid() != null){
+			group.andEquals("taskid", model.getTaskid());
+		}
+		if(model.getTripsequence() != null){
+			group.andEquals("tripsequence", model.getTripsequence());
+		}
+		if(model.getProductid() != null){
+			group.andEquals("productid", model.getProductid());
+		}
+		// 查询
+		List<WebClick> beans = dao.query(WebClick.class, cri);
+		List<WebClickModel> models = (List<WebClickModel>) copyListProperties(beans, WebClickModel.class);
+		return models;
 	}
 
 	@Override
