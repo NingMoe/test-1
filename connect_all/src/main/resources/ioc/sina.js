@@ -20,6 +20,7 @@ var ioc = {
 	// 创建连接
 	scs : {
 		type : "com.sina.cloudstorage.services.scs.SCSClient",
+		singleton : false, // 是否为单例
 		args : [ {
 			refer : "credentials"
 		} ]

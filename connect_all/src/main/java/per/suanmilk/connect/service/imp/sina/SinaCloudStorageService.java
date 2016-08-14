@@ -14,6 +14,7 @@ import org.nutz.ioc.loader.annotation.IocBean;
 import per.suanmilk.connect.service.itf.sina.ISinaCloudStorageService;
 
 import com.alibaba.fastjson.JSONObject;
+import com.sina.cloudstorage.SDKGlobalConfiguration;
 import com.sina.cloudstorage.services.scs.SCS;
 import com.sina.cloudstorage.services.scs.model.AccessControlList;
 import com.sina.cloudstorage.services.scs.model.Bucket;
@@ -25,6 +26,7 @@ import com.sina.cloudstorage.services.scs.model.S3Object;
 @IocBean
 public class SinaCloudStorageService implements ISinaCloudStorageService {
 
+	@Inject
 	private SCS scs;
 
 	@Override

@@ -21,7 +21,7 @@ import per.suanmilk.connect.service.itf.sina.ISinaCloudStorageService;
  *
  */
 @IocBean
-@At("/ctrip")
+@At("/sina")
 @Fail("http:404")
 public class SCSModule {
 
