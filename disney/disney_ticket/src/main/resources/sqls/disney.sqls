@@ -1,0 +1,64 @@
+/*
+这里是这个 SQL 文件的注释，你随便怎么写
+*/
+/* 你可以随便写任何的注释文字，只有距离 SQL 语句最近的那一行注释，才会被认为是键值 */
+/* 查询乘客总数*/
+/* selectPassengerSum*/
+select COUNT(*) from passenger
+
+/* 随机获取乘客信息*/
+/* getPassengerRandom*/
+SELECT * FROM (select @@rd:=@@rd+1 as rowId, a.* from passenger a, (select @@rd:=0) b) as passenger $condition
+
+/* 查询行程总数*/
+/* selectTripSum*/
+select COUNT(*) from trip
+
+/* 随机获取行程信息*/
+/* getTripRandom*/
+SELECT * FROM (select @@rd:=@@rd+1 as rowId, a.* from trip a, (select @@rd:=0) b) as trip $condition
+
+/* 查询游客订单信息，占位数和出票数为实时统计 */
+/* queryTouristOrders*/
+SELECT * FROM ( SELECT a.*, ifnull(occupyNum, 0) AS occupyNum, ifnull(ticketingNum, 0) AS ticketingNum, CASE WHEN status='0' THEN '0' WHEN ifnull(ticketingNum, 0)=0 THEN '1' WHEN ifnull(ticketingNum, 0) BETWEEN 1 AND (visitNum - 1) THEN '2' WHEN ifnull(ticketingNum, 0) = visitNum THEN '3' END AS showStatus FROM tourist_order a LEFT JOIN ( SELECT orderId, SUM(occupyNum) AS occupyNum FROM occupy_detail WHERE status = '1' GROUP BY orderId) b ON a.orderId = b.orderId LEFT JOIN ( SELECT orderId, COUNT(*) AS ticketingNum FROM tourist_ticket WHERE status != '0' GROUP BY orderId) c ON a.orderId = c.orderId) AS v_tourist_order $condition
+
+/* 查询游客订单信息记录总数，占位数和出票数为实时统计 */
+/* countTouristOrders*/
+SELECT COUNT(*) FROM (SELECT a.*, ifnull(occupyNum, 0) AS occupyNum, ifnull(ticketingNum, 0) AS ticketingNum, CASE WHEN status='0' THEN '0' WHEN ifnull(ticketingNum, 0)=0 THEN '1' WHEN ifnull(ticketingNum, 0) BETWEEN 1 AND (visitNum - 1) THEN '2' WHEN ifnull(ticketingNum, 0) = visitNum THEN '3' END AS showStatus FROM tourist_order a LEFT JOIN ( SELECT orderId, SUM(occupyNum) AS occupyNum FROM occupy_detail WHERE status = '1' GROUP BY orderId) b ON a.orderId = b.orderId LEFT JOIN ( SELECT orderId, COUNT(*) AS ticketingNum FROM tourist_ticket WHERE status != '0' GROUP BY orderId) c ON a.orderId = c.orderId) AS c_tourist_order $condition
+
+/* 查询游客订单详情，出票数为实时统计 */
+/* queryTouristDeatils*/
+SELECT * FROM ( SELECT a.*, ifnull(b.ticketingNum,0) AS ticketingNum FROM tourist_detail a LEFT JOIN ( SELECT a.touristId AS touristId, COUNT(*) AS ticketingNum FROM tourist_ticket a GROUP BY a.touristId) b ON a.touristId = b.touristId) AS v_tourist_detail $condition
+
+/* 统计某时间段段，各入园日订单总人数*/
+/* selectOrderNumSum*/
+select a.visitDate, SUM(a.visitNum) as visitNum from tourist_order a $condition group by a.visitDate order by a.visitDate
+
+/* 统计某时间段段，各入园日库存总数*/
+/* selectStockNumSum*/
+select a.visitDate, a.stock from ticket_stock a $condition order by a.visitDate
+
+/* 统计某时间段段，各入园日占位总数*/
+/* selectOccupyNumSum*/
+select a.visitDate, SUM(a.occupyNum) as occupyNum from occupy_detail a $condition group by a.visitDate order by a.visitDate
+
+/* 统计某时间段段，各入园日出票总数*/
+/* selectTicketNumSum*/
+select a.visitDate, COUNT(*) as visitNum from tourist_ticket a $condition group by a.visitDate order by a.visitDate
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
