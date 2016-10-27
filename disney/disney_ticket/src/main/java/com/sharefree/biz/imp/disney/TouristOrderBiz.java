@@ -51,10 +51,12 @@ public class TouristOrderBiz extends BaseBiz<TouristOrderModel, Long> implements
 		// 是否同时录入游客信息
 		List<TouristDetailModel> details = model.getTouristDetails();
 		if (details != null && details.size() > 0) {
+			// 保存订单信息
 			model.setImportOptId(currentOperator().getOptId());
 			model.setImportTime(currentTime);
-			// 保存订单信息
 			model = save(model);
+			// 保存游客详情
+			model.setTouristDetails(details);
 			touristDetailBiz.importTouristDetail(model);
 		} else {
 			// 保存订单信息
@@ -145,6 +147,9 @@ public class TouristOrderBiz extends BaseBiz<TouristOrderModel, Long> implements
 		}
 		if (model.getVisitNum() == null || model.getVisitNum() < 1) {
 			throw new CommonException("缺少参数{visitNum}:入园人数");
+		}
+		if (model.getIsNeedOccupy() && (model.getNeedOccupyNum() == null || model.getNeedOccupyNum() < 0)) {
+			throw new CommonException("缺少参数{needOccupyNum}:需要占位人数");
 		}
 		if (StringUtil.isEmpty(model.getCustomerName())) {
 			model.setCustomerName(DisneyConst.TOURIST_ORDER_CUSTOMER_NAME_INIT);

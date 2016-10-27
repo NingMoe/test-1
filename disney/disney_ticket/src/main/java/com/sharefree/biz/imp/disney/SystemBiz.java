@@ -7,6 +7,7 @@ import org.nutz.ioc.loader.annotation.IocBean;
 
 import com.sharefree.biz.itf.disney.ISystemBiz;
 import com.sharefree.common.CommonException;
+import com.sharefree.constant.DisneyConst;
 import com.sharefree.constant.SqlsConst;
 import com.sharefree.model.disney.OccupyDetailModel;
 import com.sharefree.model.disney.TicketDistributionModel;
@@ -65,6 +66,7 @@ public class SystemBiz implements ISystemBiz {
 			OccupyDetailModel cnd = new OccupyDetailModel();
 			cnd.setVisitDateF(model.getVisitDateF());
 			cnd.setVisitDateT(model.getVisitDateT());
+			cnd.setStatus(DisneyConst.OCCUPY_DETAIL_STATUS_UNUSE);
 			cnd.setSqlKey(SqlsConst.SELECT_OCCUPY_NUM_SUM);
 			List<OccupyDetailModel> models = occupyDetailService.queryByCustomSQL(cnd);
 			result.setOccupyNumSum(models);
@@ -74,6 +76,7 @@ public class SystemBiz implements ISystemBiz {
 			TouristTicketModel cnd = new TouristTicketModel();
 			cnd.setVisitDateF(model.getVisitDateF());
 			cnd.setVisitDateT(model.getVisitDateT());
+			cnd.setStatusIn(new String[] { DisneyConst.TOURIST_TICKET_STATUS_PAYED, DisneyConst.TOURIST_TICKET_STATUS_TICKETED });
 			cnd.setSqlKey(SqlsConst.SELECT_TICKET_NUM_SUM);
 			List<TouristTicketModel> models = touristTicketService.queryByCustomSQL(cnd);
 			result.setTicketNumSum(models);

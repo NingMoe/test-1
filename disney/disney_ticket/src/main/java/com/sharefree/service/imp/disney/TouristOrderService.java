@@ -80,7 +80,7 @@ public class TouristOrderService extends BaseService<TouristOrderModel, TouristO
 			group.andLT("visitDate", model.getVisitDateT().getTime());
 		}
 		if (model.getStatusIn() != null && model.getStatusIn().length > 0) {
-			group.andIn("status", model.getStatusIn());
+			group.andIn("showStatus", model.getStatusIn());
 		}
 		if (model.getVisitDateIn() != null && model.getVisitDateIn().length > 0) {
 			group.andIn("visitDate", model.getVisitDateIn());

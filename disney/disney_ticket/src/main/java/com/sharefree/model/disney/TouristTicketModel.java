@@ -56,6 +56,16 @@ public class TouristTicketModel extends BaseModel implements Serializable {
 
 	private Integer visitNum;
 
+	private String[] statusIn;
+
+	public String[] getStatusIn() {
+		return statusIn;
+	}
+
+	public void setStatusIn(String[] statusIn) {
+		this.statusIn = statusIn;
+	}
+
 	public Integer getVisitNum() {
 		return visitNum;
 	}

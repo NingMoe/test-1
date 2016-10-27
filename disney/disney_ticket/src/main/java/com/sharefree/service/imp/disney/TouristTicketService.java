@@ -75,6 +75,9 @@ public class TouristTicketService extends BaseService<TouristTicketModel, Touris
 		if (model.getVisitDateT() != null) {
 			group.andLT("visitDate", model.getVisitDateT().getTime());
 		}
+		if (model.getStatusIn() != null && model.getStatusIn().length > 0) {
+			group.andIn("status", model.getStatusIn());
+		}
 		return cri;
 	}
 
