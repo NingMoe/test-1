@@ -20,16 +20,14 @@ public class CheckTicketStockJob implements Job {
 	private IDisneyFront disneyFront;
 
 	// 东航维护5个月的门票
-	private static int[] plusMonth = { 0, 5 };
+	private static int[] plusMonth = { 0, DisneyConst.CHECK_STOCK_MONTH_MAX };
 
 	@Override
 	public void execute(JobExecutionContext arg0) throws JobExecutionException {
-		if (DisneyConst.ORDER_OCCUPY_JOB_RUN) {
-			// Step 1 检查门票库存Job
-			TicketStockModel model = new TicketStockModel();
-			dateRange(model);
-			disneyFront.check_occupy(model);
-		}
+		// Step 1 检查门票库存Job
+		TicketStockModel model = new TicketStockModel();
+		dateRange(model);
+		disneyFront.check_occupy(model);
 	}
 
 	// 根据配置获取检查月的范围

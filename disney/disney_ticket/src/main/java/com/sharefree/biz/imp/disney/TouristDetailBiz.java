@@ -15,6 +15,7 @@ import com.sharefree.model.disney.TouristOrderModel;
 import com.sharefree.service.itf.disney.ITouristDetailService;
 import com.sharefree.service.itf.disney.ITouristOrderService;
 import com.sharefree.utils.DateUtil;
+import com.sharefree.utils.StringUtil;
 
 @IocBean
 public class TouristDetailBiz extends BaseBiz<TouristDetailModel, Long> implements ITouristDetailBiz {
@@ -44,6 +45,9 @@ public class TouristDetailBiz extends BaseBiz<TouristDetailModel, Long> implemen
 			detail.setOrderNo(model.getOrderNo());
 			detail.setVisitDate(model.getVisitDate());
 			validateTouristDetail(detail);
+			// 无证件类型，默认身份证
+			if (StringUtil.isEmpty(detail.getIdcType()))
+				detail.setIdcType(DisneyConst.IDC_TYPE_IDENTITYCARD);
 			detail.setStatus(DisneyConst.TOURIST_DETAIL_STATUS_OK);
 			detail.setImportOptId(currentOperator().getOptId());
 			detail.setImportTime(model.getImportTime());

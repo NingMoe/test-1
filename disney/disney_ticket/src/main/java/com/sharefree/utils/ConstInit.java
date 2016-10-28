@@ -75,13 +75,11 @@ public class ConstInit {
 	}
 
 	public void initDisneyConst(List<String> keys) {
-		Class<DisneyConst> clazz = DisneyConst.class;
-		initValue(clazz, keys);
+		initValue(DisneyConst.class, keys);
 	}
 
 	public void initSystemConst(List<String> keys) {
-		Class<SystemConst> clazz = SystemConst.class;
-		initValue(clazz, keys);
+		initValue(SystemConst.class, keys);
 	}
 
 	public void initValue(Class<?> clazz, List<String> keys) {
@@ -107,6 +105,34 @@ public class ConstInit {
 						declaredField.set(clazz, Double.valueOf(conf.get(key)));
 					} else if (declaredField.getType() == BigDecimal.class) {
 						declaredField.set(clazz, new BigDecimal(conf.get(key)));
+					}
+				}
+			} catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	public static void initValue(Class<?> clazz, Map<String, String> constMap) {
+		for (String key : constMap.keySet()) {
+			Field declaredField;
+			try {
+				// 如果有字段名和配置的字段名相同
+				declaredField = clazz.getDeclaredField(key);
+				// 按字段的类型设置
+				if (declaredField != null) {
+					if (declaredField.getType() == String.class) {
+						declaredField.set(clazz, constMap.get(key));
+					} else if (declaredField.getType() == Boolean.class || declaredField.getType() == boolean.class) {
+						declaredField.set(clazz, Boolean.valueOf(constMap.get(key)));
+					} else if (declaredField.getType() == Integer.class || declaredField.getType() == int.class) {
+						declaredField.set(clazz, Integer.valueOf(constMap.get(key)));
+					} else if (declaredField.getType() == Long.class || declaredField.getType() == long.class) {
+						declaredField.set(clazz, Long.valueOf(constMap.get(key)));
+					} else if (declaredField.getType() == Double.class || declaredField.getType() == double.class) {
+						declaredField.set(clazz, Double.valueOf(constMap.get(key)));
+					} else if (declaredField.getType() == BigDecimal.class) {
+						declaredField.set(clazz, new BigDecimal(constMap.get(key)));
 					}
 				}
 			} catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {

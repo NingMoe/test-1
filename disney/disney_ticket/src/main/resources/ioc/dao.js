@@ -7,13 +7,13 @@ var ioc = {
             depose : 'close'
         },
         fields : {
-        	driverClassName : {java:"$conf.get('ctrip.driverClassName')"},
-        	url : {java:"$conf.get('ctrip.url')"},
-            username : {java:"$conf.get('ctrip.username')"},
-            password : {java:"$conf.get('ctrip.password')"},
+        	driverClassName : {java:"$conf.get('disney.driverClassName')"},
+        	url : {java:"$conf.get('disney.url')"},
+            username : {java:"$conf.get('disney.username')"},
+            password : {java:"$conf.get('disney.password')"},
             testWhileIdle : true, // 空闲时测试连接
-            validationQuery : {java:"$conf.get('ctrip.validationQuery')"}, // 查询验证
-            maxActive : {java:"$conf.get('ctrip.maxActive')"} // 若不配置此项,如果数据库未启动,druid会一直等可用连接,卡住启动过程
+            validationQuery : {java:"$conf.get('disney.validationQuery')"}, // 查询验证
+            maxActive : {java:"$conf.get('disney.maxActive')"} // 若不配置此项,如果数据库未启动,druid会一直等可用连接,卡住启动过程
         }
     },
     // Dao

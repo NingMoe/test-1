@@ -205,5 +205,8 @@ public class CrawlerBiz implements ICrawlerBiz {
 
 		System.out.println(Json.toJson(models, JsonFormat.compact()));
 
+		System.out.println(DateUtil.parseDateToString(new Date(1477663627000l), DateUtil.FORMAT7));
+		System.out.println(DateUtil.parseDateToString(new Date(1477663854000l), DateUtil.FORMAT7));
+
 	}
 }

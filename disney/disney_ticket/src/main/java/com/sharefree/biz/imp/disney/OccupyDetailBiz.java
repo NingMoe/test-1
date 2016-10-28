@@ -7,6 +7,7 @@ import org.nutz.ioc.loader.annotation.IocBean;
 
 import com.sharefree.biz.itf.disney.IOccupyDetailBiz;
 import com.sharefree.common.CommonException;
+import com.sharefree.constant.DisneyConst;
 import com.sharefree.model.disney.OccupyDetailModel;
 import com.sharefree.service.itf.disney.IOccupyDetailService;
 
@@ -17,6 +18,14 @@ public class OccupyDetailBiz implements IOccupyDetailBiz {
 	private IOccupyDetailService occupyDetailService;
 
 	@Override
+	public void repair(Long occupyId) throws CommonException {
+		OccupyDetailModel model = new OccupyDetailModel();
+		model.setOccupyId(occupyId);
+		model.setStatus(DisneyConst.OCCUPY_DETAIL_STATUS_CANCEL);
+		update(model);
+	}
+
+	@Override
 	public OccupyDetailModel selectById(Long id) throws CommonException {
 		return occupyDetailService.fetch(id);
 	}
@@ -24,7 +33,7 @@ public class OccupyDetailBiz implements IOccupyDetailBiz {
 	@Override
 	public List<OccupyDetailModel> query(OccupyDetailModel model) throws CommonException {
 		// 设置默认排序
-		if(model.getOrderByClause() == null)
+		if (model.getOrderByClause() == null)
 			model.setOrderByCustom("-occupyId");
 		return occupyDetailService.query(model);
 	}
@@ -49,5 +58,5 @@ public class OccupyDetailBiz implements IOccupyDetailBiz {
 	public int update(OccupyDetailModel model) throws CommonException {
 		return occupyDetailService.updateById(model, true);
 	}
-	
+
 }

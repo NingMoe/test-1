@@ -63,6 +63,9 @@ public class DisneyConst {
 	public static String YEEGO_SERVICE_CODE_ANALYSIS_RT = "/analysisRt/"; // 解析RT信息
 	public static String YEEGO_SERVICE_CODE_ANALYSIS_PAT = "/analysisPat/"; // 解析PAT信息
 
+	// 检查东航假期网站迪士尼门票库存最多越月份
+	public static Integer CHECK_STOCK_MONTH_MAX = 5;
+
 	// 东航假期网站迪士尼入园日期距离下单日限定最小天数
 	public static Integer ORDER_PERIOD_MIN = 3;
 
@@ -82,7 +85,7 @@ public class DisneyConst {
 	public static Integer TRIP_ROW_MAX = 1;
 
 	// 是否执行占位JOB
-	public static Boolean ORDER_OCCUPY_JOB_RUN = true;
+	public static Boolean ORDER_OCCUPY_RUN = true;
 
 	// 机票提前门票日期最少天数
 	public static Integer PLANE_BEFORE_DSN_MIN = 1;

@@ -1,5 +1,7 @@
 package com.sharefree.module.disney;
 
+import java.util.Map;
+
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.mvc.adaptor.PairAdaptor;
@@ -11,11 +13,15 @@ import org.nutz.mvc.annotation.Param;
 
 import com.sharefree.biz.itf.disney.ISystemBiz;
 import com.sharefree.common.WithoutLoginCheck;
+import com.sharefree.constant.DisneyConst;
 import com.sharefree.front.itf.IDisneyFront;
 import com.sharefree.model.JsonResult;
 import com.sharefree.model.ResultRender;
 import com.sharefree.model.disney.TicketDistributionModel;
 import com.sharefree.model.disney.TicketStockModel;
+import com.sharefree.service.itf.disney.IPassengerService;
+import com.sharefree.utils.ConstInit;
+import com.sharefree.utils.DateUtil;
 
 /**
  * 
@@ -40,6 +46,9 @@ public class SystemModule {
 	@Inject
 	private IDisneyFront disneyFront;
 
+	@Inject
+	private IPassengerService passengerService;
+
 	/**
 	 * 门票库存信息查询
 	 * 
@@ -62,6 +71,18 @@ public class SystemModule {
 			disneyFront.check_occupy(model.getVisitDateF(), model.getVisitDateT());
 		}
 		return ResultRender.renderResult("操作成功");
+	}
+
+	@POST
+	@At("/initConst")
+	@WithoutLoginCheck
+	public JsonResult initConst(Map<String, String> constMap) {
+		ConstInit.initValue(DisneyConst.class, constMap);
+		return ResultRender.renderResult("操作成功");
+	}
+
+	public static void main(String[] args) {
+		System.out.println(DateUtil.parseStringToDate("2016-11-04", DateUtil.FORMAT1).getTime());
 	}
 
 }

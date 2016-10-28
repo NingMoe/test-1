@@ -78,7 +78,7 @@ public class EtermBiz implements IEtermBiz {
 	public PlaneOrderModel analysisPNR(String pnr) throws CommonException {
 		log.debug("请求参数: " + pnr);
 		// 发送请求并接受回执
-		String resp = URLConnUtils.sendGet(DisneyConst.YEEGO_REQUEST_URL + DisneyConst.YEEGO_SERVICE_CODE_CANCEL_PNR + pnr, null);
+		String resp = URLConnUtils.sendGet(DisneyConst.YEEGO_REQUEST_URL + DisneyConst.YEEGO_SERVICE_CODE_ANALYSIS_PNR + pnr, null);
 		log.debug("回复数据: " + resp);
 		PlaneOrderModel model = null;
 		if (StringUtil.isNotEmpty(resp)) {
@@ -93,7 +93,8 @@ public class EtermBiz implements IEtermBiz {
 					// 运价排序
 					model.sort(model.getPrices(), null);
 				} else {
-					log.error("解析PNR(RT&PAT)[" + pnr + "]失败");
+					log.error("解析PNR(RT&PAT)[" + pnr + "]失败" + result.getCustomMsg());
+					throw new CommonException("解析PNR(RT&PAT)[" + pnr + "]失败" + result.getCustomMsg());
 				}
 			} catch (Exception e) {
 				log.error(resp);
@@ -109,7 +110,7 @@ public class EtermBiz implements IEtermBiz {
 	public PlaneOrderModel analysisRT(String pnr) throws CommonException {
 		log.debug("请求参数: " + pnr);
 		// 发送请求并接受回执
-		String resp = URLConnUtils.sendGet(DisneyConst.YEEGO_REQUEST_URL + DisneyConst.YEEGO_SERVICE_CODE_CANCEL_PNR + pnr, null);
+		String resp = URLConnUtils.sendGet(DisneyConst.YEEGO_REQUEST_URL + DisneyConst.YEEGO_SERVICE_CODE_ANALYSIS_RT + pnr, null);
 		log.debug("回复数据: " + resp);
 		PlaneOrderModel model = null;
 		if (StringUtil.isNotEmpty(resp)) {
@@ -123,6 +124,7 @@ public class EtermBiz implements IEtermBiz {
 					model = Json.fromJson(PlaneOrderModel.class, obj);
 				} else {
 					log.error("解析RT信息[" + pnr + "]失败");
+					throw new CommonException("解析RT信息[" + pnr + "]失败" + result.getCustomMsg());
 				}
 			} catch (Exception e) {
 				log.error(resp);
@@ -154,6 +156,7 @@ public class EtermBiz implements IEtermBiz {
 					model.sort(model.getPrices(), null);
 				} else {
 					log.error("解析PAT信息[" + pnr + "]失败");
+					throw new CommonException("解析PAT信息[" + pnr + "]失败" + result.getCustomMsg());
 				}
 			} catch (Exception e) {
 				log.error(resp);

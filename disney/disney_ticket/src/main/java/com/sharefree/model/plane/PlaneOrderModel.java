@@ -23,6 +23,10 @@ public class PlaneOrderModel extends BaseModel implements Serializable {
 
 	private String pnr;
 
+	private String bigPnr;
+
+	private String priceCode;
+
 	private List<PlaneODModel> ods;
 
 	// 乘客
@@ -37,6 +41,22 @@ public class PlaneOrderModel extends BaseModel implements Serializable {
 
 	public void setPnr(String pnr) {
 		this.pnr = pnr;
+	}
+
+	public String getBigPnr() {
+		return bigPnr;
+	}
+
+	public void setBigPnr(String bigPnr) {
+		this.bigPnr = bigPnr;
+	}
+
+	public String getPriceCode() {
+		return priceCode;
+	}
+
+	public void setPriceCode(String priceCode) {
+		this.priceCode = priceCode;
 	}
 
 	public List<PlaneODModel> getOds() {

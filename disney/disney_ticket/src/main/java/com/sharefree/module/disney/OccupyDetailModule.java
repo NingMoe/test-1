@@ -69,4 +69,17 @@ public class OccupyDetailModule {
 		return ResultRender.renderResult("操作成功");
 	}
 
+	/**
+	 * 确认修复异常取消
+	 * 
+	 * @param occupyId
+	 * @return
+	 */
+	@PUT
+	@At("/anomalyCancelRepair/?")
+	public JsonResult repair(Long occupyId) {
+		occupyDetailBiz.repair(occupyId);
+		return ResultRender.renderResult("操作成功");
+	}
+
 }

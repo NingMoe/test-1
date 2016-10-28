@@ -15,9 +15,11 @@ import org.nutz.mvc.annotation.Param;
 
 import com.sharefree.biz.itf.disney.ITouristOrderBiz;
 import com.sharefree.common.CommonException;
+import com.sharefree.front.itf.IDisneyFront;
 import com.sharefree.model.JsonResult;
 import com.sharefree.model.ResultRender;
 import com.sharefree.model.disney.TouristOrderModel;
+import com.sharefree.model.plane.PlaneOrderModel;
 import com.sharefree.module.BaseModule;
 import com.sharefree.runner.disney.CheckOccupyRunner;
 import com.sharefree.utils.ThreadPoolUtil;
@@ -41,6 +43,9 @@ public class TouristOrderModule extends BaseModule {
 
 	@Inject
 	private ITouristOrderBiz touristOrderBiz;
+
+	@Inject
+	private IDisneyFront disneyFront;
 
 	/**
 	 * 游客订单下单
@@ -105,6 +110,19 @@ public class TouristOrderModule extends BaseModule {
 		model.setOrderId(orderId);
 		touristOrderBiz.update(model);
 		return ResultRender.renderResult("操作成功");
+	}
+
+	/**
+	 * 解析pnr
+	 * 
+	 * @param model
+	 * @return
+	 */
+	@GET
+	@At("/analysisPnr/?")
+	public JsonResult analysisPnr(String pnr) {
+		PlaneOrderModel model = disneyFront.analysisPnr(pnr);
+		return ResultRender.renderResult("操作成功", model);
 	}
 
 }

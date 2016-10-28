@@ -17,7 +17,10 @@ import com.sharefree.constant.DisneyConst;
 import com.sharefree.front.itf.IDisneyFront;
 import com.sharefree.model.disney.OccupyDetailModel;
 import com.sharefree.model.disney.TicketStockModel;
+import com.sharefree.model.plane.PlaneOrderModel;
+import com.sharefree.model.plane.TicketPassengerModel;
 import com.sharefree.service.itf.ISystemService;
+import com.sharefree.utils.CommonUtil;
 
 @IocBean
 public class DisneyFront implements IDisneyFront {
@@ -48,8 +51,10 @@ public class DisneyFront implements IDisneyFront {
 		// Step 1 检查门票库存Job
 		List<TicketStockModel> models = ticketStockBiz.check(model);
 
-		// Step 2 执行占位Job
-		disneyOrderBiz.occupyList(models);
+		if (DisneyConst.ORDER_OCCUPY_RUN) {
+			// Step 2 执行占位Job
+			disneyOrderBiz.occupyList(models);
+		}
 	}
 
 	@Override
@@ -65,22 +70,22 @@ public class DisneyFront implements IDisneyFront {
 		OccupyDetailModel model = occupyDetailBiz.selectById(occupyId);
 		if (model != null) {
 			if (DisneyConst.OCCUPY_DETAIL_STATUS_UNUSE.equals(model.getStatus())) {
-				// 先取消平台订单
-				// 获取平台订单号
-				String platOrderNo = model.getPlatOrderNo();
-				boolean cancelOrder = crawlerBiz.cancelOrder(platOrderNo);
-				// 再取消PNR
-				boolean cancelPNR = etermBiz.cancelPNR(model.getPnr());
 				// 回填取消信息
 				String status = null;
-				if (cancelOrder && cancelPNR) {
-					status = DisneyConst.OCCUPY_DETAIL_STATUS_CANCEL;
-				} else if (cancelOrder) {
-					status = DisneyConst.OCCUPY_DETAIL_STATUS_CANCEL_PNR_ERROR;
-				} else if (cancelPNR) {
-					status = DisneyConst.OCCUPY_DETAIL_STATUS_CANCEL_ORDER_ERROR;
+				// 先取消平台订单
+				boolean cancelOrder = crawlerBiz.cancelOrder(model.getPlatOrderNo());
+				// 取消成功才能取消PNR
+				boolean cancelPNR = false;
+				if (cancelOrder) {
+					// 再取消PNR
+					cancelPNR = etermBiz.cancelPNR(model.getPnr());
+					if (cancelPNR) {
+						status = DisneyConst.OCCUPY_DETAIL_STATUS_CANCEL;
+					} else {
+						status = DisneyConst.OCCUPY_DETAIL_STATUS_CANCEL_PNR_ERROR;
+					}
 				} else {
-					throw new CommonException("取消占位失败");
+					status = DisneyConst.OCCUPY_DETAIL_STATUS_CANCEL_ORDER_ERROR;
 				}
 				model = new OccupyDetailModel();
 				model.setOccupyId(occupyId);
@@ -88,10 +93,26 @@ public class DisneyFront implements IDisneyFront {
 				model.setStatus(status);
 				// 更新状态
 				occupyDetailBiz.update(model);
+				if (!cancelOrder || !cancelPNR)
+					throw new CommonException("取消占位异常");
 			}
 		} else {
 			throw new CommonException("占位信息不存在");
 		}
 
+	}
+
+	@Override
+	public PlaneOrderModel analysisPnr(String pnr) throws CommonException {
+		PlaneOrderModel model = etermBiz.analysisPNR(pnr);
+		if (model != null) {
+			List<TicketPassengerModel> passengers = model.getPassengers();
+			for (TicketPassengerModel passenger : passengers) {
+				passenger.setTel(CommonUtil.getTel());
+				passenger.setEmail(CommonUtil.getEmail(passenger.getIdcName()));
+			}
+		}
+		model.setPriceCode(DisneyConst.CRAWLER_SERVICE_PATAM_FREIGHTNO);
+		return model;
 	}
 }

@@ -4,6 +4,7 @@ import java.util.Date;
 
 import com.sharefree.common.CommonException;
 import com.sharefree.model.disney.TicketStockModel;
+import com.sharefree.model.plane.PlaneOrderModel;
 
 public interface IDisneyFront {
 
@@ -37,5 +38,14 @@ public interface IDisneyFront {
 	 * @throws CommonException
 	 */
 	void cancel_occupy(Long occupyId) throws CommonException;
+
+	/**
+	 * 解析pnr加入运价编码
+	 * 
+	 * @param pnr
+	 * @return
+	 * @throws CommonException
+	 */
+	PlaneOrderModel analysisPnr(String pnr) throws CommonException;
 
 }

@@ -56,7 +56,10 @@ public class CommonUtil {
 	/**
 	 * 返回Email
 	 * 
-	 * 默认邮箱名长度6~9位
+	 * 首部随机格式<br>
+	 * 1. 手机号<br>
+	 * 2. 名字首字母+手机号<br>
+	 * 3. 名字首字母+2位数字<br>
 	 * 
 	 * @return
 	 */
@@ -70,7 +73,22 @@ public class CommonUtil {
 			sb.append(tel);
 		} else {
 			sb.append(PingYinUtil.getFullSpell(name));
+			sb.append(getNum(10, 99));
 		}
+		sb.append(email_suffix[(int) (Math.random() * email_suffix.length)]);
+		return sb.toString();
+	}
+
+	/**
+	 * 返回Email
+	 * 
+	 * 首部为汉字拼音全写
+	 * 
+	 * @return
+	 */
+	public static String getEmail(String name) {
+		StringBuffer sb = new StringBuffer();
+		sb.append(PingYinUtil.getFullSpell(name));
 		sb.append(email_suffix[(int) (Math.random() * email_suffix.length)]);
 		return sb.toString();
 	}

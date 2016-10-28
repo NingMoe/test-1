@@ -111,8 +111,8 @@ public class DisneyOrderBiz extends BaseBiz<TouristOrderModel, Long> implements 
 							stockMap.put(visitDate, stock);
 						} else {
 							// 取出全部库存
-							stock = 0;
 							canOccupy = stock;
+							stock = 0;
 							stockMap.put(visitDate, stock);
 						}
 					}
