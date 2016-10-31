@@ -2,16 +2,17 @@ package com.sharefree.runner.disney;
 
 import java.util.Date;
 
-import com.sharefree.front.itf.IDisneyFront;
-import com.sharefree.module.system.BaseRunner;
+import org.nutz.mvc.Mvcs;
 
-public class CheckOccupyRunner extends BaseRunner {
+import com.sharefree.front.itf.IDisneyFront;
+
+public class CheckOccupyRunner implements Runnable {
 
 	private Date visitDateF;
 
 	private Date visitDateT;
 
-	private IDisneyFront disneyFront = ioc.get(IDisneyFront.class, "disneyFront");
+	private IDisneyFront disneyFront = Mvcs.getIoc().get(IDisneyFront.class);
 
 	public CheckOccupyRunner(Date visitDateF, Date visitDateT) {
 		this.visitDateF = visitDateF;

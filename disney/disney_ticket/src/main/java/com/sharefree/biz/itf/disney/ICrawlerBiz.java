@@ -5,6 +5,7 @@ import java.util.List;
 import com.sharefree.common.CommonException;
 import com.sharefree.model.disney.OccupyDetailModel;
 import com.sharefree.model.disney.TicketStockModel;
+import com.sharefree.model.disney.TouristTicketModel;
 
 public interface ICrawlerBiz {
 
@@ -21,14 +22,11 @@ public interface ICrawlerBiz {
 	/**
 	 * 下单支付
 	 * 
-	 * @param pnr
-	 *            编码
-	 * @param passengers
-	 *            乘客信息
-	 * @return 平台订单号
+	 * @param model
+	 * @return
 	 * @throws CommonException
 	 */
-	public String order_pay(String pnr, List<OccupyDetailModel> models) throws CommonException;
+	public String order_pay(TouristTicketModel model) throws CommonException;
 
 	/**
 	 * 取消订单

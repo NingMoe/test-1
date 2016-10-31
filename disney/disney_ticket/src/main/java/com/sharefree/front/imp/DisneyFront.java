@@ -17,6 +17,7 @@ import com.sharefree.constant.DisneyConst;
 import com.sharefree.front.itf.IDisneyFront;
 import com.sharefree.model.disney.OccupyDetailModel;
 import com.sharefree.model.disney.TicketStockModel;
+import com.sharefree.model.disney.TouristTicketModel;
 import com.sharefree.model.plane.PlaneOrderModel;
 import com.sharefree.model.plane.TicketPassengerModel;
 import com.sharefree.service.itf.ISystemService;
@@ -47,22 +48,21 @@ public class DisneyFront implements IDisneyFront {
 	protected ISystemService systemService;
 
 	@Override
-	public void check_occupy(TicketStockModel model) throws CommonException {
-		// Step 1 检查门票库存Job
-		List<TicketStockModel> models = ticketStockBiz.check(model);
-
-		if (DisneyConst.ORDER_OCCUPY_RUN) {
-			// Step 2 执行占位Job
-			disneyOrderBiz.occupyList(models);
-		}
+	public List<TicketStockModel> check(Date visitDateF, Date visitDateT) throws CommonException {
+		TicketStockModel model = new TicketStockModel();
+		model.setVisitDateF(visitDateF);
+		model.setVisitDateT(visitDateT);
+		return ticketStockBiz.check(model);
 	}
 
 	@Override
 	public void check_occupy(Date visitDateF, Date visitDateT) throws CommonException {
-		TicketStockModel model = new TicketStockModel();
-		model.setVisitDateF(visitDateF);
-		model.setVisitDateT(visitDateT);
-		check_occupy(model);
+		// Step 1 检查门票库存Job
+		List<TicketStockModel> models = check(visitDateF, visitDateT);
+		if (DisneyConst.ORDER_OCCUPY_RUN) {
+			// Step 2 执行占位Job
+			disneyOrderBiz.occupyList(models);
+		}
 	}
 
 	@Override
@@ -100,6 +100,16 @@ public class DisneyFront implements IDisneyFront {
 			throw new CommonException("占位信息不存在");
 		}
 
+	}
+
+	@Override
+	public void check_pay(TouristTicketModel model) throws CommonException {
+		Date visitDate = model.getVisitDate();
+		// 查询当天库存
+		List<TicketStockModel> stocks = check(visitDate, visitDate);
+		model.setStocks(stocks);
+		// web.socket提示库存信息
+		disneyOrderBiz.pay(model);
 	}
 
 	@Override

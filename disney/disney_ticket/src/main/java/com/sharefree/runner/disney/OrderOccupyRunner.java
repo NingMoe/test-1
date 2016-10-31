@@ -1,14 +1,15 @@
 package com.sharefree.runner.disney;
 
+import org.nutz.mvc.Mvcs;
+
 import com.sharefree.biz.itf.disney.IDisneyOrderBiz;
 import com.sharefree.model.disney.OccupyDetailModel;
-import com.sharefree.module.system.BaseRunner;
 
-public class OrderOccupyRunner extends BaseRunner {
+public class OrderOccupyRunner implements Runnable {
 
 	private OccupyDetailModel model;
 
-	private IDisneyOrderBiz disneyOrderBiz = ioc.get(IDisneyOrderBiz.class, "disneyOrderBiz");
+	private IDisneyOrderBiz disneyOrderBiz = Mvcs.getIoc().get(IDisneyOrderBiz.class);
 
 	public OrderOccupyRunner(OccupyDetailModel model) {
 		this.model = model;

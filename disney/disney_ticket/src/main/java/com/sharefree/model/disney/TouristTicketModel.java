@@ -2,6 +2,7 @@ package com.sharefree.model.disney;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 import org.nutz.json.JsonField;
 
@@ -49,6 +50,14 @@ public class TouristTicketModel extends BaseModel implements Serializable {
 
 	private Long createOptId;
 
+	// 关联数据
+	private List<TouristDetailModel> tourists;
+
+	// 下单支付验证库存
+	private List<TicketStockModel> stocks;
+
+	private OrderRequestModel request;
+
 	// 条件
 	private Date visitDateF;
 
@@ -88,6 +97,30 @@ public class TouristTicketModel extends BaseModel implements Serializable {
 
 	public void setVisitDateT(Date visitDateT) {
 		this.visitDateT = DateUtil.addOneDay(visitDateT);
+	}
+
+	public List<TouristDetailModel> getTourists() {
+		return tourists;
+	}
+
+	public void setTourists(List<TouristDetailModel> tourists) {
+		this.tourists = tourists;
+	}
+
+	public List<TicketStockModel> getStocks() {
+		return stocks;
+	}
+
+	public void setStocks(List<TicketStockModel> stocks) {
+		this.stocks = stocks;
+	}
+
+	public OrderRequestModel getRequest() {
+		return request;
+	}
+
+	public void setRequest(OrderRequestModel request) {
+		this.request = request;
 	}
 
 	public Long getTicketId() {

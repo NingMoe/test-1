@@ -1,5 +1,7 @@
 package com.sharefree.utils;
 
+import java.util.Set;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
@@ -11,9 +13,10 @@ import com.sharefree.common.CommonException;
 import com.sharefree.constant.SystemConst;
 import com.sharefree.model.system.OperatorModel;
 import com.sharefree.service.imp.RedisService;
+import com.sharefree.websocket.disney.DisneySocket;
 
 public class WebSystemUtils {
-	
+
 	private static final Logger log = Logger.getLogger(WebSystemUtils.class);
 
 	private static RedisService redisService = Mvcs.getIoc().get(RedisService.class);
@@ -36,6 +39,22 @@ public class WebSystemUtils {
 		OperatorModel model = getLoginOpt(key);
 		// 重置超时时间
 		setTokenValue(token, model);
+		DisneySocket.resetTimeOut(token);
+		return true;
+	}
+
+	/**
+	 * 验证登陆信息
+	 * 
+	 * @param token
+	 * @return
+	 */
+	public static boolean validateLogin(String token) {
+		if (StringUtil.isEmpty(token))
+			return false;
+		String key = getTokenKey(token);
+		if (!redisService.exists(key))
+			return false;
 		return true;
 	}
 
@@ -103,8 +122,24 @@ public class WebSystemUtils {
 	 * @param token
 	 */
 	public static void deleteToken(String token) {
+		DisneySocket.sessionMap.remove(token);
 		String key = getTokenKey(token);
 		redisService.del(key);
+	}
+
+	/**
+	 * 删除所有token
+	 */
+	public static void clearToken() {
+		DisneySocket.sessionMap.clear();
+		// 所有满足条件的keys
+		String pattern = SystemConst.REDIS_KEY_LOGIN_TOKEN + ":*";
+		Set<String> keys = redisService.keys(pattern);
+		if (keys != null && keys.size() > 0) {
+			for (String key : keys) {
+				redisService.del(key);
+			}
+		}
 	}
 
 	/**

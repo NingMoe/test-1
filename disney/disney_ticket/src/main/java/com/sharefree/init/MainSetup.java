@@ -12,9 +12,9 @@ import org.nutz.mvc.Setup;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 
-import com.sharefree.module.system.BaseRunner;
 import com.sharefree.utils.ConstInit;
 import com.sharefree.utils.StringUtil;
+import com.sharefree.utils.WebSystemUtils;
 
 public class MainSetup implements Setup {
 
@@ -34,9 +34,6 @@ public class MainSetup implements Setup {
 
 		// REDIS启动验证
 		initRedis(ioc);
-
-		// 在runner中注入IOC
-		BaseRunner.ioc = ioc;
 
 		log.info("系统启动成功");
 	}
@@ -71,6 +68,8 @@ public class MainSetup implements Setup {
 	}
 
 	public void destroy(NutConfig conf) {
+		// 清除所有登陆token
+		WebSystemUtils.clearToken();
 		log.info("系统关闭成功");
 	}
 

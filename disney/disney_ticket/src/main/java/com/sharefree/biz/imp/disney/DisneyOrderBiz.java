@@ -21,7 +21,9 @@ import com.sharefree.constant.SqlsConst;
 import com.sharefree.model.disney.OccupyDetailModel;
 import com.sharefree.model.disney.PassengerModel;
 import com.sharefree.model.disney.TicketStockModel;
+import com.sharefree.model.disney.TouristDetailModel;
 import com.sharefree.model.disney.TouristOrderModel;
+import com.sharefree.model.disney.TouristTicketModel;
 import com.sharefree.model.disney.TripModel;
 import com.sharefree.model.plane.PlaneODModel;
 import com.sharefree.model.plane.PlaneOrderModel;
@@ -32,6 +34,7 @@ import com.sharefree.service.itf.disney.IOccupyDetailService;
 import com.sharefree.service.itf.disney.IPassengerService;
 import com.sharefree.service.itf.disney.ITouristDetailService;
 import com.sharefree.service.itf.disney.ITouristOrderService;
+import com.sharefree.service.itf.disney.ITouristTicketService;
 import com.sharefree.service.itf.disney.ITripService;
 import com.sharefree.utils.CommonUtil;
 import com.sharefree.utils.DateUtil;
@@ -49,6 +52,9 @@ public class DisneyOrderBiz extends BaseBiz<TouristOrderModel, Long> implements 
 
 	@Inject
 	private ITouristDetailService touristDetailService;
+
+	@Inject
+	private ITouristTicketService touristTicketService;
 
 	@Inject
 	private IOccupyDetailService occupyDetailService;
@@ -69,14 +75,7 @@ public class DisneyOrderBiz extends BaseBiz<TouristOrderModel, Long> implements 
 	public void occupyList(List<TicketStockModel> stocks) throws CommonException {
 		if (stocks != null && stocks.size() > 0) {
 			// 获取日期库存对应数据
-			Map<String, Integer> stockMap = new HashMap<String, Integer>();
-			for (TicketStockModel stock : stocks) {
-				String key = DateUtil.parseDateToString(stock.getVisitDate(), DateUtil.FORMAT1);
-				Integer orderingNum = DisneyUtil.handle(key, DisneyUtil.Signal.OBTAIN, null);
-				if (stock.getStock() > orderingNum) {
-					stockMap.put(key, stock.getStock() - orderingNum);
-				}
-			}
+			Map<String, Integer> stockMap = getRealStock(stocks);
 			// 查询符合条件的游客订单
 			TouristOrderModel model = new TouristOrderModel();
 			// 确认入园日期
@@ -310,10 +309,86 @@ public class DisneyOrderBiz extends BaseBiz<TouristOrderModel, Long> implements 
 		return models.get(0);
 	}
 
-	@Override
-	public void pay(String info) throws CommonException {
-		// TODO Auto-generated method stub
+	// 根据查询库存获取实际可用库存
+	private Map<String, Integer> getRealStock(List<TicketStockModel> stocks) {
+		// 获取日期库存对应数据
+		Map<String, Integer> stockMap = new HashMap<String, Integer>();
+		for (TicketStockModel stock : stocks) {
+			String key = DateUtil.parseDateToString(stock.getVisitDate(), DateUtil.FORMAT1);
+			Integer orderingNum = DisneyUtil.handle(key, DisneyUtil.Signal.OBTAIN, null);
+			if (stock.getStock() > orderingNum) {
+				stockMap.put(key, stock.getStock() - orderingNum);
+			}
+		}
+		return stockMap;
+	}
 
+	@Override
+	public void pay(TouristTicketModel model) throws CommonException {
+		List<TicketStockModel> stocks = model.getStocks();
+		if (stocks != null && stocks.size() > 0) {
+			// 入园日期
+			Date visitDate = model.getVisitDate();
+			// 计算入园总人数
+			Integer ticketingNumSum = 0;
+			List<TouristDetailModel> tourists = model.getTourists();
+			for (TouristDetailModel tourist : tourists) {
+				ticketingNumSum = ticketingNumSum + tourist.getTicketingNum();
+			}
+
+			String key = DateUtil.parseDateToString(visitDate, DateUtil.FORMAT1);
+			// 获取日期库存对应数据
+			Map<String, Integer> stockMap = getRealStock(stocks);
+			// 查看库存是否充足
+			if (stockMap.containsKey(key) && stockMap.get(key) >= ticketingNumSum) {
+				// 执行下单支付
+
+				return;
+			}
+
+			// 查看占位是否充足
+			OccupyDetailModel cnd = new OccupyDetailModel();
+			cnd.setOrderId(model.getOrderId());
+			cnd.setStatus(DisneyConst.OCCUPY_DETAIL_STATUS_UNUSE);
+			List<OccupyDetailModel> models = occupyDetailService.query(cnd);
+			if (models != null && models.size() > 0) {
+				// 验证占位总数是否满足
+
+				// 通过算法选出合适的占位信息
+
+				// 释放占位订单，如果释放数超过出票数，立即占回超出量（不受本地执行记录数的限制，但是需要累积和释放占位数）
+
+				// 累计正在执行出票数量
+
+				// 执行下单支付
+
+				return;
+			}
+
+			// 提示库存不足
+			throw new CommonException("库存|占位量不足，请重新选择合适出票数");
+		}
+	}
+
+	public void executePay(TouristTicketModel model) throws CommonException {
+		try {
+			String platOrderNo = crawlerBiz.order_pay(model);
+			if (StringUtil.isNotEmpty(platOrderNo)) {
+				// 下单占位成功
+				model.setPlatOrderNo(platOrderNo);
+				// 保存出票信息（记录数 = 出票数）
+				touristTicketService.insert(model);
+
+			} else {
+				// 下单占位失败
+
+			}
+		} catch (Exception e) {
+		} finally {
+			String key = DateUtil.parseDateToString(model.getVisitDate(), DateUtil.FORMAT1);
+			// 不管占位操作结果如何，减少此入园日期，下单执行数1次
+			DisneyUtil.handle(key, DisneyUtil.Signal.REDUCE, 1);
+		}
 	}
 
 	public static void main(String[] args) {
@@ -321,5 +396,6 @@ public class DisneyOrderBiz extends BaseBiz<TouristOrderModel, Long> implements 
 		System.out.println(Json.toJson(DisneyUtil.calculateOccupyOrder(0)));
 
 		System.out.println(DateUtil.parseStringToDate("2016-11-26 08:00", DateUtil.FORMAT4).getTime());
+
 	}
 }

@@ -14,10 +14,12 @@ import org.nutz.mvc.annotation.Param;
 
 import com.sharefree.biz.itf.disney.ITouristDetailBiz;
 import com.sharefree.common.CommonException;
+import com.sharefree.front.itf.IDisneyFront;
 import com.sharefree.model.JsonResult;
 import com.sharefree.model.ResultRender;
 import com.sharefree.model.disney.TouristDetailModel;
 import com.sharefree.model.disney.TouristOrderModel;
+import com.sharefree.model.disney.TouristTicketModel;
 
 /**
  * 
@@ -39,6 +41,9 @@ public class TouristDetailModule {
 	@Inject
 	private ITouristDetailBiz touristDetailBiz;
 
+	@Inject
+	private IDisneyFront disneyFront;
+
 	/**
 	 * 录入游客详情
 	 * 
@@ -48,7 +53,7 @@ public class TouristDetailModule {
 	@POST
 	@At("")
 	public JsonResult importTourist(TouristOrderModel model) {
-		if(model == null || model.getTouristDetails() == null || model.getTouristDetails().size() == 0)
+		if (model == null || model.getTouristDetails() == null || model.getTouristDetails().size() == 0)
 			throw new CommonException("缺少参数{touristDetails}:游客详情");
 		touristDetailBiz.importTourist(model);
 		return ResultRender.renderResult("操作成功");
@@ -62,9 +67,9 @@ public class TouristDetailModule {
 	 */
 	@GET
 	@At("")
-	@AdaptBy(type=PairAdaptor.class)
+	@AdaptBy(type = PairAdaptor.class)
 	public JsonResult query(@Param("..") TouristDetailModel model) {
-		model = (model == null?new TouristDetailModel():model);
+		model = (model == null ? new TouristDetailModel() : model);
 		List<TouristDetailModel> models = touristDetailBiz.query(model);
 		int total = touristDetailBiz.count(model);
 		return ResultRender.renderPagedResult("操作成功", models, total);
@@ -92,9 +97,9 @@ public class TouristDetailModule {
 	@PUT
 	@At("/?")
 	public JsonResult update(Long touristId, TouristDetailModel model) {
-		if(touristId == null)
+		if (touristId == null)
 			throw new CommonException("缺少参数{touristId}:游客详情ID");
-		if(model == null)
+		if (model == null)
 			throw new CommonException("缺少参数:修改值");
 		model.setTouristId(touristId);
 		touristDetailBiz.update(model);
@@ -102,16 +107,15 @@ public class TouristDetailModule {
 	}
 
 	/**
-	 * 游客出票
+	 * 游客下单支付
 	 * 
 	 * @param model
 	 * @return
 	 */
-	@GET
-	@At("/ticketing")
-	public JsonResult ticketing(TouristDetailModel model) {
-		// 需要提供有效PNR编码
-		
+	@POST
+	@At("/payment")
+	public JsonResult payment(TouristTicketModel model) {
+		disneyFront.check_pay(model);
 		return ResultRender.renderResult("操作成功", model);
 	}
 

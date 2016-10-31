@@ -24,6 +24,8 @@ import com.sharefree.model.JsonResult;
 import com.sharefree.model.disney.OccupyDetailModel;
 import com.sharefree.model.disney.OrderRequestModel;
 import com.sharefree.model.disney.TicketStockModel;
+import com.sharefree.model.disney.TouristDetailModel;
+import com.sharefree.model.disney.TouristTicketModel;
 import com.sharefree.model.plane.PlaneOrderModel;
 import com.sharefree.model.plane.PlanePriceModel;
 import com.sharefree.utils.DateUtil;
@@ -101,10 +103,69 @@ public class CrawlerBiz implements ICrawlerBiz {
 		return platOrderNo;
 	}
 
+	private String getAllTouristInfo(TouristDetailModel model) {
+		StringBuilder touristInfo = new StringBuilder("");
+		touristInfo.append(DateUtil.parseDateToString(model.getVisitDate(), DateUtil.FORMAT1)).append("DISNEY");
+		touristInfo.append("ADT").append("DISNEY");
+		touristInfo.append(model.getTouristName()).append("DISNEY");
+		touristInfo.append(model.getIdcNo()).append("DISNEY");
+		touristInfo.append("0").append("DISNEY");
+		touristInfo.append(model.getTicketingNum() - 1).append("DISNEY");
+		touristInfo.append("0").append("DISNEY");
+		touristInfo.append(model.getTelephone()).append("DISNEY");
+		touristInfo.append(model.getEmail()).append("END");
+		return touristInfo.toString();
+	}
+
 	@Override
-	public String order_pay(String pnr, List<OccupyDetailModel> models) throws CommonException {
-		// TODO Auto-generated method stub
-		return null;
+	public String order_pay(TouristTicketModel model) throws CommonException {
+		String platOrderNo = null;
+		// 初始化请求参数
+		OrderRequestModel reqModel = model.getRequest();
+		// 使用航司大编码
+		reqModel.setPnr_name(model.getBigPnr());
+		// 格式化运价信息
+		reqModel.setTicketPrice(df.format(new BigDecimal(reqModel.getTicketPrice())));
+		reqModel.setTotalTaxes(df.format(new BigDecimal(reqModel.getTotalTaxes())));
+		reqModel.setTotalCosts(df.format(new BigDecimal(reqModel.getTotalCosts())));
+		// 格式化游客信息
+		List<TouristDetailModel> tourists = model.getTourists();
+		StringBuilder allTouristInfo = new StringBuilder("");
+		String[] parkDate = new String[tourists.size()];
+		for (int i = 0; i < tourists.size(); i++) {
+			TouristDetailModel tourist = tourists.get(i);
+			allTouristInfo.append(getAllTouristInfo(tourist));
+			parkDate[i] = DateUtil.parseDateToString(tourist.getVisitDate(), DateUtil.FORMAT1);
+		}
+		reqModel.setAllTouristInfo(allTouristInfo.toString());
+		reqModel.setParkDate(parkDate);
+		// 联系人信息
+		reqModel.setContact_name(model.getContactName());
+		reqModel.setContact_mobile(model.getContactTel());
+		reqModel.setContact_email(model.getContactEmail());
+		// 请求参数进行序列化
+		String param = Json.toJson(model, JsonFormat.compact());
+		log.debug("请求参数: " + param);
+		// 发送请求并接受回执
+		log.debug("执行占位操作");
+		String resp = URLConnUtils.sendPost(DisneyConst.CRAWLER_REQUEST_URL + DisneyConst.CRAWLER_SERVICE_CODE_ORDER_PAY, param, 30000, 30000);
+		log.debug("回复数据: " + resp);
+		if (StringUtil.isNotEmpty(resp)) {
+			// 解析返回数据
+			try {
+				JsonResult result = Json.fromJson(JsonResult.class, resp);
+				// 请求是否成功
+				if (result.getSuccess()) {
+					String content = result.getResults().toString().trim();
+					platOrderNo = content.substring(content.indexOf("BO"));
+					log.debug("执行占位成功,订单号:[" + platOrderNo + "]");
+				}
+			} catch (Exception e) {
+				log.error(resp);
+				throw new CommonException("返回数据不符合规范：" + resp);
+			}
+		}
+		return platOrderNo;
 	}
 
 	@Override

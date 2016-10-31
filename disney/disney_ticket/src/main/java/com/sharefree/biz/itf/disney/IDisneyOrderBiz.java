@@ -5,6 +5,7 @@ import java.util.List;
 import com.sharefree.common.CommonException;
 import com.sharefree.model.disney.OccupyDetailModel;
 import com.sharefree.model.disney.TicketStockModel;
+import com.sharefree.model.disney.TouristTicketModel;
 
 public interface IDisneyOrderBiz {
 
@@ -28,8 +29,9 @@ public interface IDisneyOrderBiz {
 	/**
 	 * 支付订单（真实订单）
 	 * 
-	 * @param stocks有库存的日期
+	 * @param model
+	 *            下单信息
 	 * @throws CommonException
 	 */
-	public void pay(String info) throws CommonException;
+	public void pay(TouristTicketModel model) throws CommonException;
 }
