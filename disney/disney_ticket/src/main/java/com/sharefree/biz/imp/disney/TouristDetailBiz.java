@@ -66,6 +66,7 @@ public class TouristDetailBiz extends BaseBiz<TouristDetailModel, Long> implemen
 		cnd.setVisitDate(detail.getVisitDate());
 		cnd.setIdcNo(detail.getIdcNo());
 		cnd.setTouristName(detail.getTouristName());
+		cnd.setStatus(DisneyConst.TOURIST_ORDER_STATUS_OK);
 		List<TouristDetailModel> models = touristDetailService.query(cnd);
 		if (models != null && models.size() > 0) {
 			String visitDate = DateUtil.parseDateToString(detail.getVisitDate(), DateUtil.FORMAT1);

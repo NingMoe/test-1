@@ -19,7 +19,7 @@ import org.nutz.json.JsonFormat;
 
 import com.sharefree.constant.SystemConst;
 import com.sharefree.model.SocketResult;
-import com.sharefree.utils.WebSystemUtils;
+import com.sharefree.utils.StringUtil;
 
 @ServerEndpoint(value = "/main")
 public class DisneySocket {
@@ -56,8 +56,6 @@ public class DisneySocket {
 		if (token != null) {
 			sessionMap.remove(token);
 			log.info(String.format("Session [%s] closed because of [%s] (T_T)", token, closeReason));
-		} else {
-			log.info(String.format("Session [%s] is invalid (T_T) ,Session closed", token));
 		}
 	}
 
@@ -79,9 +77,8 @@ public class DisneySocket {
 	 * @param result
 	 */
 	public static void handleRequest(String token, String paramter) {
-		SocketResult result = new SocketResult("操作员名称", "操作员token", "业务编码", "服务器返回消息" + paramter);
+		SocketResult result = new SocketResult("操作员名称", "操作员token", "业务编码", "服务器收到请求参数：" + paramter);
 		point(token, result);
-		broadcast(result);
 	}
 
 	/**
@@ -119,11 +116,12 @@ public class DisneySocket {
 
 	private static String validateLogin(Session session) {
 		String token = getToken(session);
-		if (WebSystemUtils.validateLogin(token)) {
+		if (StringUtil.isNotEmpty(token)) {
 			if (!sessionMap.containsKey(token))
 				sessionMap.put(token, session);
 			resetTimeOut(token);
-			return token;
+		} else {
+			token = null;
 		}
 		return token;
 	}

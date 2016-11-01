@@ -6,15 +6,19 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import org.nutz.ioc.loader.annotation.Inject;
+import org.nutz.json.Json;
+import org.nutz.json.JsonFormat;
 import org.nutz.mvc.Mvcs;
 
 import com.sharefree.biz.itf.IBaseBiz;
 import com.sharefree.common.CommonException;
 import com.sharefree.model.BaseModel;
+import com.sharefree.model.SocketResult;
 import com.sharefree.model.system.OperatorModel;
 import com.sharefree.service.itf.IBaseService;
 import com.sharefree.service.itf.ISystemService;
 import com.sharefree.utils.WebSystemUtils;
+import com.sharefree.websocket.disney.DisneySocket;
 
 public class BaseBiz<Model extends BaseModel, Id> implements IBaseBiz<Model, Id> {
 
@@ -52,6 +56,30 @@ public class BaseBiz<Model extends BaseModel, Id> implements IBaseBiz<Model, Id>
 	 */
 	protected OperatorModel currentOperator() throws CommonException {
 		return WebSystemUtils.getLoginOpt(getRequest());
+	}
+
+	/**
+	 * 获取当前登陆token
+	 * 
+	 * @return
+	 * @throws CommonException
+	 */
+	protected String currentToken() throws CommonException {
+		return WebSystemUtils.getToken(getRequest());
+	}
+
+	/**
+	 * 获取当前登陆token
+	 * 
+	 * @return
+	 * @throws CommonException
+	 */
+	protected void clientPoint(Object msg) throws CommonException {
+		if (getRequest() != null) {
+			String token = currentToken();
+			DisneySocket.point(token,
+					new SocketResult(currentOperator().getOptName(), token, this.getClass().getSimpleName(), Json.toJson(msg, JsonFormat.compact())));
+		}
 	}
 
 	@Override

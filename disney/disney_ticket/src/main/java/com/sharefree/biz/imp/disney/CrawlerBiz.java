@@ -110,7 +110,7 @@ public class CrawlerBiz implements ICrawlerBiz {
 		touristInfo.append(model.getTouristName()).append("DISNEY");
 		touristInfo.append(model.getIdcNo()).append("DISNEY");
 		touristInfo.append("0").append("DISNEY");
-		touristInfo.append(model.getTicketingNum() - 1).append("DISNEY");
+		touristInfo.append(model.getTicketNum() - 1).append("DISNEY");
 		touristInfo.append("0").append("DISNEY");
 		touristInfo.append(model.getTelephone()).append("DISNEY");
 		touristInfo.append(model.getEmail()).append("END");
@@ -144,7 +144,7 @@ public class CrawlerBiz implements ICrawlerBiz {
 		reqModel.setContact_mobile(model.getContactTel());
 		reqModel.setContact_email(model.getContactEmail());
 		// 请求参数进行序列化
-		String param = Json.toJson(model, JsonFormat.compact());
+		String param = Json.toJson(reqModel, JsonFormat.compact());
 		log.debug("请求参数: " + param);
 		// 发送请求并接受回执
 		log.debug("执行占位操作");

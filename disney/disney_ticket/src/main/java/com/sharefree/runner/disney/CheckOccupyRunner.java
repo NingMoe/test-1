@@ -12,7 +12,7 @@ public class CheckOccupyRunner implements Runnable {
 
 	private Date visitDateT;
 
-	private IDisneyFront disneyFront = Mvcs.getIoc().get(IDisneyFront.class);
+	private IDisneyFront disneyFront = Mvcs.getIoc().get(IDisneyFront.class, "disneyFront");
 
 	public CheckOccupyRunner(Date visitDateF, Date visitDateT) {
 		this.visitDateF = visitDateF;

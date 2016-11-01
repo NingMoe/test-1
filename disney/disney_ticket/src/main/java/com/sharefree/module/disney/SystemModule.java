@@ -1,6 +1,6 @@
 package com.sharefree.module.disney;
 
-import java.util.Map;
+import java.util.List;
 
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
@@ -9,18 +9,18 @@ import org.nutz.mvc.annotation.AdaptBy;
 import org.nutz.mvc.annotation.At;
 import org.nutz.mvc.annotation.GET;
 import org.nutz.mvc.annotation.POST;
+import org.nutz.mvc.annotation.PUT;
 import org.nutz.mvc.annotation.Param;
 
 import com.sharefree.biz.itf.disney.ISystemBiz;
 import com.sharefree.common.WithoutLoginCheck;
-import com.sharefree.constant.DisneyConst;
 import com.sharefree.front.itf.IDisneyFront;
 import com.sharefree.model.JsonResult;
 import com.sharefree.model.ResultRender;
+import com.sharefree.model.disney.ConstModel;
 import com.sharefree.model.disney.TicketDistributionModel;
 import com.sharefree.model.disney.TicketStockModel;
 import com.sharefree.service.itf.disney.IPassengerService;
-import com.sharefree.utils.ConstInit;
 import com.sharefree.utils.DateUtil;
 
 /**
@@ -73,12 +73,18 @@ public class SystemModule {
 		return ResultRender.renderResult("操作成功");
 	}
 
-	@POST
-	@At("/initConst")
-	@WithoutLoginCheck
-	public JsonResult initConst(Map<String, String> constMap) {
-		ConstInit.initValue(DisneyConst.class, constMap);
+	@PUT
+	@At("/updateConst")
+	public JsonResult updateConst(List<ConstModel> models) {
+		systemBiz.updateConst(models);
 		return ResultRender.renderResult("操作成功");
+	}
+
+	@GET
+	@At("/getConst")
+	public JsonResult getConst() {
+		List<ConstModel> models = systemBiz.getConst();
+		return ResultRender.renderResult("操作成功", models);
 	}
 
 	public static void main(String[] args) {

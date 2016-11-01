@@ -1,5 +1,7 @@
 package com.sharefree.init;
 
+import java.util.List;
+
 import org.apache.log4j.Logger;
 import org.nutz.dao.Dao;
 import org.nutz.dao.impl.FileSqlManager;
@@ -12,6 +14,9 @@ import org.nutz.mvc.Setup;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 
+import com.sharefree.model.disney.ConstModel;
+import com.sharefree.service.imp.disney.ConstService;
+import com.sharefree.service.itf.disney.IConstService;
 import com.sharefree.utils.ConstInit;
 import com.sharefree.utils.StringUtil;
 import com.sharefree.utils.WebSystemUtils;
@@ -27,7 +32,7 @@ public class MainSetup implements Setup {
 		initSqls(ioc);
 
 		// 初始化静态数据
-		ioc.get(ConstInit.class);
+		initConsts(ioc);
 
 		// 计划任务的初始化与启动
 		ioc.get(NutQuartzCronJobFactory.class);
@@ -49,6 +54,20 @@ public class MainSetup implements Setup {
 		// 加载 SQL 文件
 		nutDao.setSqlManager(new FileSqlManager("sqls/"));
 		log.debug("加载SQL配置文件成功，共" + nutDao.sqls().count() + "条");
+	}
+
+	/**
+	 * 初始化静态数据
+	 * 
+	 * @param ioc
+	 */
+	private void initConsts(Ioc ioc) {
+		// 获取Dao实例
+		Dao dao = ioc.get(Dao.class);
+		// 获取ConstService实例
+		IConstService constService = ioc.get(ConstService.class);
+		List<ConstModel> models = constService.query(new ConstModel());
+		ConstInit.init(models, dao);
 	}
 
 	/**

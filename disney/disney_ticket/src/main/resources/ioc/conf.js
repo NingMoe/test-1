@@ -5,10 +5,5 @@ var ioc = {
         fields : {
             paths : ["conf/"]
         }
-    },
-    // 配置静态数据
-    constInit : {
-        type : "com.sharefree.utils.ConstInit",
-        args : [{refer:"conf"},{refer:"dao"}]
     }
 };

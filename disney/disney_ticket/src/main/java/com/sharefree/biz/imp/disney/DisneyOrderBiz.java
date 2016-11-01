@@ -333,7 +333,7 @@ public class DisneyOrderBiz extends BaseBiz<TouristOrderModel, Long> implements 
 			Integer ticketingNumSum = 0;
 			List<TouristDetailModel> tourists = model.getTourists();
 			for (TouristDetailModel tourist : tourists) {
-				ticketingNumSum = ticketingNumSum + tourist.getTicketingNum();
+				ticketingNumSum = ticketingNumSum + tourist.getTicketNum();
 			}
 
 			String key = DateUtil.parseDateToString(visitDate, DateUtil.FORMAT1);
@@ -341,9 +341,12 @@ public class DisneyOrderBiz extends BaseBiz<TouristOrderModel, Long> implements 
 			Map<String, Integer> stockMap = getRealStock(stocks);
 			// 查看库存是否充足
 			if (stockMap.containsKey(key) && stockMap.get(key) >= ticketingNumSum) {
+				clientPoint("当日门票库存充足：" + stockMap.get(key));
 				// 执行下单支付
-
+				executePay(model);
 				return;
+			} else {
+				clientPoint("当日门票库存不足：" + stockMap.get(key));
 			}
 
 			// 查看占位是否充足
@@ -363,25 +366,40 @@ public class DisneyOrderBiz extends BaseBiz<TouristOrderModel, Long> implements 
 				// 执行下单支付
 
 				return;
+			} else {
+				clientPoint("当日门票无占位");
 			}
 
 			// 提示库存不足
 			throw new CommonException("库存|占位量不足，请重新选择合适出票数");
+		} else {
+			clientPoint("当日门票无库存");
 		}
 	}
 
 	public void executePay(TouristTicketModel model) throws CommonException {
 		try {
+			clientPoint("执行下单支付");
 			String platOrderNo = crawlerBiz.order_pay(model);
 			if (StringUtil.isNotEmpty(platOrderNo)) {
-				// 下单占位成功
+				// 下单支付成功
+				clientPoint("下单支付成功，订单号：" + platOrderNo);
 				model.setPlatOrderNo(platOrderNo);
-				// 保存出票信息（记录数 = 出票数）
-				touristTicketService.insert(model);
-
+				model.setCreateTime(getSystemTime());
+				model.setCreateOptId(currentOperator().getOptId());
+				model.setStatus(DisneyConst.TOURIST_TICKET_STATUS_PAYED);
+				for (TouristDetailModel tourist : model.getTourists()) {
+					for (int index = 0; index < tourist.getTicketNum(); index++) {
+						model.setTouristId(tourist.getTouristId());
+						// 保存出票信息（记录数 = 出票数）
+						touristTicketService.insert(model);
+					}
+				}
 			} else {
-				// 下单占位失败
-
+				// 下单支付失败
+				clientPoint("下单支付失败");
+				log.warn("下单支付失败");
+				throw new CommonException("下单支付失败");
 			}
 		} catch (Exception e) {
 		} finally {

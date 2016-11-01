@@ -13,7 +13,7 @@ $(function(){
 	    return (new Function( "return " + strData ))();
 	};
 	//创建socket对象
-	socket = new WebSocket("ws://"+ window.location.host+"${pageContext.request.contextPath}/main?token=T1BUX1RPS0VOX1RFU1Q6eHVwZW5nZmVpOjIwMTYxMDI5MTAxMDU4");
+	socket = new WebSocket("ws://"+ window.location.host+"${pageContext.request.contextPath}/main?token=T1BUX1RPS0VOX1RFU1Q6eHVwZW5nZmVpOjIwMTYxMDMxMTc0NzU1");
 	//连接创建后调用
 	socket.onopen = function() {
 		$("#showMsg").append("连接成功...<br/>");
@@ -21,9 +21,7 @@ $(function(){
 	//接收到服务器消息后调用
 	socket.onmessage = function(message) {
 		var data=parseObj(message.data);
-		if(data.type=="message"){
-			$("#showMsg").append("<span style='display:block'>"+data.text+"</span>");
-		}
+		$("#showMsg").append("<span style='display:block'>"+data.msg+"</span>");
 	};
 	//关闭连接的时候调用
 	socket.onclose = function(){

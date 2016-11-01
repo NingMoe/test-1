@@ -9,15 +9,18 @@ import com.sharefree.biz.itf.disney.ISystemBiz;
 import com.sharefree.common.CommonException;
 import com.sharefree.constant.DisneyConst;
 import com.sharefree.constant.SqlsConst;
+import com.sharefree.model.disney.ConstModel;
 import com.sharefree.model.disney.OccupyDetailModel;
 import com.sharefree.model.disney.TicketDistributionModel;
 import com.sharefree.model.disney.TicketStockModel;
 import com.sharefree.model.disney.TouristOrderModel;
 import com.sharefree.model.disney.TouristTicketModel;
+import com.sharefree.service.itf.disney.IConstService;
 import com.sharefree.service.itf.disney.IOccupyDetailService;
 import com.sharefree.service.itf.disney.ITicketStockService;
 import com.sharefree.service.itf.disney.ITouristOrderService;
 import com.sharefree.service.itf.disney.ITouristTicketService;
+import com.sharefree.utils.ConstInit;
 import com.sharefree.utils.DateUtil;
 
 @IocBean
@@ -34,6 +37,9 @@ public class SystemBiz implements ISystemBiz {
 
 	@Inject
 	private IOccupyDetailService occupyDetailService;
+
+	@Inject
+	private IConstService constService;
 
 	@Override
 	public TicketDistributionModel getTicketDistribution(TicketDistributionModel model) throws CommonException {
@@ -84,4 +90,16 @@ public class SystemBiz implements ISystemBiz {
 		return result;
 	}
 
+	@Override
+	public void updateConst(List<ConstModel> models) throws CommonException {
+		if (models != null && models.size() > 0) {
+			constService.updateById(models, true);
+			ConstInit.init(models, null);
+		}
+	}
+
+	@Override
+	public List<ConstModel> getConst() throws CommonException {
+		return constService.query(new ConstModel());
+	}
 }

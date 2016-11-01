@@ -9,7 +9,7 @@ public class OrderOccupyRunner implements Runnable {
 
 	private OccupyDetailModel model;
 
-	private IDisneyOrderBiz disneyOrderBiz = Mvcs.getIoc().get(IDisneyOrderBiz.class);
+	private IDisneyOrderBiz disneyOrderBiz = Mvcs.getIoc().get(IDisneyOrderBiz.class, "disneyOrderBiz");
 
 	public OrderOccupyRunner(OccupyDetailModel model) {
 		this.model = model;

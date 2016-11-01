@@ -41,24 +41,24 @@ public class ExceptionView implements View {
 	}
 
 	@Override
-	public void render(HttpServletRequest req, HttpServletResponse resp,
-			Object obj) throws Throwable {
+	public void render(HttpServletRequest req, HttpServletResponse resp, Object obj) throws Throwable {
 		if (obj != null) {
 			if (obj instanceof CommonException) {
 				CommonException error = (CommonException) obj;
-				obj = ResultRender.renderErrorResult("操作失败",
-						error.getCustomMsg());
+				obj = ResultRender.renderErrorResult("操作失败", error.getCustomMsg());
 				log.error(error.getCustomMsg());
+			} else if (obj instanceof Error) {
+				Error error = (Error) obj;
+				obj = ResultRender.renderErrorResult("操作失败", error.getMessage());
+				log.error(error.getMessage());
 			} else {
 				Exception error = (Exception) obj;
-				obj = ResultRender
-						.renderErrorResult("操作失败", error.getMessage());
+				obj = ResultRender.renderErrorResult("操作失败", error.getMessage());
 				log.error(error.getMessage());
 			}
 			Mvcs.write(resp, obj, format);
 		} else if (errorMsg != null) {
-			Mvcs.write(resp, ResultRender.renderErrorResult("操作失败", errorMsg),
-					format);
+			Mvcs.write(resp, ResultRender.renderErrorResult("操作失败", errorMsg), format);
 		} else {
 			Mvcs.write(resp, ResultRender.renderErrorResult("操作失败"), format);
 		}

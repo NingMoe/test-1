@@ -42,6 +42,16 @@ public class TouristDetailModel extends BaseModel implements Serializable {
 
 	private Integer ticketLeftNum;
 
+	private Integer ticketNum;
+
+	public Integer getTicketNum() {
+		return ticketNum;
+	}
+
+	public void setTicketNum(Integer ticketNum) {
+		this.ticketNum = ticketNum;
+	}
+
 	public Integer getTicketingNum() {
 		return ticketingNum;
 	}
