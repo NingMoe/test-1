@@ -18,20 +18,22 @@ import org.nutz.json.Json;
 import org.nutz.json.JsonFormat;
 
 import com.sharefree.constant.SystemConst;
+import com.sharefree.model.SocketRender;
 import com.sharefree.model.SocketResult;
-import com.sharefree.utils.StringUtil;
+import com.sharefree.model.system.OperatorModel;
+import com.sharefree.utils.WebSystemUtils;
 
 @ServerEndpoint(value = "/main")
 public class DisneySocket {
 	private static final Logger log = Logger.getLogger(DisneySocket.class);
 
-	public static Map<String, Session> sessionMap = new Hashtable<String, Session>();
+	public static Map<String, Object[]> sessionMap = new Hashtable<String, Object[]>();
 
 	@OnOpen
 	public void onOpen(Session session) throws Exception {
 		String token = validateLogin(session);
 		if (token != null) {
-			handleRequest(token, null);
+			point(token, SocketRender.pointInfoResult(DisneySocket.class.getSimpleName(), "连接服务器成功"));
 			log.info(String.format("Session [%s] is open Y(^_^)Y", token));
 		} else {
 			log.info(String.format("Session [%s] is invalid (T_T) ,Session closed", token));
@@ -41,7 +43,7 @@ public class DisneySocket {
 
 	@OnMessage
 	public void onMessage(String paramter, Session session) throws Exception {
-		String token = validateLogin(session);
+		String token = getToken(session);
 		if (token != null) {
 			handleRequest(token, paramter);
 		} else {
@@ -77,8 +79,7 @@ public class DisneySocket {
 	 * @param result
 	 */
 	public static void handleRequest(String token, String paramter) {
-		SocketResult result = new SocketResult("操作员名称", "操作员token", "业务编码", "服务器收到请求参数：" + paramter);
-		point(token, result);
+		point(token, SocketRender.pointInfoResult(DisneySocket.class.getSimpleName(), paramter));
 	}
 
 	/**
@@ -87,10 +88,10 @@ public class DisneySocket {
 	 * @param result
 	 */
 	public static void broadcast(SocketResult result) {
-		Set<Map.Entry<String, Session>> entrys = sessionMap.entrySet();
-		for (Map.Entry<String, Session> entry : entrys) {
+		Set<String> keys = sessionMap.keySet();
+		for (String key : keys) {
 			try {
-				Session session = entry.getValue();
+				Session session = getSession(key);
 				session.getBasicRemote().sendText(Json.toJson(result, JsonFormat.compact()));
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -106,7 +107,7 @@ public class DisneySocket {
 	 */
 	public static void point(String token, SocketResult result) {
 		try {
-			Session session = sessionMap.get(token);
+			Session session = getSession(token);
 			if (session != null)
 				session.getBasicRemote().sendText(Json.toJson(result, JsonFormat.compact()));
 		} catch (Exception e) {
@@ -116,9 +117,14 @@ public class DisneySocket {
 
 	private static String validateLogin(Session session) {
 		String token = getToken(session);
-		if (StringUtil.isNotEmpty(token)) {
-			if (!sessionMap.containsKey(token))
-				sessionMap.put(token, session);
+		if (WebSystemUtils.validateLogin(token)) {
+			if (!sessionMap.containsKey(token)) {
+				Object[] obj = new Object[2];
+				obj[0] = session;
+				OperatorModel operator = WebSystemUtils.getLoginOpt(WebSystemUtils.getTokenKey(token));
+				obj[1] = operator;
+				sessionMap.put(token, obj);
+			}
 			resetTimeOut(token);
 		} else {
 			token = null;
@@ -136,13 +142,21 @@ public class DisneySocket {
 		return null;
 	}
 
+	private static Session getSession(String token) {
+		return (Session) sessionMap.get(token)[0];
+	}
+
+	public static OperatorModel getOperator(String token) {
+		return (OperatorModel) sessionMap.get(token)[1];
+	}
+
 	/**
 	 * 维持Session有效
 	 * 
 	 * @param token
 	 */
 	public static void resetTimeOut(String token) {
-		Session session = sessionMap.get(token);
+		Session session = getSession(token);
 		if (session != null)
 			session.setMaxIdleTimeout(SystemConst.LOGIN_TOKEN_TIMEOUT * 1000);
 	}

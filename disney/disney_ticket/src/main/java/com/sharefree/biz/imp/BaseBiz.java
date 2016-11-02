@@ -6,14 +6,12 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import org.nutz.ioc.loader.annotation.Inject;
-import org.nutz.json.Json;
-import org.nutz.json.JsonFormat;
 import org.nutz.mvc.Mvcs;
 
 import com.sharefree.biz.itf.IBaseBiz;
 import com.sharefree.common.CommonException;
 import com.sharefree.model.BaseModel;
-import com.sharefree.model.SocketResult;
+import com.sharefree.model.SocketRender;
 import com.sharefree.model.system.OperatorModel;
 import com.sharefree.service.itf.IBaseService;
 import com.sharefree.service.itf.ISystemService;
@@ -74,11 +72,10 @@ public class BaseBiz<Model extends BaseModel, Id> implements IBaseBiz<Model, Id>
 	 * @return
 	 * @throws CommonException
 	 */
-	protected void clientPoint(Object msg) throws CommonException {
+	protected void clientPoint(String msg) throws CommonException {
 		if (getRequest() != null) {
 			String token = currentToken();
-			DisneySocket.point(token,
-					new SocketResult(currentOperator().getOptName(), token, this.getClass().getSimpleName(), Json.toJson(msg, JsonFormat.compact())));
+			DisneySocket.point(token, SocketRender.pointInfoResult(currentOperator().getOptName(), this.getClass().getSimpleName(), msg));
 		}
 	}
 

@@ -99,6 +99,18 @@ public class DisneyFront implements IDisneyFront {
 		} else {
 			throw new CommonException("占位信息不存在");
 		}
+	}
+
+	@Override
+	public void cancel_occupys(Long orderId) throws CommonException {
+		OccupyDetailModel cnd = new OccupyDetailModel();
+		cnd.setOrderId(orderId);
+		List<OccupyDetailModel> models = occupyDetailBiz.query(cnd);
+		if (models != null && models.size() > 0) {
+			for (OccupyDetailModel model : models) {
+				cancel_occupy(model.getOccupyId());
+			}
+		}
 
 	}
 

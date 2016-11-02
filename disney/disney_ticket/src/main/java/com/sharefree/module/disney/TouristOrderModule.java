@@ -21,7 +21,7 @@ import com.sharefree.model.ResultRender;
 import com.sharefree.model.disney.TouristOrderModel;
 import com.sharefree.model.plane.PlaneOrderModel;
 import com.sharefree.module.BaseModule;
-import com.sharefree.runner.disney.CheckOccupyRunner;
+import com.sharefree.runner.disney.CancelOccupyRunner;
 import com.sharefree.utils.ThreadPoolUtil;
 
 /**
@@ -61,7 +61,7 @@ public class TouristOrderModule extends BaseModule {
 		// 查询条件
 		Date visitDate = model.getVisitDate();
 		// 立即检查
-		ThreadPoolUtil.execute(new CheckOccupyRunner(visitDate, visitDate));
+		disneyFront.check_occupy(visitDate, visitDate);
 		return ResultRender.renderResult("操作成功");
 	}
 
@@ -109,6 +109,23 @@ public class TouristOrderModule extends BaseModule {
 			throw new CommonException("缺少参数:修改值");
 		model.setOrderId(orderId);
 		touristOrderBiz.update(model);
+		return ResultRender.renderResult("操作成功");
+	}
+
+	/**
+	 * 游客订单取消
+	 * 
+	 * @param model
+	 * @return
+	 */
+	@PUT
+	@At("/cancel/?")
+	public JsonResult cancel(Long orderId) {
+		if (orderId == null)
+			throw new CommonException("缺少参数{orderId}:订单ID");
+		touristOrderBiz.cancel(orderId);
+		// 取消关联占位信息
+		ThreadPoolUtil.execute(new CancelOccupyRunner(orderId));
 		return ResultRender.renderResult("操作成功");
 	}
 

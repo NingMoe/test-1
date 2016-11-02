@@ -43,6 +43,16 @@ public interface IDisneyFront {
 	void cancel_occupy(Long occupyId) throws CommonException;
 
 	/**
+	 * 取消占位
+	 * 
+	 * @param orderId
+	 *            订单Id <br>
+	 *            包含取消PNR和取消平台订单
+	 * @throws CommonException
+	 */
+	void cancel_occupys(Long orderId) throws CommonException;
+
+	/**
 	 * 查询余票并进行下单支付
 	 * 
 	 * @param visitDateF

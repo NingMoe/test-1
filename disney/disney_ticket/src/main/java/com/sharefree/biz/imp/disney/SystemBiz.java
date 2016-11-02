@@ -54,6 +54,7 @@ public class SystemBiz implements ISystemBiz {
 			TouristOrderModel cnd = new TouristOrderModel();
 			cnd.setVisitDateF(model.getVisitDateF());
 			cnd.setVisitDateT(model.getVisitDateT());
+			cnd.setStatus(DisneyConst.TOURIST_ORDER_STATUS_OK);
 			cnd.setSqlKey(SqlsConst.SELECT_ORDER_NUM_SUM);
 			List<TouristOrderModel> models = touristOrderService.queryByCustomSQL(cnd);
 			result.setOrderNumSum(models);

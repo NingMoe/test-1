@@ -18,7 +18,7 @@ public class SocketResult implements Serializable {
 
 	private String optName;
 
-	private String token;
+	private Type type;
 
 	private Date time;
 
@@ -26,21 +26,49 @@ public class SocketResult implements Serializable {
 
 	private String msg;
 
+	public static enum Type {
+		INFO, WARN, ERROR
+	}
+
 	/**
 	 * 默认构造方法
+	 */
+	public SocketResult() {
+	}
+
+	/**
+	 * 构造方法
 	 * 
 	 * @param optName
 	 *            操作员名称
-	 * @param token
-	 *            操作员token
+	 * @param type
+	 *            消息类别
 	 * @param code
 	 *            业务编码
 	 * @param msg
 	 *            返回消息
 	 */
-	public SocketResult(String optName, String token, String code, String msg) {
+	public SocketResult(String optName, Type type, String code, String msg) {
 		this.optName = optName;
-		this.token = token;
+		this.type = type;
+		this.time = new Date();
+		this.code = code;
+		this.msg = msg;
+	}
+
+	/**
+	 * 构造方法（系统消息）
+	 * 
+	 * @param type
+	 *            消息类别
+	 * @param code
+	 *            业务编码
+	 * @param msg
+	 *            返回消息
+	 */
+	public SocketResult(Type type, String code, String msg) {
+		this.optName = "系统";
+		this.type = type;
 		this.time = new Date();
 		this.code = code;
 		this.msg = msg;
@@ -54,12 +82,12 @@ public class SocketResult implements Serializable {
 		this.optName = optName;
 	}
 
-	public String getToken() {
-		return token;
+	public Type getType() {
+		return type;
 	}
 
-	public void setToken(String token) {
-		this.token = token;
+	public void setType(Type type) {
+		this.type = type;
 	}
 
 	public Date getTime() {

@@ -19,12 +19,12 @@ public class CheckTicketStockJob implements Job {
 	private IDisneyFront disneyFront;
 
 	// 东航维护5个月的门票
-	private static int[] plusMonth = { 0, DisneyConst.CHECK_STOCK_MONTH_MAX };
+	private static int plusMonth = 0;
 
 	@Override
 	public void execute(JobExecutionContext arg0) throws JobExecutionException {
 		// Step 1 检查门票库存Job
-		int plus = plusMonth[0];
+		int plus = plusMonth;
 		// 获取当前月份首日
 		Date checkMonthFirstDay = DateUtil.getCurrentMonthFirstDay(new Date());
 		if (plus > 0)
@@ -34,10 +34,10 @@ public class CheckTicketStockJob implements Job {
 		Date checkMonthLastDay = DateUtil.addDateByMonth(checkMonthFirstDay, 1);
 		checkMonthLastDay = DateUtil.getDateAfterDays(checkMonthLastDay, -1);
 		// 设置下次检查累加月数
-		if ((plus + 1) < plusMonth[1]) {
-			plusMonth[0] = plus + 1;
+		if ((plus + 1) < DisneyConst.CHECK_STOCK_MONTH_MAX) {
+			plusMonth = plus + 1;
 		} else {
-			plusMonth[0] = 0;
+			plusMonth = 0;
 		}
 		disneyFront.check_occupy(checkMonthFirstDay, checkMonthLastDay);
 	}

@@ -40,4 +40,12 @@ public interface ITouristOrderBiz extends IBaseBiz<TouristOrderModel, Long> {
 	 * @throws CommonException
 	 */
 	TouristOrderModel selectByIdWithDetail(Long id) throws CommonException;
+
+	/**
+	 * 取消订单
+	 * 
+	 * @param model
+	 * @throws CommonException
+	 */
+	void cancel(Long orderId) throws CommonException;
 }

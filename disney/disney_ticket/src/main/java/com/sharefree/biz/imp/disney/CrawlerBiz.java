@@ -21,6 +21,8 @@ import com.sharefree.biz.itf.disney.IEtermBiz;
 import com.sharefree.common.CommonException;
 import com.sharefree.constant.DisneyConst;
 import com.sharefree.model.JsonResult;
+import com.sharefree.model.SocketRender;
+import com.sharefree.model.SocketResult;
 import com.sharefree.model.disney.OccupyDetailModel;
 import com.sharefree.model.disney.OrderRequestModel;
 import com.sharefree.model.disney.TicketStockModel;
@@ -31,6 +33,7 @@ import com.sharefree.model.plane.PlanePriceModel;
 import com.sharefree.utils.DateUtil;
 import com.sharefree.utils.StringUtil;
 import com.sharefree.utils.URLConnUtils;
+import com.sharefree.websocket.disney.DisneySocket;
 
 @IocBean
 public class CrawlerBiz implements ICrawlerBiz {
@@ -98,6 +101,8 @@ public class CrawlerBiz implements ICrawlerBiz {
 					log.error(resp);
 					throw new CommonException("返回数据不符合规范：" + resp);
 				}
+			} else {
+				DisneySocket.broadcast(SocketRender.broadErrorResult(this.getClass().getSimpleName(), "执行下单占位操作无返回"));
 			}
 		}
 		return platOrderNo;
@@ -164,6 +169,8 @@ public class CrawlerBiz implements ICrawlerBiz {
 				log.error(resp);
 				throw new CommonException("返回数据不符合规范：" + resp);
 			}
+		} else {
+			DisneySocket.broadcast(new SocketResult(null, null, this.getClass().getSimpleName(), "执行下单支付操作无返回"));
 		}
 		return platOrderNo;
 	}
@@ -241,6 +248,8 @@ public class CrawlerBiz implements ICrawlerBiz {
 				log.error(resp);
 				throw new CommonException("检查库存失败：" + resp);
 			}
+		} else {
+			DisneySocket.broadcast(new SocketResult(null, null, this.getClass().getSimpleName(), "执行检查库存操作无返回"));
 		}
 		return models;
 	}

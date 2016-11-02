@@ -159,4 +159,15 @@ public class TouristOrderBiz extends BaseBiz<TouristOrderModel, Long> implements
 		}
 	}
 
+	@Override
+	public void cancel(Long orderId) throws CommonException {
+		// 取消订单
+		TouristOrderModel model = new TouristOrderModel();
+		model.setOrderId(orderId);
+		model.setStatus(DisneyConst.TOURIST_ORDER_STATUS_CANCEL);
+		model.setIsNeedOccupy(false);
+		model.setOccupyNum(0);
+		update(model);
+	}
+
 }

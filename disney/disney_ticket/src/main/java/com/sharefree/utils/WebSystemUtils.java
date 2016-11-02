@@ -13,13 +13,14 @@ import com.sharefree.common.CommonException;
 import com.sharefree.constant.SystemConst;
 import com.sharefree.model.system.OperatorModel;
 import com.sharefree.service.imp.RedisService;
+import com.sharefree.service.itf.IRedisService;
 import com.sharefree.websocket.disney.DisneySocket;
 
 public class WebSystemUtils {
 
 	private static final Logger log = Logger.getLogger(WebSystemUtils.class);
 
-	private static RedisService redisService = Mvcs.getIoc().get(RedisService.class);
+	private static IRedisService redisService = Mvcs.getIoc().get(RedisService.class);
 
 	/**
 	 * 验证登陆信息
