@@ -7,12 +7,10 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.log4j.Logger;
 import org.nutz.json.Json;
 import org.nutz.json.JsonFormat;
-import org.nutz.mvc.Mvcs;
 
 import com.sharefree.common.CommonException;
 import com.sharefree.constant.SystemConst;
 import com.sharefree.model.system.OperatorModel;
-import com.sharefree.service.imp.RedisService;
 import com.sharefree.service.itf.IRedisService;
 import com.sharefree.websocket.disney.DisneySocket;
 
@@ -20,7 +18,7 @@ public class WebSystemUtils {
 
 	private static final Logger log = Logger.getLogger(WebSystemUtils.class);
 
-	private static IRedisService redisService = Mvcs.getIoc().get(RedisService.class);
+	public static IRedisService redisService;
 
 	/**
 	 * 验证登陆信息

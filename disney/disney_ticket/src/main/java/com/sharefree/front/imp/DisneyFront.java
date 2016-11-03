@@ -16,6 +16,7 @@ import com.sharefree.common.CommonException;
 import com.sharefree.constant.DisneyConst;
 import com.sharefree.front.itf.IDisneyFront;
 import com.sharefree.model.disney.OccupyDetailModel;
+import com.sharefree.model.disney.OccupyDetailSelector;
 import com.sharefree.model.disney.TicketStockModel;
 import com.sharefree.model.disney.TouristTicketModel;
 import com.sharefree.model.plane.PlaneOrderModel;
@@ -61,7 +62,7 @@ public class DisneyFront implements IDisneyFront {
 		List<TicketStockModel> models = check(visitDateF, visitDateT);
 		if (DisneyConst.ORDER_OCCUPY_RUN) {
 			// Step 2 执行占位Job
-			disneyOrderBiz.occupyList(models);
+			disneyOrderBiz.check_occupy(models);
 		}
 	}
 
@@ -120,8 +121,21 @@ public class DisneyFront implements IDisneyFront {
 		// 查询当天库存
 		List<TicketStockModel> stocks = check(visitDate, visitDate);
 		model.setStocks(stocks);
-		// web.socket提示库存信息
+		// 检查库存与占位
+		OccupyDetailSelector selector = disneyOrderBiz.check_pay(model);
+		// 取消占位信息
+		if (selector != null) {
+			for (Long occupyId : selector.getSelectionIds()) {
+				// 释放占位订单
+				cancel_occupy(occupyId);
+			}
+		}
+		// 立即下单
 		disneyOrderBiz.pay(model);
+		// 如果释放数超过出票数，立即占回超出量（不受本地执行记录数的限制，但是需要累积和释放占位数）
+		if (selector != null && selector.getOccupyNum() != null && selector.getOccupyNum() > 0) {
+			disneyOrderBiz.distribute_occupy(model.getOrderId(), model.getOrderNo(), model.getVisitDate(), selector.getOccupyNum(), true);
+		}
 	}
 
 	@Override

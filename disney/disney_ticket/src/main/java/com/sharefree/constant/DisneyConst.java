@@ -72,8 +72,8 @@ public class DisneyConst {
 	@Comment("YEEGO服务编码.解析PAT信息")
 	public static String YEEGO_SERVICE_CODE_ANALYSIS_PAT = "/analysisPat/";
 
-	@Comment("检查门票库存最多越月份")
-	public static Integer CHECK_STOCK_MONTH_MAX = 5;
+	@Comment("检查门票库存最多越天数")
+	public static Integer CHECK_STOCK_DAY_MAX = 30;
 
 	@Comment("入园日期距离下单日限定最小天数")
 	public static Integer ORDER_PERIOD_MIN = 3;

@@ -18,7 +18,7 @@ import com.sharefree.utils.view.ResultViewMaker;
 
 @Modules(scanPackage = true)
 @Filters({ @By(type = CheckRequestFilter.class) })
-@IocBy(type = ComboIocProvider.class, args = { "*json", "ioc/", "*anno", "com.sharefree", "*tx", "*org.nutz.integration.quartz.QuartzIocLoader" })
+@IocBy(type = ComboIocProvider.class, args = { "*json", "ioc/", "*anno", "com.sharefree", "*tx" })
 @AdaptBy(type = JsonAdaptor.class)
 @SetupBy(value = MainSetup.class)
 @Views({ ResultViewMaker.class })

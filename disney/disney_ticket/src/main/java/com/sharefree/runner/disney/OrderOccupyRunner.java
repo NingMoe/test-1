@@ -10,15 +10,18 @@ public class OrderOccupyRunner implements Runnable {
 
 	private OccupyDetailModel model;
 
+	private Boolean ignoreCompetition;
+
 	private IDisneyOrderBiz disneyOrderBiz = Mvcs.getIoc().get(DisneyOrderBiz.class);
 
-	public OrderOccupyRunner(OccupyDetailModel model) {
+	public OrderOccupyRunner(OccupyDetailModel model, Boolean ignoreCompetition) {
 		this.model = model;
+		this.ignoreCompetition = ignoreCompetition;
 	}
 
 	@Override
 	public void run() {
-		disneyOrderBiz.occupy(model);
+		disneyOrderBiz.occupy(model, ignoreCompetition);
 	}
 
 }

@@ -12,24 +12,36 @@ public class DisneyUtil {
 	}
 
 	/**
-	 * 同一入园日期，正在执行的[下单占位人数]<br>
+	 * 同一入园日期，各订单正在执行的[下单占位人数]<br>
 	 * 
 	 * key: 入园日期（Format: yyyy-MM-dd）<br>
-	 * value: 正在执行的[下单占位人数]<br>
+	 * value: 各订单正在执行的[下单占位人数]<br>
 	 */
-	private static Map<String, Integer> ORDERING = new HashMap<String, Integer>();
+	private static Map<String, Map<Long, Integer>> ORDERING = new HashMap<String, Map<Long, Integer>>();
 
 	/**
-	 * 查询某入园日正在执行的[下单占位人数]
+	 * 查询某入园日某订单正在执行的[下单占位人数]
 	 * 
 	 * @param visitDate
 	 *            入园日
+	 * @param orderId
+	 *            某订单
 	 * @return 正在执行的[下单占位人数]
 	 */
-	private static Integer obtain(String visitDate) {
-		Integer num = ORDERING.get(visitDate);
-		if (num == null)
-			num = 0;
+	private static Integer obtain(String visitDate, Long orderId) {
+		Integer num = 0;
+		Map<Long, Integer> map = ORDERING.get(visitDate);
+		if (map != null) {
+			if (orderId != null) {
+				if (map.containsKey(orderId))
+					num = map.get(orderId);
+			} else {
+				// 获取入园日所有执行数
+				for (Integer value : map.values()) {
+					num = num + value;
+				}
+			}
+		}
 		return num;
 	}
 
@@ -38,12 +50,24 @@ public class DisneyUtil {
 	 * 
 	 * @param visitDate
 	 *            入园日
+	 * @param orderId
+	 *            某订单
 	 * @return 增加后，正在执行的[下单占位人数]
 	 */
-	private static Integer increase(String visitDate, Integer increaseNum) {
-		Integer num = obtain(visitDate) + increaseNum;
-		ORDERING.put(visitDate, num);
-		return num;
+	private static void increase(String visitDate, Long orderId, Integer increaseNum) {
+		Map<Long, Integer> map = ORDERING.get(visitDate);
+		if (map != null) {
+			if (map.containsKey(orderId)) {
+				Integer value = map.get(orderId) + increaseNum;
+				map.put(orderId, value);
+			} else {
+				map.put(orderId, increaseNum);
+			}
+		} else {
+			map = new HashMap<Long, Integer>();
+			map.put(orderId, increaseNum);
+			ORDERING.put(visitDate, map);
+		}
 	}
 
 	/**
@@ -53,31 +77,31 @@ public class DisneyUtil {
 	 * @param num
 	 * @return
 	 */
-	private static Integer reduce(String visitDate, Integer reduceNum) {
-		Integer num = obtain(visitDate);
-		if (num > 0) {
-			if (num > reduceNum) {
-				num = num - reduceNum;
-				ORDERING.put(visitDate, num);
+	private static void reduce(String visitDate, Long orderId, Integer reduceNum) {
+		Map<Long, Integer> map = ORDERING.get(visitDate);
+		if (map != null && map.containsKey(orderId)) {
+			Integer value = map.get(orderId) - reduceNum;
+			if (value > 0) {
+				map.put(orderId, value);
 			} else {
-				num = 0;
-				ORDERING.remove(visitDate);
+				map.remove(orderId);
+				if (map.size() == 0)
+					ORDERING.remove(visitDate);
 			}
 		}
-		return num;
 	}
 
-	public static Integer handle(String visitDate, Signal code, Integer num) {
+	public static Integer handle(String visitDate, Long orderId, Signal code, Integer num) {
 		synchronized (visitDate) {
 			switch (code) {
 			case OBTAIN:
-				num = obtain(visitDate);
+				num = obtain(visitDate, orderId);
 				break;
 			case INCREASE:
-				num = increase(visitDate, num);
+				increase(visitDate, orderId, num);
 				break;
 			case REDUCE:
-				num = reduce(visitDate, num);
+				reduce(visitDate, orderId, num);
 				break;
 			default:
 				num = 0;

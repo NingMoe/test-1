@@ -6,7 +6,6 @@ import org.apache.log4j.Logger;
 import org.nutz.dao.Dao;
 import org.nutz.dao.impl.FileSqlManager;
 import org.nutz.dao.impl.NutDao;
-import org.nutz.integration.quartz.NutQuartzCronJobFactory;
 import org.nutz.ioc.Ioc;
 import org.nutz.mvc.NutConfig;
 import org.nutz.mvc.Setup;
@@ -14,10 +13,13 @@ import org.nutz.mvc.Setup;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 
+import com.sharefree.jobs.disney.CheckTicketStockJob;
 import com.sharefree.model.disney.ConstModel;
+import com.sharefree.service.imp.RedisService;
 import com.sharefree.service.imp.disney.ConstService;
 import com.sharefree.service.itf.disney.IConstService;
 import com.sharefree.utils.ConstInit;
+import com.sharefree.utils.QuartzManager;
 import com.sharefree.utils.StringUtil;
 import com.sharefree.utils.WebSystemUtils;
 
@@ -31,14 +33,15 @@ public class MainSetup implements Setup {
 		// 加载 SQL 文件
 		initSqls(ioc);
 
+		// REDIS启动验证
+		initRedis(ioc);
+
 		// 初始化静态数据
 		initConsts(ioc);
 
-		// 计划任务的初始化与启动
-		ioc.get(NutQuartzCronJobFactory.class);
-
-		// REDIS启动验证
-		initRedis(ioc);
+		// 启动job
+		// JobInfo.updateJob(new JobInfo(JobInfo.JobStateOpt.RUN));
+		QuartzManager.addSimpleJob("testJob", "testJobGroup", "testTrigger", "testTriggerGroup", CheckTicketStockJob.class, null, null, -1, 10, null);
 
 		log.info("系统启动成功");
 	}
@@ -81,6 +84,7 @@ public class MainSetup implements Setup {
 		String resp = jedis.ping();
 		if (StringUtil.isNotEmpty(resp)) {
 			log.info("[PING --> " + resp + "],REDIS启动成功");
+			WebSystemUtils.redisService = ioc.get(RedisService.class);
 		} else {
 			log.info("REDIS启动失败");
 		}

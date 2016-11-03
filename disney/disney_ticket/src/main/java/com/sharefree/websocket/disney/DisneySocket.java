@@ -92,7 +92,8 @@ public class DisneySocket {
 		for (String key : keys) {
 			try {
 				Session session = getSession(key);
-				session.getBasicRemote().sendText(Json.toJson(result, JsonFormat.compact()));
+				if (session != null)
+					session.getBasicRemote().sendText(Json.toJson(result, JsonFormat.compact()));
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -143,11 +144,19 @@ public class DisneySocket {
 	}
 
 	private static Session getSession(String token) {
-		return (Session) sessionMap.get(token)[0];
+		Session session = null;
+		if (sessionMap.containsKey(token)) {
+			session = (Session) sessionMap.get(token)[0];
+		}
+		return session;
 	}
 
 	public static OperatorModel getOperator(String token) {
-		return (OperatorModel) sessionMap.get(token)[1];
+		OperatorModel operator = null;
+		if (sessionMap.containsKey(token)) {
+			operator = (OperatorModel) sessionMap.get(token)[1];
+		}
+		return operator;
 	}
 
 	/**

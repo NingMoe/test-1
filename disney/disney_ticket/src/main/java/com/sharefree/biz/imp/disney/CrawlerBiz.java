@@ -22,7 +22,6 @@ import com.sharefree.common.CommonException;
 import com.sharefree.constant.DisneyConst;
 import com.sharefree.model.JsonResult;
 import com.sharefree.model.SocketRender;
-import com.sharefree.model.SocketResult;
 import com.sharefree.model.disney.OccupyDetailModel;
 import com.sharefree.model.disney.OrderRequestModel;
 import com.sharefree.model.disney.TicketStockModel;
@@ -96,13 +95,14 @@ public class CrawlerBiz implements ICrawlerBiz {
 						String content = result.getResults().toString().trim();
 						platOrderNo = content.substring(content.indexOf("BO"));
 						log.debug("执行占位成功,订单号:[" + platOrderNo + "]");
+						DisneySocket.broadcast(SocketRender.broadInfoResult("DISNEY下单占位", "订单[" + model.getOrderNo() + "]成功占位[" + model.getOccupyNum() + "]"));
 					}
 				} catch (Exception e) {
 					log.error(resp);
 					throw new CommonException("返回数据不符合规范：" + resp);
 				}
 			} else {
-				DisneySocket.broadcast(SocketRender.broadErrorResult(this.getClass().getSimpleName(), "执行下单占位操作无返回"));
+				DisneySocket.broadcast(SocketRender.broadErrorResult("DISNEY下单占位", "执行下单占位操作无返回"));
 			}
 		}
 		return platOrderNo;
@@ -152,7 +152,7 @@ public class CrawlerBiz implements ICrawlerBiz {
 		String param = Json.toJson(reqModel, JsonFormat.compact());
 		log.debug("请求参数: " + param);
 		// 发送请求并接受回执
-		log.debug("执行占位操作");
+		log.debug("执行下单支付操作");
 		String resp = URLConnUtils.sendPost(DisneyConst.CRAWLER_REQUEST_URL + DisneyConst.CRAWLER_SERVICE_CODE_ORDER_PAY, param, 30000, 30000);
 		log.debug("回复数据: " + resp);
 		if (StringUtil.isNotEmpty(resp)) {
@@ -163,14 +163,14 @@ public class CrawlerBiz implements ICrawlerBiz {
 				if (result.getSuccess()) {
 					String content = result.getResults().toString().trim();
 					platOrderNo = content.substring(content.indexOf("BO"));
-					log.debug("执行占位成功,订单号:[" + platOrderNo + "]");
+					log.debug("执行下单支付成功,订单号:[" + platOrderNo + "]");
 				}
 			} catch (Exception e) {
 				log.error(resp);
 				throw new CommonException("返回数据不符合规范：" + resp);
 			}
 		} else {
-			DisneySocket.broadcast(new SocketResult(null, null, this.getClass().getSimpleName(), "执行下单支付操作无返回"));
+			DisneySocket.broadcast(SocketRender.broadErrorResult("DISNEY下单支付", "执行下单支付操作无返回"));
 		}
 		return platOrderNo;
 	}
@@ -198,12 +198,17 @@ public class CrawlerBiz implements ICrawlerBiz {
 					if (result.getSuccess()) {
 						successFlag = true;
 						log.debug("执行取消订单成功");
+						DisneySocket.broadcast(SocketRender.broadInfoResult("DISNEY取消订单", "执行取消订单[" + platOrderNo + "]成功"));
+					} else {
+						DisneySocket.broadcast(SocketRender.broadErrorResult("DISNEY取消订单", "执行取消订单[" + platOrderNo + "]失败"));
 					}
 				} catch (Exception e) {
 					log.error("返回数据不符合规范：" + resp);
 					// throw new CommonException("取消平台订单[" + platOrderNo +
 					// "]，返回数据不符合规范：" + resp);
 				}
+			} else {
+				DisneySocket.broadcast(SocketRender.broadErrorResult("DISNEY取消订单", "执行取消订单操作无返回"));
 			}
 		}
 		return successFlag;
@@ -249,7 +254,7 @@ public class CrawlerBiz implements ICrawlerBiz {
 				throw new CommonException("检查库存失败：" + resp);
 			}
 		} else {
-			DisneySocket.broadcast(new SocketResult(null, null, this.getClass().getSimpleName(), "执行检查库存操作无返回"));
+			DisneySocket.broadcast(SocketRender.broadErrorResult("DISNEY检查库存", "执行检查库存操作无返回"));
 		}
 		return models;
 	}

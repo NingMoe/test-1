@@ -2,44 +2,27 @@ package com.sharefree.jobs.disney;
 
 import java.util.Date;
 
-import org.nutz.ioc.loader.annotation.Inject;
-import org.nutz.ioc.loader.annotation.IocBean;
+import org.nutz.mvc.Mvcs;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 
 import com.sharefree.constant.DisneyConst;
+import com.sharefree.front.imp.DisneyFront;
 import com.sharefree.front.itf.IDisneyFront;
 import com.sharefree.utils.DateUtil;
 
-@IocBean
 public class CheckTicketStockJob implements Job {
 
-	@Inject
-	private IDisneyFront disneyFront;
-
-	// 东航维护5个月的门票
-	private static int plusMonth = 0;
+	private IDisneyFront disneyFront = Mvcs.getIoc().get(DisneyFront.class);;
 
 	@Override
 	public void execute(JobExecutionContext arg0) throws JobExecutionException {
-		// Step 1 检查门票库存Job
-		int plus = plusMonth;
-		// 获取当前月份首日
-		Date checkMonthFirstDay = DateUtil.getCurrentMonthFirstDay(new Date());
-		if (plus > 0)
-			// 获取累加月数后的月份首日
-			checkMonthFirstDay = DateUtil.addDateByMonth(checkMonthFirstDay, plus);
-		// 获取检查月份末日
-		Date checkMonthLastDay = DateUtil.addDateByMonth(checkMonthFirstDay, 1);
-		checkMonthLastDay = DateUtil.getDateAfterDays(checkMonthLastDay, -1);
-		// 设置下次检查累加月数
-		if ((plus + 1) < DisneyConst.CHECK_STOCK_MONTH_MAX) {
-			plusMonth = plus + 1;
-		} else {
-			plusMonth = 0;
-		}
-		disneyFront.check_occupy(checkMonthFirstDay, checkMonthLastDay);
+		// 获取当前日期为起始日期
+		Date visitDateF = DateUtil.parseStringToDate(DateUtil.parseDateToString(new Date(), DateUtil.FORMAT1), DateUtil.FORMAT1);
+		// 获取检查门票库存最多越天数的日期为终止日期
+		Date visitDateT = DateUtil.getDateAfterDays(visitDateF, DisneyConst.CHECK_STOCK_DAY_MAX);
+		disneyFront.check_occupy(visitDateF, visitDateT);
 	}
 
 }
