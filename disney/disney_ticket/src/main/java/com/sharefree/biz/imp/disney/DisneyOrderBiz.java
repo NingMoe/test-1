@@ -332,16 +332,16 @@ public class DisneyOrderBiz extends BaseBiz<TouristOrderModel, Long> implements 
 
 	@Override
 	public OccupyDetailSelector check_pay(TouristTicketModel model) throws CommonException {
+		// 计算入园总人数
+		Integer ticketingNumSum = 0;
+		List<TouristDetailModel> tourists = model.getTourists();
+		for (TouristDetailModel tourist : tourists) {
+			ticketingNumSum = ticketingNumSum + tourist.getTicketNum();
+		}
 		List<TicketStockModel> stocks = model.getStocks();
 		if (stocks != null && stocks.size() > 0) {
 			// 入园日期
 			Date visitDate = model.getVisitDate();
-			// 计算入园总人数
-			Integer ticketingNumSum = 0;
-			List<TouristDetailModel> tourists = model.getTourists();
-			for (TouristDetailModel tourist : tourists) {
-				ticketingNumSum = ticketingNumSum + tourist.getTicketNum();
-			}
 
 			String key = DateUtil.parseDateToString(visitDate, DateUtil.FORMAT1);
 			// 获取日期库存对应数据
@@ -354,32 +354,30 @@ public class DisneyOrderBiz extends BaseBiz<TouristOrderModel, Long> implements 
 			} else {
 				clientPoint("当日门票库存不足[" + stockMap.get(key) + "]");
 			}
-
-			// 查看占位是否充足
-			OccupyDetailModel cnd = new OccupyDetailModel();
-			cnd.setOrderId(model.getOrderId());
-			cnd.setStatus(DisneyConst.OCCUPY_DETAIL_STATUS_UNUSE);
-			cnd.setOrderByCustom("occupyNum");
-			List<OccupyDetailModel> deteils = occupyDetailService.query(cnd);
-			if (deteils != null && deteils.size() > 0) {
-				// 通过算法选出合适的占位信息
-				OccupyDetailSelector selector = new OccupyDetailSelector(deteils, ticketingNumSum);
-				if (selector.getSelectionIds() != null && selector.getSelectionIds().size() > 0) {
-					clientPoint("当日门票占位充足");
-					// 执行释放占位 --> 下单支付 --> 回占超出量
-					return selector;
-				} else {
-					clientPoint("当日门票占位不足");
-				}
-			} else {
-				clientPoint("当日门票无占位");
-			}
-			// 提示库存不足
-			throw new CommonException("库存|占位量不足，请重新选择合适出票数");
 		} else {
 			clientPoint("当日门票无库存");
-			throw new CommonException("当日门票无库存");
 		}
+		// 查看占位是否充足
+		OccupyDetailModel cnd = new OccupyDetailModel();
+		cnd.setOrderId(model.getOrderId());
+		cnd.setStatus(DisneyConst.OCCUPY_DETAIL_STATUS_UNUSE);
+		cnd.setOrderByCustom("occupyNum");
+		List<OccupyDetailModel> deteils = occupyDetailService.query(cnd);
+		if (deteils != null && deteils.size() > 0) {
+			// 通过算法选出合适的占位信息
+			OccupyDetailSelector selector = new OccupyDetailSelector(deteils, ticketingNumSum);
+			if (selector.getSelectionIds() != null && selector.getSelectionIds().size() > 0) {
+				clientPoint("当日门票占位充足");
+				// 执行释放占位 --> 下单支付 --> 回占超出量
+				return selector;
+			} else {
+				clientPoint("当日门票占位不足");
+			}
+		} else {
+			clientPoint("当日门票无占位");
+		}
+		// 提示库存不足
+		throw new CommonException("库存|占位量不足，请重新选择合适出票数");
 	}
 
 	@Override
@@ -412,7 +410,6 @@ public class DisneyOrderBiz extends BaseBiz<TouristOrderModel, Long> implements 
 				// 下单支付失败
 				clientPoint("下单支付失败");
 				log.warn("下单支付失败");
-				throw new CommonException("下单支付失败");
 			}
 		} catch (Exception e) {
 		} finally {

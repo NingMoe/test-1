@@ -40,7 +40,7 @@ public interface IDisneyFront {
 	 *            包含取消PNR和取消平台订单
 	 * @throws CommonException
 	 */
-	void cancel_occupy(Long occupyId) throws CommonException;
+	String cancel_occupy(Long occupyId) throws CommonException;
 
 	/**
 	 * 取消占位

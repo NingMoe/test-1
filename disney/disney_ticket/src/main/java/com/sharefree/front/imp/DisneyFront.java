@@ -25,7 +25,7 @@ import com.sharefree.service.itf.ISystemService;
 import com.sharefree.utils.CommonUtil;
 
 @IocBean
-public class DisneyFront implements IDisneyFront {
+public class DisneyFront extends BaseFront implements IDisneyFront {
 
 	@Inject
 	private ITicketStockBiz ticketStockBiz;
@@ -67,12 +67,12 @@ public class DisneyFront implements IDisneyFront {
 	}
 
 	@Override
-	public void cancel_occupy(Long occupyId) throws CommonException {
+	public String cancel_occupy(Long occupyId) throws CommonException {
+		// 回填取消信息
+		String status = DisneyConst.OCCUPY_DETAIL_STATUS_CANCEL_ORDER_ERROR;
 		OccupyDetailModel model = occupyDetailBiz.selectById(occupyId);
 		if (model != null) {
 			if (DisneyConst.OCCUPY_DETAIL_STATUS_UNUSE.equals(model.getStatus())) {
-				// 回填取消信息
-				String status = null;
 				// 先取消平台订单
 				boolean cancelOrder = crawlerBiz.cancelOrder(model.getPlatOrderNo());
 				// 取消成功才能取消PNR
@@ -85,8 +85,6 @@ public class DisneyFront implements IDisneyFront {
 					} else {
 						status = DisneyConst.OCCUPY_DETAIL_STATUS_CANCEL_PNR_ERROR;
 					}
-				} else {
-					status = DisneyConst.OCCUPY_DETAIL_STATUS_CANCEL_ORDER_ERROR;
 				}
 				model = new OccupyDetailModel();
 				model.setOccupyId(occupyId);
@@ -95,11 +93,12 @@ public class DisneyFront implements IDisneyFront {
 				// 更新状态
 				occupyDetailBiz.update(model);
 				if (!cancelOrder || !cancelPNR)
-					throw new CommonException("取消占位异常");
+					clientPoint("取消占位异常[" + status + "]");
 			}
 		} else {
-			throw new CommonException("占位信息不存在");
+			clientPoint("占位信息不存在");
 		}
+		return status;
 	}
 
 	@Override
@@ -124,17 +123,29 @@ public class DisneyFront implements IDisneyFront {
 		// 检查库存与占位
 		OccupyDetailSelector selector = disneyOrderBiz.check_pay(model);
 		// 取消占位信息
+		// 累计取消占位数
+		Integer cancelSum = 0;
+		// 全部取消成功标识
+		boolean cancelAll = true;
 		if (selector != null) {
-			for (Long occupyId : selector.getSelectionIds()) {
+			for (OccupyDetailModel detail : selector.getSelections()) {
 				// 释放占位订单
-				cancel_occupy(occupyId);
+				String cancelFlag = cancel_occupy(detail.getOccupyId());
+				if (DisneyConst.OCCUPY_DETAIL_STATUS_CANCEL_ORDER_ERROR.equals(cancelFlag)) {
+					cancelAll = false;
+					break;
+				}
+				cancelSum = cancelSum + detail.getOccupyNum();
 			}
 		}
-		// 立即下单
-		disneyOrderBiz.pay(model);
+		if (cancelAll)
+			// 立即下单
+			disneyOrderBiz.pay(model);
 		// 如果释放数超过出票数，立即占回超出量（不受本地执行记录数的限制，但是需要累积和释放占位数）
-		if (selector != null && selector.getOccupyNum() != null && selector.getOccupyNum() > 0) {
-			disneyOrderBiz.distribute_occupy(model.getOrderId(), model.getOrderNo(), model.getVisitDate(), selector.getOccupyNum(), true);
+		if (selector != null && selector.getOccupyNum() != null) {
+			Integer occupyNum = cancelAll ? selector.getOccupyNum() : cancelSum;
+			if (occupyNum > 0)
+				disneyOrderBiz.distribute_occupy(model.getOrderId(), model.getOrderNo(), model.getVisitDate(), selector.getOccupyNum(), true);
 		}
 	}
 
