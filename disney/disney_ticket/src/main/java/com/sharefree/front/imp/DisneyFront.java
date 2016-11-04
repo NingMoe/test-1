@@ -127,6 +127,8 @@ public class DisneyFront extends BaseFront implements IDisneyFront {
 		Integer cancelSum = 0;
 		// 全部取消成功标识
 		boolean cancelAll = true;
+		// 提前占位锁
+		boolean occupyLock = false;
 		if (selector != null) {
 			for (OccupyDetailModel detail : selector.getSelections()) {
 				// 释放占位订单
@@ -136,17 +138,28 @@ public class DisneyFront extends BaseFront implements IDisneyFront {
 					break;
 				}
 				cancelSum = cancelSum + detail.getOccupyNum();
+				// 提前占位
+				if (!occupyLock && selector.getOccupyNum() != null && selector.getOccupyNum() > 0 && cancelSum >= selector.getOccupyNum()) {
+					// 如果释放数超过出票数，立即占回超出量（不受本地执行记录数的限制，但是需要累积和释放占位数）
+					disneyOrderBiz.distribute_occupy(model.getOrderId(), model.getOrderNo(), model.getVisitDate(), selector.getOccupyNum(), true);
+					occupyLock = true;
+				}
 			}
 		}
-		if (cancelAll)
+		if (cancelAll) {
 			// 立即下单
-			disneyOrderBiz.pay(model);
-		// 如果释放数超过出票数，立即占回超出量（不受本地执行记录数的限制，但是需要累积和释放占位数）
-		if (selector != null && selector.getOccupyNum() != null) {
-			Integer occupyNum = cancelAll ? selector.getOccupyNum() : cancelSum;
-			if (occupyNum > 0)
-				disneyOrderBiz.distribute_occupy(model.getOrderId(), model.getOrderNo(), model.getVisitDate(), selector.getOccupyNum(), true);
+			Integer ticketNum = disneyOrderBiz.pay(model);
+			if (ticketNum != null)
+				cancelSum = ticketNum;
+		} else {
+			// 已提前占位
+			if (occupyLock) {
+				cancelSum = cancelSum - selector.getOccupyNum();
+			}
 		}
+		// 如果下单支付或者释放订单失败，立即占回超出量（不受本地执行记录数的限制，但是需要累积和释放占位数）
+		if (cancelSum > 0)
+			disneyOrderBiz.distribute_occupy(model.getOrderId(), model.getOrderNo(), model.getVisitDate(), cancelSum, true);
 	}
 
 	@Override

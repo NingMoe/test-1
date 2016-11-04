@@ -381,7 +381,7 @@ public class DisneyOrderBiz extends BaseBiz<TouristOrderModel, Long> implements 
 	}
 
 	@Override
-	public void pay(TouristTicketModel model) throws CommonException {
+	public Integer pay(TouristTicketModel model) throws CommonException {
 		String key = DateUtil.parseDateToString(model.getVisitDate(), DateUtil.FORMAT1);
 		// 累计正在执行出票数量
 		Integer ticketNum = 0;
@@ -406,6 +406,7 @@ public class DisneyOrderBiz extends BaseBiz<TouristOrderModel, Long> implements 
 						touristTicketService.insert(model);
 					}
 				}
+				return null;
 			} else {
 				// 下单支付失败
 				clientPoint("下单支付失败");
@@ -416,6 +417,7 @@ public class DisneyOrderBiz extends BaseBiz<TouristOrderModel, Long> implements 
 			// 不管占位操作结果如何，减少此入园日期，下单执行数1次
 			DisneyUtil.handle(key, model.getOrderId(), DisneyUtil.Signal.REDUCE, ticketNum);
 		}
+		return ticketNum;
 	}
 
 }

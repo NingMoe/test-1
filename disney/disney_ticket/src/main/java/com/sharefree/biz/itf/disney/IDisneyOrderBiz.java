@@ -64,7 +64,8 @@ public interface IDisneyOrderBiz {
 	 * 
 	 * @param model
 	 *            下单信息
+	 * @return 失败返回下单支付人数
 	 * @throws CommonException
 	 */
-	public void pay(TouristTicketModel model) throws CommonException;
+	public Integer pay(TouristTicketModel model) throws CommonException;
 }
