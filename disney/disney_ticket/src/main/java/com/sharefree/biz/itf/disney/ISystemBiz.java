@@ -3,7 +3,6 @@ package com.sharefree.biz.itf.disney;
 import java.util.List;
 
 import com.sharefree.common.CommonException;
-import com.sharefree.jobs.disney.JobInfo;
 import com.sharefree.model.disney.ConstModel;
 import com.sharefree.model.disney.TicketDistributionModel;
 
@@ -32,19 +31,5 @@ public interface ISystemBiz {
 	 * @throws CommonException
 	 */
 	void updateConst(List<ConstModel> models) throws CommonException;
-
-	/**
-	 * 获取任务列表
-	 * 
-	 * @throws CommonException
-	 */
-	List<JobInfo> getJobs() throws CommonException;
-
-	/**
-	 * 修改任务
-	 * 
-	 * @throws CommonException
-	 */
-	JobInfo updateJob(JobInfo job) throws CommonException;
 
 }

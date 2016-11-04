@@ -93,6 +93,9 @@ public class DisneyConst {
 	// 占位行程id最大检索数
 	public static Integer TRIP_ROW_MAX = 1;
 
+	@Comment("执行检查库存的频率")
+	public static Integer CHECK_OCCUPY_PERIOD = 10;
+
 	@Comment("是否执行占位JOB")
 	public static Boolean ORDER_OCCUPY_RUN = true;
 

@@ -7,19 +7,19 @@ import org.nutz.dao.Dao;
 import org.nutz.dao.impl.FileSqlManager;
 import org.nutz.dao.impl.NutDao;
 import org.nutz.ioc.Ioc;
+import org.nutz.lang.Tasks;
 import org.nutz.mvc.NutConfig;
 import org.nutz.mvc.Setup;
 
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 
-import com.sharefree.jobs.disney.CheckTicketStockJob;
 import com.sharefree.model.disney.ConstModel;
+import com.sharefree.runner.disney.BaseRunner;
 import com.sharefree.service.imp.RedisService;
 import com.sharefree.service.imp.disney.ConstService;
 import com.sharefree.service.itf.disney.IConstService;
 import com.sharefree.utils.ConstInit;
-import com.sharefree.utils.QuartzManager;
 import com.sharefree.utils.StringUtil;
 import com.sharefree.utils.WebSystemUtils;
 
@@ -38,10 +38,6 @@ public class MainSetup implements Setup {
 
 		// 初始化静态数据
 		initConsts(ioc);
-
-		// 启动job
-		// JobInfo.updateJob(new JobInfo(JobInfo.JobStateOpt.RUN));
-		QuartzManager.addSimpleJob("testJob", "testJobGroup", "testTrigger", "testTriggerGroup", CheckTicketStockJob.class, null, null, -1, 10, null);
 
 		log.info("系统启动成功");
 	}
@@ -65,12 +61,11 @@ public class MainSetup implements Setup {
 	 * @param ioc
 	 */
 	private void initConsts(Ioc ioc) {
-		// 获取Dao实例
-		Dao dao = ioc.get(Dao.class);
+		BaseRunner.setIoc(ioc);
 		// 获取ConstService实例
 		IConstService constService = ioc.get(ConstService.class);
 		List<ConstModel> models = constService.query(new ConstModel());
-		ConstInit.init(models, dao);
+		ConstInit.init(models);
 	}
 
 	/**
@@ -93,6 +88,7 @@ public class MainSetup implements Setup {
 	public void destroy(NutConfig conf) {
 		// 清除所有登陆token
 		WebSystemUtils.clearToken();
+		Tasks.depose();
 		log.info("系统关闭成功");
 	}
 

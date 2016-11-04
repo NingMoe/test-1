@@ -1,6 +1,5 @@
 package com.sharefree.biz.imp.disney;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.nutz.ioc.loader.annotation.Inject;
@@ -10,7 +9,6 @@ import com.sharefree.biz.itf.disney.ISystemBiz;
 import com.sharefree.common.CommonException;
 import com.sharefree.constant.DisneyConst;
 import com.sharefree.constant.SqlsConst;
-import com.sharefree.jobs.disney.JobInfo;
 import com.sharefree.model.disney.ConstModel;
 import com.sharefree.model.disney.OccupyDetailModel;
 import com.sharefree.model.disney.TicketDistributionModel;
@@ -97,25 +95,12 @@ public class SystemBiz implements ISystemBiz {
 	public void updateConst(List<ConstModel> models) throws CommonException {
 		if (models != null && models.size() > 0) {
 			constService.updateById(models, true);
-			ConstInit.init(models, null);
+			ConstInit.init(models);
 		}
 	}
 
 	@Override
 	public List<ConstModel> getConst() throws CommonException {
 		return constService.query(new ConstModel());
-	}
-
-	@Override
-	public List<JobInfo> getJobs() throws CommonException {
-		List<JobInfo> jobs = new ArrayList<JobInfo>();
-		JobInfo job = new JobInfo();
-		jobs.add(job);
-		return jobs;
-	}
-
-	@Override
-	public JobInfo updateJob(JobInfo job) throws CommonException {
-		return JobInfo.updateJob(job);
 	}
 }

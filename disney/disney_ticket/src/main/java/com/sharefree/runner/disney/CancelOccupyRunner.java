@@ -1,15 +1,13 @@
 package com.sharefree.runner.disney;
 
-import org.nutz.mvc.Mvcs;
-
 import com.sharefree.front.imp.DisneyFront;
 import com.sharefree.front.itf.IDisneyFront;
 
-public class CancelOccupyRunner implements Runnable {
+public class CancelOccupyRunner extends BaseRunner implements Runnable {
 
 	private Long orderId;
 
-	private IDisneyFront disneyFront = Mvcs.getIoc().get(DisneyFront.class);
+	private IDisneyFront disneyFront = ioc.get(DisneyFront.class);
 
 	public CancelOccupyRunner(Long orderId) {
 		this.orderId = orderId;

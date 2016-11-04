@@ -8,15 +8,19 @@ import org.nutz.dao.Dao;
 import org.nutz.dao.Sqls;
 import org.nutz.dao.entity.annotation.Comment;
 import org.nutz.dao.sql.Sql;
+import org.nutz.mvc.Mvcs;
 
 import com.sharefree.constant.DisneyConst;
 import com.sharefree.constant.SqlsConst;
 import com.sharefree.model.disney.ConstModel;
+import com.sharefree.runner.disney.CheckTicketStockRunner;
 
 public class ConstInit {
 
+	public static Dao dao = Mvcs.getIoc().get(Dao.class);
+
 	// 初始化静态数据
-	public static void init(List<ConstModel> models, Dao dao) {
+	public static void init(List<ConstModel> models) {
 		initValue(DisneyConst.class, models);
 		initPassengerRowMax(dao);
 		initTripRowMax(dao);
@@ -46,6 +50,11 @@ public class ConstInit {
 								declaredField.set(clazz, new BigDecimal(model.getConstValue()));
 							}
 						}
+					}
+					// 附加操作（临时代码）
+					if ("CHECK_OCCUPY_PERIOD".equals(model.getConstKey())) {
+						// 启动job
+						TasksManager.restartTask(new CheckTicketStockRunner(), Integer.valueOf(model.getConstValue()));
 					}
 				} catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
 					e.printStackTrace();
