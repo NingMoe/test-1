@@ -59,18 +59,18 @@ public class DisneyConst {
 	@Comment("东航迪斯尼运价编码")
 	public static String CRAWLER_SERVICE_PATAM_FREIGHTNO = "DM-60BJOT";
 
-	@Comment("YEEGO接口.URL")
-	public static String YEEGO_REQUEST_URL = "http://180.97.80.177:8083/travel_web/yeeGo";
-	@Comment("YEEGO服务编码.生成PNR")
-	public static String YEEGO_SERVICE_CODE_CREATE_PNR = "/createPnr";
-	@Comment("YEEGO服务编码.取消PNR")
-	public static String YEEGO_SERVICE_CODE_CANCEL_PNR = "/cancelPnr/";
-	@Comment("YEEGO服务编码.解析PNR(RT&PAT)")
-	public static String YEEGO_SERVICE_CODE_ANALYSIS_PNR = "/analysisPnr/";
-	@Comment("YEEGO服务编码.解析RT信息")
-	public static String YEEGO_SERVICE_CODE_ANALYSIS_RT = "/analysisRt/";
-	@Comment("YEEGO服务编码.解析PAT信息")
-	public static String YEEGO_SERVICE_CODE_ANALYSIS_PAT = "/analysisPat/";
+	@Comment("ETERM接口.URL")
+	public static String ETERM_REQUEST_URL = "http://180.97.80.177:8083/travel_web/eterm/ibettu";
+	@Comment("ETERM服务编码.生成PNR")
+	public static String ETERM_SERVICE_CODE_CREATE_PNR = "/createPnr";
+	@Comment("ETERM服务编码.取消PNR")
+	public static String ETERM_SERVICE_CODE_CANCEL_PNR = "/cancelPnr/";
+	@Comment("ETERM服务编码.解析PNR(RT&PAT)")
+	public static String ETERM_SERVICE_CODE_ANALYSIS_PNR = "/analysisPnr/";
+	@Comment("ETERM服务编码.解析RT信息")
+	public static String ETERM_SERVICE_CODE_ANALYSIS_RT = "/analysisRt/";
+	@Comment("ETERM服务编码.解析PAT信息")
+	public static String ETERM_SERVICE_CODE_ANALYSIS_PAT = "/analysisPat/";
 
 	@Comment("检查门票库存最多越天数")
 	public static Integer CHECK_STOCK_DAY_MAX = 30;

@@ -24,7 +24,7 @@ public class EtermBiz implements IEtermBiz {
 		String param = Json.toJson(order, JsonFormat.compact());
 		log.debug("请求参数: " + param);
 		// 发送请求并接受回执
-		String resp = URLConnUtils.sendPost(DisneyConst.YEEGO_REQUEST_URL + DisneyConst.YEEGO_SERVICE_CODE_CREATE_PNR, param, 30000, 30000);
+		String resp = URLConnUtils.sendPost(DisneyConst.ETERM_REQUEST_URL + DisneyConst.ETERM_SERVICE_CODE_CREATE_PNR, param, 30000, 30000);
 		log.debug("回复数据: " + resp);
 		String pnr[] = null;
 		if (StringUtil.isNotEmpty(resp)) {
@@ -50,7 +50,7 @@ public class EtermBiz implements IEtermBiz {
 		boolean successFlag = false;
 		log.debug("请求参数: " + pnr);
 		// 发送请求并接受回执
-		String resp = URLConnUtils.sendGet(DisneyConst.YEEGO_REQUEST_URL + DisneyConst.YEEGO_SERVICE_CODE_CANCEL_PNR + pnr, null);
+		String resp = URLConnUtils.sendGet(DisneyConst.ETERM_REQUEST_URL + DisneyConst.ETERM_SERVICE_CODE_CANCEL_PNR + pnr, null);
 		log.debug("回复数据: " + resp);
 		if (StringUtil.isNotEmpty(resp)) {
 			// 解析返回数据
@@ -78,7 +78,7 @@ public class EtermBiz implements IEtermBiz {
 	public PlaneOrderModel analysisPNR(String pnr) throws CommonException {
 		log.debug("请求参数: " + pnr);
 		// 发送请求并接受回执
-		String resp = URLConnUtils.sendGet(DisneyConst.YEEGO_REQUEST_URL + DisneyConst.YEEGO_SERVICE_CODE_ANALYSIS_PNR + pnr, null);
+		String resp = URLConnUtils.sendGet(DisneyConst.ETERM_REQUEST_URL + DisneyConst.ETERM_SERVICE_CODE_ANALYSIS_PNR + pnr, null);
 		log.debug("回复数据: " + resp);
 		PlaneOrderModel model = null;
 		if (StringUtil.isNotEmpty(resp)) {
@@ -110,7 +110,7 @@ public class EtermBiz implements IEtermBiz {
 	public PlaneOrderModel analysisRT(String pnr) throws CommonException {
 		log.debug("请求参数: " + pnr);
 		// 发送请求并接受回执
-		String resp = URLConnUtils.sendGet(DisneyConst.YEEGO_REQUEST_URL + DisneyConst.YEEGO_SERVICE_CODE_ANALYSIS_RT + pnr, null);
+		String resp = URLConnUtils.sendGet(DisneyConst.ETERM_REQUEST_URL + DisneyConst.ETERM_SERVICE_CODE_ANALYSIS_RT + pnr, null);
 		log.debug("回复数据: " + resp);
 		PlaneOrderModel model = null;
 		if (StringUtil.isNotEmpty(resp)) {
@@ -140,7 +140,7 @@ public class EtermBiz implements IEtermBiz {
 	public PlaneOrderModel analysisPAT(String pnr) throws CommonException {
 		log.debug("请求参数: " + pnr);
 		// 发送请求并接受回执
-		String resp = URLConnUtils.sendGet(DisneyConst.YEEGO_REQUEST_URL + DisneyConst.YEEGO_SERVICE_CODE_ANALYSIS_PAT + pnr, null);
+		String resp = URLConnUtils.sendGet(DisneyConst.ETERM_REQUEST_URL + DisneyConst.ETERM_SERVICE_CODE_ANALYSIS_PAT + pnr, null);
 		log.debug("回复数据: " + resp);
 		PlaneOrderModel model = null;
 		if (StringUtil.isNotEmpty(resp)) {
