@@ -6,6 +6,8 @@ public class SystemConst {
 
 	public static String REDIS_KEY_LOGIN_TOKEN = "OPT_TOKEN";
 
+	public static String REDIS_KEY_TICKET_STOCK = "TICKET_STOCK";
+
 	// 登陆token失效时间（秒）(默认10小时)
 	public static int LOGIN_TOKEN_TIMEOUT = 10 * 60 * 60;
 

@@ -1,17 +1,6 @@
 package com.sharefree.front.imp;
 
-import java.util.Date;
-import java.util.List;
-
-import org.nutz.ioc.loader.annotation.Inject;
-import org.nutz.ioc.loader.annotation.IocBean;
-
-import com.sharefree.biz.itf.disney.ICrawlerBiz;
-import com.sharefree.biz.itf.disney.IDisneyOrderBiz;
-import com.sharefree.biz.itf.disney.IEtermBiz;
-import com.sharefree.biz.itf.disney.IOccupyDetailBiz;
-import com.sharefree.biz.itf.disney.ITicketStockBiz;
-import com.sharefree.biz.itf.disney.ITouristOrderBiz;
+import com.sharefree.biz.itf.disney.*;
 import com.sharefree.common.CommonException;
 import com.sharefree.constant.DisneyConst;
 import com.sharefree.front.itf.IDisneyFront;
@@ -23,6 +12,12 @@ import com.sharefree.model.plane.PlaneOrderModel;
 import com.sharefree.model.plane.TicketPassengerModel;
 import com.sharefree.service.itf.ISystemService;
 import com.sharefree.utils.CommonUtil;
+import com.sharefree.utils.WebSystemUtils;
+import org.nutz.ioc.loader.annotation.Inject;
+import org.nutz.ioc.loader.annotation.IocBean;
+
+import java.util.Date;
+import java.util.List;
 
 @IocBean
 public class DisneyFront extends BaseFront implements IDisneyFront {
@@ -60,6 +55,7 @@ public class DisneyFront extends BaseFront implements IDisneyFront {
 	public void check_occupy(Date visitDateF, Date visitDateT) throws CommonException {
 		// Step 1 检查门票库存Job
 		List<TicketStockModel> models = check(visitDateF, visitDateT);
+		WebSystemUtils.countStock(models);
 		if (DisneyConst.ORDER_OCCUPY_RUN) {
 			// Step 2 执行占位Job
 			disneyOrderBiz.check_occupy(models);

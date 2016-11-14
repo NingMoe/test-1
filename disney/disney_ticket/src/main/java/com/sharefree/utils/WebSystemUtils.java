@@ -1,18 +1,17 @@
 package com.sharefree.utils;
 
-import java.util.Set;
-
-import javax.servlet.http.HttpServletRequest;
-
+import com.sharefree.common.CommonException;
+import com.sharefree.constant.SystemConst;
+import com.sharefree.model.disney.TicketStockModel;
+import com.sharefree.model.system.OperatorModel;
+import com.sharefree.service.itf.IRedisService;
+import com.sharefree.websocket.disney.DisneySocket;
 import org.apache.log4j.Logger;
 import org.nutz.json.Json;
 import org.nutz.json.JsonFormat;
 
-import com.sharefree.common.CommonException;
-import com.sharefree.constant.SystemConst;
-import com.sharefree.model.system.OperatorModel;
-import com.sharefree.service.itf.IRedisService;
-import com.sharefree.websocket.disney.DisneySocket;
+import javax.servlet.http.HttpServletRequest;
+import java.util.*;
 
 public class WebSystemUtils {
 
@@ -149,6 +148,51 @@ public class WebSystemUtils {
 	 */
 	public static String getTokenKey(String token) {
 		return Base64.decode(token);
+	}
+
+	/**
+	 * 统计库存
+	 */
+	public static void countStock(List<TicketStockModel> models) {
+		if(models != null && models.size() > 0){
+			//
+			String key = SystemConst.REDIS_KEY_TICKET_STOCK;
+			// 获取对象
+			String value = redisService.get(key);
+			Map<String, Integer> stock = null;
+			if(StringUtil.isNotEmpty(value)){
+				// 解析对象
+				stock = Json.fromJson(Map.class, value);
+				for(TicketStockModel model : models){
+					String date = DateUtil.parseDateToString(model.getVisitDate(), DateUtil.FORMAT1);
+					if(stock.containsKey(date)){
+						if(stock.get(date) < model.getStock())
+							stock.put(date, stock.get(date) + model.getStock());
+					}else{
+						stock.put(date, model.getStock());
+					}
+				}
+				sortMap(stock);
+			}else{
+				stock = new LinkedHashMap<>();
+				for(TicketStockModel model : models){
+					String date = DateUtil.parseDateToString(model.getVisitDate(), DateUtil.FORMAT1);
+					stock.put(date, model.getStock());
+				}
+
+			}
+			redisService.set(key, Json.toJson(stock, JsonFormat.compact()));
+		}
+	}
+
+	public static void sortMap(Map<String, Integer> stock){
+		List<Map.Entry<String,Integer>> list = new ArrayList<Map.Entry<String,Integer>>(stock.entrySet());
+		Collections.sort(list, new Comparator<Map.Entry<String, Integer>>() {
+			@Override
+			public int compare(Map.Entry<String, Integer> o1, Map.Entry<String, Integer> o2) {
+				return o1.getValue().compareTo(o2.getValue());
+			}
+		});
 	}
 
 }
