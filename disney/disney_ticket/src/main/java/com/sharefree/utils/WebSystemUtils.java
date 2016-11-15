@@ -36,7 +36,7 @@ public class WebSystemUtils {
 		// 获取对象
 		OperatorModel model = getLoginOpt(key);
 		// 重置超时时间
-		setTokenValue(token, model);
+		setTokenValue(key, model);
 		DisneySocket.resetTimeOut(token);
 		return true;
 	}
