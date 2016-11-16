@@ -172,7 +172,7 @@ public class WebSystemUtils {
 						stock.put(date, model.getStock());
 					}
 				}
-				sortMap(stock);
+                stock = sortMap(stock);
 			}else{
 				stock = new LinkedHashMap<>();
 				for(TicketStockModel model : models){
@@ -185,14 +185,16 @@ public class WebSystemUtils {
 		}
 	}
 
-	public static void sortMap(Map<String, Integer> stock){
-		List<Map.Entry<String,Integer>> list = new ArrayList<Map.Entry<String,Integer>>(stock.entrySet());
-		Collections.sort(list, new Comparator<Map.Entry<String, Integer>>() {
-			@Override
-			public int compare(Map.Entry<String, Integer> o1, Map.Entry<String, Integer> o2) {
-				return o1.getValue().compareTo(o2.getValue());
-			}
-		});
+	public static Map<String, Integer> sortMap(Map<String, Integer> stock){
+        if (stock == null || stock.isEmpty()) {
+            return null;
+        }
+        Map<String, Integer> sortedMap = new TreeMap<>(new Comparator<String>() {
+            public int compare(String key1, String key2) {
+                return key1.compareTo(key2);
+            }});
+        sortedMap.putAll(stock);
+        return sortedMap;
 	}
 
 }
