@@ -1,8 +1,0 @@
-<component name="ArtifactManager">
-  <artifact type="war" name="suanmilk:war">
-    <output-path>$PROJECT_DIR$/suanmilk/target</output-path>
-    <root id="archive" name="suanmilk.war">
-      <element id="artifact" artifact-name="suanmilk:war exploded" />
-    </root>
-  </artifact>
-</component>
