@@ -1,0 +1,38 @@
+[
+  {
+    "text": "用户管理",
+    "id": "1",
+    "cls": "folder",
+    "leaf": false,
+    "expanded": true,
+    "children": [
+      {
+        "text": "用户列表",
+        "id": "2",
+        "cls": "file",
+        "url": "operatorlist",
+        "controller": "Operators",
+        "leaf": true,
+        "children": []
+      }
+    ]
+  },
+  {
+    "text": "分组管理",
+    "id": "3",
+    "cls": "folder",
+    "leaf": false,
+    "expanded": false,
+    "children": [
+      {
+        "text": "选题分组确认",
+        "id": "4",
+        "cls": "file",
+        "url": "operatorlist",
+        "controller": "Operators",
+        "leaf": true,
+        "children": []
+      }
+    ]
+  }
+]
