@@ -1,12 +1,9 @@
 /**
  * 程序控制器
  */
-Ext.define('CA.controller.MainController', {
+Ext.define('DSN.controller.MainController', {
     extend: 'Ext.app.Controller',
-    requires: [],
-    views: ['system.Menu'],
-    ctr: {},
-    init: function () {
+    init: function () {/*
         // 初始化部分，下面是部分是给菜单绑定单击事件
         this.control({
             'dynamicmenu': {
@@ -14,31 +11,45 @@ Ext.define('CA.controller.MainController', {
             }
         });
     },
-    loadFunction: function (view, rec, item, index, eventObj) {
-        var self = this;
-        var tabs = Ext.getCmp('tabs');// 获取主选项卡
-        var tabId = 'functionTab' + rec.get('functionId');// 获取记录的的值
-        var tab = tabs.queryById(tabId);// 根据id获取选项卡
-        if (tab) {
-            tabs.setActiveTab(tab);// 激活选项卡
-        } else {
-            tabs.getEl().mask('加载中...');
-            Ext.require('CC.controller.' + rec.get('functionController'),
-                function ()     {// 加载须要的控制器
-                    Ext.require(rec.get('functionPanel'),
-                        function () {// 加载需要的控制面板
-                            self.getController(rec
-                                .get('functionController'));// 控制器导入
-                            var tab = Ext.create(
-                                rec.get('functionPanel'), {// 创建tablpanel
-                                    title: rec.get('text'),
-                                    id: tabId
-                                });
-                            tabs.insert(1, tab);// 添加到第一位中
-                            tabs.setActiveTab(tab);// 激活
-                            tabs.unmask();// 等待取消
-                        });
-                });
+    loadFunction: function (view, rec) {
+        var record = rec.raw;
+        if (record.leaf) {
+            // var app =DSN.getApplication();
+            // 动态加载controller
+            var controller = this.addController(record.ctrl);
+            if (controller) {
+                var desktop = Ext.getCmp("tabPanels");
+                var tabId = 'tabPanel' + record.id;
+                var tab = desktop.getComponent(tabId);
+                if (!tab) {
+                    desktop.getEl().mask('加载中...');
+                    tab = controller.mainView(tabId, record);
+                    // desktop.add(newTab);
+                    desktop.insert(1, tab);// 添加到第一位中
+                    desktop.setActiveTab(tab);
+                    desktop.unmask();// 等待取消
+                } else {
+                    desktop.setActiveTab(tab);
+                }
+            }
         }
+    },
+    addController: function(name) {
+        var app =DSN.getApplication();
+        var controller = app.controllers.get(name);
+
+        if (!controller) {
+            var path = app.getModuleClassName(name, 'controller');
+            Ext.require(path, function () {
+                controller = Ext.create(app.getModuleClassName(name, 'controller'), {
+                    application: app,
+                    id: name
+                });
+                app.controllers.add(controller);
+            });
+        }
+
+        return controller;*/
     }
+
 });

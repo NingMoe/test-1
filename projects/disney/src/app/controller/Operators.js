@@ -1,5 +1,5 @@
 Ext.define('DSN.controller.Operators', {
-    extend: 'Ext.app.Controller',
+    extend: 'DSN.controller.BaseController',
     views: [
         'operator.List'
     ],

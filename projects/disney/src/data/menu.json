@@ -10,8 +10,7 @@
         "text": "用户列表",
         "id": "2",
         "cls": "file",
-        "url": "operatorlist",
-        "controller": "Operators",
+        "ctrl": "Operators",
         "leaf": true,
         "children": []
       }
@@ -28,8 +27,7 @@
         "text": "选题分组确认",
         "id": "4",
         "cls": "file",
-        "url": "operatorlist",
-        "controller": "Operators",
+        "ctrl": "system.Menu",
         "leaf": true,
         "children": []
       }
