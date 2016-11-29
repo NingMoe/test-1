@@ -1,7 +1,5 @@
 Ext.define('DSN.controller.system.Menu', {
-    extend: 'Ext.app.Controller',
-    // stores: ['system.Menus'],
-    // models: ['system.Menu'],
+    extend: 'DSN.controller.BaseController',
     views: ['operator.List'],
     init: function () {
         // 下面是给菜单绑定单击事件

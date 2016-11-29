@@ -2,15 +2,15 @@
   {
     "text": "用户管理",
     "id": "1",
-    "cls": "folder",
+//    "iconCls": "folder",
     "leaf": false,
     "expanded": true,
     "children": [
       {
         "text": "用户列表",
         "id": "2",
-        "cls": "file",
-        "ctrl": "Operators",
+//        "iconCls": "Cog",
+        "ctrl": "system.Operators",
         "leaf": true,
         "children": []
       }
@@ -19,14 +19,14 @@
   {
     "text": "分组管理",
     "id": "3",
-    "cls": "folder",
+//    "iconCls": "folder",
     "leaf": false,
     "expanded": false,
     "children": [
       {
         "text": "选题分组确认",
         "id": "4",
-        "cls": "file",
+//        "iconCls": "file",
         "ctrl": "system.Menu",
         "leaf": true,
         "children": []

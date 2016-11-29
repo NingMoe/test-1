@@ -1,6 +1,5 @@
-Ext.define('DSN.store.system.Menus', {
+Ext.define('DSN.store.system.Menu', {
     extend: 'Ext.data.TreeStore',
-    // requires: 'DSN.model.system.Menu',
     model: 'DSN.model.system.Menu',
     autoLoad: true,
     proxy: {

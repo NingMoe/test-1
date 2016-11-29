@@ -1,5 +1,8 @@
-Ext.define('DSN.controller.Operators', {
+Ext.define('DSN.controller.system.Operators', {
     extend: 'DSN.controller.BaseController',
+    config: {
+        mainView: 'operatorlist'
+    },
     views: [
         'operator.List'
     ],

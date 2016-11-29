@@ -3,7 +3,7 @@ Ext.Loader.setConfig({
     enabled: true
 });
 //  定义application
-var application = new Ext.app.Application({
+Ext.application({
     name: 'DSN', // 项目名称
     appFolder: 'app', // 指定根目录
     autoCreateViewport: true, // 文件：app/view/Viewport.js 必须存在 ！

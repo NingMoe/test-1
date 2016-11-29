@@ -3,13 +3,15 @@
  */
 Ext.define('DSN.controller.BaseController', {
     extend: 'Ext.app.Controller',
-
-    mainView: function(tabId, record){
-        return Ext.createWidget('operatorlist', {
-            id: tabId,
-            title: record.text,
-            closable: true
-        });
+    showView: function(tabId, record){
+        if(this.mainView){
+            return Ext.createWidget(this.mainView, {
+                id: tabId,
+                title: record.text,
+                closable: true
+            });
+        }else{
+            // 没有定义主页面
+        }
     }
-
 });

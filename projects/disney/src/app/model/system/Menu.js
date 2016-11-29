@@ -1,5 +1,10 @@
 Ext.define('DSN.model.system.Menu', {
     extend: 'Ext.data.Model',
-    fields: ['id', 'text', 'cls', 'stores', 'columns', 'url',
-        'expanded', 'optype']
+    fields: [{name : "id",type : "string"},
+        {name : "text",type : "string"},
+        {name : "iconCls",type : "string"},
+        {name : "leaf",type : "boolean"},
+        {name : "expanded",type : "boolean"},
+        {name : 'url',type:"string"},
+        {name : 'description',type:"string"}]
 });
