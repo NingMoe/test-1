@@ -4,11 +4,11 @@ Ext.define('DSN.controller.system.Menu', {
         // 加载菜单树
         this.loadTree();
         // 下面是给菜单绑定单击事件
-        this.control({
-            '#app-menu': {
-                itemclick: this.showView
-            }
-        });
+        // this.control({
+        //     'dynamicmenu': {
+        //         itemclick: this.showView
+        //     }
+        // });
     },
     showView: function (view, rec) {
         console.log('加载窗口信息...')
@@ -40,13 +40,18 @@ Ext.define('DSN.controller.system.Menu', {
      * @param json
      */
     buildTree: function (node) {
+        var self = this;
         return Ext.create('Ext.tree.Panel', {
             rootVisible: false,
             border: false,
+            // lines: false, // 不显示线
             store: Ext.create('Ext.data.TreeStore', {
                 root: {
                     expanded: true,
                     children: node.children
+                },
+                listeners : {
+                    itemclick : self.showView
                 }
             })
         });

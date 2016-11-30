@@ -2,7 +2,8 @@ Ext.define('DSN.view.Viewport', {
     extend: 'Ext.Viewport',
     layout: 'fit',
     hideBorders: false,
-    views: [
+    // views: [
+    requires: [
         'DSN.view.system.Header',
         'DSN.view.system.Menu',
         'DSN.view.system.TabPanel',

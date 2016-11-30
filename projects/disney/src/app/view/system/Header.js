@@ -1,7 +1,7 @@
 Ext.define('DSN.view.system.Header', {
     extend: 'Ext.panel.Panel',
     border: false,
-    layout: 'anchor',
+    // layout: 'anchor',
     region: 'north',
 //	height : 50,
     items: [new Ext.Toolbar({
