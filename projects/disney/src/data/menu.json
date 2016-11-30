@@ -1,36 +1,79 @@
-[
-  {
-    "text": "用户管理",
-    "id": "1",
-//    "iconCls": "folder",
-    "leaf": false,
-    "expanded": true,
-    "children": [
-      {
-        "text": "用户列表",
-        "id": "2",
-//        "iconCls": "Cog",
-        "ctrl": "system.Operators",
-        "leaf": true,
-        "children": []
-      }
-    ]
-  },
-  {
-    "text": "分组管理",
-    "id": "3",
-//    "iconCls": "folder",
-    "leaf": false,
-    "expanded": false,
-    "children": [
-      {
-        "text": "选题分组确认",
-        "id": "4",
-//        "iconCls": "file",
-        "ctrl": "system.Menu",
-        "leaf": true,
-        "children": []
-      }
-    ]
-  }
-]
+{
+  "success": true,
+  "msg": "操作成功",
+  "results": [
+    {
+      "id": "01000000",
+      "text": "订单管理",
+      "level": "1",
+      "expanded": true,
+      "leaf": false,
+      "children": [
+        {
+          "id": "01010000",
+          "text": "订单查询",
+          "iconCls": "",
+          "level": "2",
+          "leaf": true
+        }
+      ]
+    },
+    {
+      "id": "09000000",
+      "text": "系统管理",
+      "level": "1",
+      "expanded": true,
+      "leaf": false,
+      "children": [
+        {
+          "id": "09010000",
+          "text": "服务管理",
+          "level": "2",
+          "leaf": true
+        },
+        {
+          "id": "09020000",
+          "text": "参数设置",
+          "level": "2",
+          "expanded": true,
+          "leaf": false,
+          "children": [
+            {
+              "id": "09020100",
+              "text": "系统参数",
+              "level": "3",
+              "leaf": true
+            },
+            {
+              "id": "09020200",
+              "text": "请求参数",
+              "level": "3",
+              "leaf": true
+            },
+            {
+              "id": "09020300",
+              "text": "定时参数",
+              "level": "3",
+              "expanded": true,
+              "leaf": false,
+              "children": [
+                {
+                  "id": "09020301",
+                  "text": "库存检测",
+                  "level": "4",
+                  "leaf": true
+                },
+                {
+                  "id": "09020302",
+                  "text": "订单出票",
+                  "level": "4",
+                  "leaf": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

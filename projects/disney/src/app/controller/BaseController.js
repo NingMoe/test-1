@@ -3,7 +3,7 @@
  */
 Ext.define('DSN.controller.BaseController', {
     extend: 'Ext.app.Controller',
-    showView: function(tabId, record){
+    getView: function(tabId, record){
         if(this.mainView){
             return Ext.createWidget(this.mainView, {
                 id: tabId,

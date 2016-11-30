@@ -1,5 +1,6 @@
 Ext.define('DSN.view.system.Menu', {
-    extend: 'Ext.tree.Panel',
+    extend: 'Ext.panel.Panel',
+    layout: 'accordion', //手风琴布局
     alias: 'widget.dynamicmenu',
     initComponent: function () {
         Ext.apply(this, {
@@ -7,15 +8,15 @@ Ext.define('DSN.view.system.Menu', {
             title: '系统菜单',
             margins: '1 1 0 0',
             region: 'west',
+            collapsible: true, // 可以折叠
             border: true,
             // split: true,
             width: 200,
-            animate : false, // 有滑动效果
-            rootVisible: false,
-            containerScroll: false,
-            collapsible: true, // 可以折叠
-            autoScroll: false,
-            store: Ext.create('DSN.store.system.Menu')
+            animate: false, // 有滑动效果
+
+            // containerScroll: false,
+            // activeOnTop: false,
+            hideCollapseTool: true
         });
         this.callParent(arguments);
     }

@@ -4,11 +4,12 @@ Ext.define('DSN.store.system.Menu', {
     autoLoad: true,
     proxy: {
         type: 'ajax',
-        async: true,
+        // url: 'api/system/menu',
         url: 'data/menu.json',
         reader: {
             type: 'json',
-            successProperty: 'success'
+            successProperty: 'success',
+            root: 'results'
         }
     }
 });
