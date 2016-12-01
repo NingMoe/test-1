@@ -11,7 +11,6 @@ Ext.define('DSN.controller.system.Menu', {
         // });
     },
     showView: function (view, rec) {
-        console.log('加载窗口信息...')
         var record = rec.raw;
         if (record.leaf) {
             var app = DSN.getApplication();
@@ -23,7 +22,7 @@ Ext.define('DSN.controller.system.Menu', {
                 var tab = desktop.getComponent(tabId);
                 if (!tab) {
                     desktop.getEl().mask('加载中...');
-                    tab = controller.getView(tabId, record);
+                    tab = controller.getTabView(tabId, record);
                     // desktop.add(newTab);
                     desktop.insert(1, tab);// 添加到第一位中
                     desktop.setActiveTab(tab);
@@ -40,7 +39,7 @@ Ext.define('DSN.controller.system.Menu', {
      * @param json
      */
     buildTree: function (node) {
-        var self = this;
+        var me = this;
         return Ext.create('Ext.tree.Panel', {
             rootVisible: false,
             border: false,
@@ -49,11 +48,11 @@ Ext.define('DSN.controller.system.Menu', {
                 root: {
                     expanded: true,
                     children: node.children
-                },
-                listeners : {
-                    itemclick : self.showView
                 }
-            })
+            }),
+            listeners: {
+                itemclick: me.showView
+            }
         });
     },
 
@@ -61,7 +60,7 @@ Ext.define('DSN.controller.system.Menu', {
      * 获取菜单树数据并加载菜单
      */
     loadTree: function () {
-        var self = this;
+        var me = this;
         Ext.Ajax.request({
             url: '/api/system/menu',
             method: 'GET',
@@ -75,7 +74,7 @@ Ext.define('DSN.controller.system.Menu', {
                             iconCls: el.iconCls,
                             layout: 'fit'
                         });
-                    panel.add(self.buildTree(el));
+                    panel.add(me.buildTree(el));
                     Ext.getCmp('app-menu').add(panel);
                 });
             },

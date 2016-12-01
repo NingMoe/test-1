@@ -13,6 +13,6 @@ Ext.application({
         Ext.getBody().unmask();
         // 页面加载完成之后执行
         Ext.tip.QuickTipManager.init();
-        
+
     }
 });

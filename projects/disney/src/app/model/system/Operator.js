@@ -1,4 +1,4 @@
-Ext.define('CA.model.model.Opt', {
+Ext.define('DSN.model.system.Operator', {
     extend: 'Ext.data.Model',
     fields: [{
         name: 'optId',

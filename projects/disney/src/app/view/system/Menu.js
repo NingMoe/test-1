@@ -1,7 +1,7 @@
 Ext.define('DSN.view.system.Menu', {
     extend: 'Ext.panel.Panel',
     layout: 'accordion', //手风琴布局
-    iconCls: 'User',
+    iconCls: 'Applicationsidelist',
     alias: 'widget.dynamicmenu',
     initComponent: function () {
         Ext.apply(this, {
@@ -11,6 +11,7 @@ Ext.define('DSN.view.system.Menu', {
             region: 'west',
             collapsible: true, // 可以折叠
             border: true,
+            collapseDirection: false,
             // split: true,
             width: 200
         });
