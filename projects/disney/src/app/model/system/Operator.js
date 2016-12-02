@@ -13,7 +13,10 @@ Ext.define('DSN.model.system.Operator', {
         name: 'optName',
         type: 'string'
     }, {
-        name: 'sex',
+        name: 'gender',
+        type: 'string'
+    }, {
+        name: 'status',
         type: 'string'
     }, {
         name: 'tel',

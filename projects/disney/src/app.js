@@ -10,9 +10,12 @@ Ext.application({
     autoCreateViewport: true, // 文件：app/view/Viewport.js 必须存在 ！
     controllers: ['MainController', 'system.Menu'],
     launch: function () {
-        Ext.getBody().unmask();
         // 页面加载完成之后执行
+        // 关闭再入系统提示罩
+        Ext.getBody().unmask();
+        // 初始化Tips
         Ext.tip.QuickTipManager.init();
-
+        // 引入工具类
+        Ext.require(['DSN.ux.CommonUtil', 'DSN.ux.BizUtil']);
     }
 });

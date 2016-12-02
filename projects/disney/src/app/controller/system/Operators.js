@@ -14,6 +14,6 @@ Ext.define('DSN.controller.system.Operators', {
         });
     },
     editOperator: function (grid, record) {
-        console.log('Double clicked on ' + record.get('name'));
+        console.log('Double clicked on ' + record.get('optName') + ' - ' + record.get('crtTime'));
     }
 });

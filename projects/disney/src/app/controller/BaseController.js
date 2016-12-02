@@ -8,6 +8,7 @@ Ext.define('DSN.controller.BaseController', {
             return Ext.createWidget(this.mainView, {
                 id: tabId,
                 title: record.text,
+                iconCls: record.iconCls,
                 closable: true
             });
         }else{
