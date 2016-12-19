@@ -7,7 +7,7 @@ Ext.define('DSN.view.system.Menu', {
         Ext.apply(this, {
             id: 'app-menu',
             // title: '系统菜单',
-            // margins: '1 1 0 0',
+            margins: '1 1 0 0',
             region: 'west',
             width: 200,
             minWidth: 150,

@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:p="http://www.springframework.org/schema/p" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:task="http://www.springframework.org/schema/task"
+	xmlns:jaxws="http://cxf.apache.org/jaxws"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+						 http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+						 http://www.springframework.org/schema/context
+						 http://www.springframework.org/schema/context/spring-context-3.0.xsd
+						 http://www.springframework.org/schema/aop
+						 http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+						 http://www.springframework.org/schema/tx
+						 http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+					     http://www.springframework.org/schema/task
+						 http://www.springframework.org/schema/task/spring-task-3.0.xsd
+						 http://cxf.apache.org/jaxws 
+    					 http://cxf.apache.org/schemas/jaxws.xsd">
+
+	<import resource="classpath:META-INF/cxf/cxf.xml" />
+	<!-- <import resource="classpath:META-INF/cxf/cxf-extension-soap.xml"/> -->
+	<import resource="classpath:META-INF/cxf/cxf-servlet.xml" />
+
+	<!-- 让系统识别注解 -->
+	<!-- <context:annotation-config /> -->
+	<!-- 自动扫描所有注解路径 -->
+	<context:component-scan base-package="com.jike" />
+
+	<context:property-placeholder location="classpath:config/database.properties" />
+
+	<!-- JNDI获取数据源(使用c3p0连接池) -->
+	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource"
+		destroy-method="close">
+		<property name="driverClass" value="${oracle.driverClassName}" />
+		<property name="jdbcUrl" value="${oracle.url}" />
+		<property name="user" value="${oracle.username}" />
+		<property name="password" value="${oracle.password}" />
+		<!-- 指定连接数据库连接池的最小连接数 -->
+		<property name="minPoolSize" value="5" />
+		<!-- 指定连接数据库连接池的最大连接数 -->
+		<property name="maxPoolSize" value="25" />
+		<!-- 指定连接数据库连接池的连接的最大空闲时间 -->
+		<property name="maxIdleTime" value="1800" />
+		<property name="acquireIncrement" value="2" />
+		<property name="maxStatements" value="0" />
+		<!-- 指定连接数据库连接池的初始化连接数 -->
+		<property name="initialPoolSize" value="3" />
+		<property name="idleConnectionTestPeriod" value="1800" />
+		<property name="acquireRetryAttempts" value="30" />
+		<property name="breakAfterAcquireFailure" value="false" />
+		<property name="testConnectionOnCheckout" value="false" />
+		<property name="testConnectionOnCheckin" value="true" />
+		<property name="IdleConnectionTestPeriod" value="120" />
+	</bean>
+
+	<!-- redis数据库连接配置 -->
+<!--  	<bean id="poolConfig" class="redis.clients.jedis.JedisPoolConfig">
+	</bean>
+
+	<bean id="connectionFactory"
+		class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory"
+		p:host-name="${redis.host}" p:port="${redis.port}" p:password="${redis.password}"
+		p:pool-config-ref="poolConfig" />
+
+	<bean id="redisTemplate" class="org.springframework.data.redis.core.StringRedisTemplate">
+		<property name="connectionFactory" ref="connectionFactory" />
+	</bean>
+ -->
+
+
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="configLocation" value="classpath:mybatis-config.xml" />
+		<!-- 所有Mapper.xml -->
+		<property name="mapperLocations" value="classpath*:com/jike/**/mapper/*Mapper.xml" />
+	</bean>
+
+	<!-- 自动注入所有Mapper -->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<!-- Mapper接口所在包名，Spring会自动查找其下的Mapper -->
+		<property name="basePackage" value="com.jike.**.dao" />
+	</bean>
+
+	<!-- (事务管理)transaction manager, use JtaTransactionManager for global tx -->
+	<bean id="transactionManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+
+	<!-- 事务（注解 ） -->
+	<tx:annotation-driven transaction-manager="transactionManager" />
+
+	<!-- 启动成功后 注入applicationContext -->
+	<bean class="com.jike.system.servlet.ApplicationInit" />
+
+</beans>
