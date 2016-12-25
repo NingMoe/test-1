@@ -1,0 +1,14 @@
+<ul class="layui-nav">
+    {{# layui.each(d.service, function(index, item){ }}
+    <li class="layui-nav-item">
+        <a href="{{ item.serviceid || '' }}">{{ item.name }}</a>
+        {{# if(item.child){ }}
+        <dl class="layui-nav-child">
+            {{# layui.each(item.child, function(index, child){ }}
+            <dd><a href="{{ child.serviceid || '' }}">{{ child.name }}</a></dd>
+            {{# }); }}
+        </dl>
+        {{# } }}
+    </li>
+    {{# }); }}
+</ul>

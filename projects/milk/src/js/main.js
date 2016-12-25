@@ -4,24 +4,50 @@
 layui.config({
     base: '/ux/'
 });
-layui.use(['jquery', 'element', 'fileload'], function () {
-    var $ = layui.jquery, element = layui.element(), fileload = layui.fileload;
+layui.use(['layer', 'element', 'laydlt'], function () {
+    var layer = layui.layer, element = layui.element(), laydlt = layui.laydlt;
+    laydlt.set({
+        'elem': element
+    });
+    var app_head_data = {
+        "service": [{"name": "最新活动", "serviceid": "1000"}, {
+            "name": "产品",
+            "serviceid": "2000",
+            "child": [{"name": "选项1", "serviceid": "2001"}, {"name": "选项2", "serviceid": "2002"}, {
+                "name": "选项3",
+                "serviceid": "2003"
+            }],
+            "expend": true
+        }, {"name": "大数据", "serviceid": "3000"}, {
+            "name": "解决方案",
+            "serviceid": "4000",
+            "child": [{"name": "移动模块", "serviceid": "4001"}, {"name": "后台模版", "serviceid": "4002"}, {
+                "name": "电商平台",
+                "serviceid": "4003"
+            }],
+            "expend": false
+        }, {"name": "社区", "serviceid": "5000"}]
+    }
+        , app_menu_data = {
+        "title": "垂直导航菜单"
 
-    var data = {
-        "title": "Layui常用模块"
-        , "list": [{"modname": "弹层", "alias": "layer", "site": "layer.layui.com"}, {"modname": "表单", "alias": "form"}]
     };
-
-    fileload.add('/html/milk_head.html', data, $('#milk_head'), milk_top);
-    /*    $('#milk_head').load('/html/milk_head.html', function () {
-     var getTpl = milk_head.innerHTML;
-     laytpl(getTpl).render(data, function (html) {
-     milk_top.innerHTML = html;
-     });
-     });*/
-
+    <!--加载主页面头部-->
+    laydlt.read({
+        url: '/html/app_head.html',
+        data: app_head_data,
+        tsn: 'app_template',
+        ln: 'app_top'
+    });
+    <!--加载主页面菜单-->
+    laydlt.read({
+        url: '/html/app_menu.html',
+        data: app_menu_data,
+        tsn: 'app_template',
+        ln: 'app_left'
+    });
     // 一些事件监听
-    element.on('nav(demo)', function (data) {
-        console.log(data);
+    element.on('nav(test)', function (elem) {
+        layer.msg(elem.text());
     });
 });
