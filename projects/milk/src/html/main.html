@@ -4,18 +4,28 @@
     <meta charset="UTF-8">
     <title>MILK</title>
     <link rel="stylesheet" href="/layui_dev/css/layui.css">
+    <link rel="stylesheet" href="/css/main.css">
 </head>
 <body>
-<!--主页面头部-->
-<div id="app_top"></div>
-<!--主页面菜单-->
-<div id="app_left"></div>
-<!--主页面工作空间-->
-<div id="app_mid"></div>
+<div class="layui-layout-admin">
+    <!--主页面头部-->
+    <div id="app_top" class="layui-header app-header"></div>
+    <!--主页面菜单-->
+    <div class="layui-side layui-bg-black">
+        <!--可滚动-->
+        <div id="app_left" class="layui-side-scroll"></div>
+    </div>
+    <!--主页面工作空间-->
+    <div id="app_mid"></div>
+</div>
 <!--临时存放模板文件-->
 <script id="app_template" type="text/html"></script>
 <!--加载必要js-->
 <script src="/layui_dev/layui.js"></script>
 <script src="/js/main.js"></script>
-</body>
+<script>
+    function select(child) {
+        alert(child)
+    }
+</script>
 </html>

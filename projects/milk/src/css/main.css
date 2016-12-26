@@ -1,0 +1,18 @@
+.layui-side-scroll {
+    width: 220px;
+    height: 100%;
+    overflow-x: hidden;
+}
+
+.app-header {
+    height: 65px;
+    border-bottom-color: #009688;
+    background-color: #fff;
+    color: #fff;
+}
+
+.header-demo {
+    border-bottom-color: #009688;
+    background-color: #fff;
+}
+

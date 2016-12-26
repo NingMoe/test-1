@@ -5,5 +5,12 @@
             "/api": "http://118.178.135.151:8080/disney_ticket"
         },
         "name": "disney_ticket"
+    },
+    {
+        "port": 8000,
+        "proxy": {
+            "/api": "http://localhost:8080/disney_ticket"
+        },
+        "name": "local_disney"
     }
 ]

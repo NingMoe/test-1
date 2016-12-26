@@ -63,7 +63,7 @@ layui.define(['jquery', 'laytpl'], function (exports) {
                 conf.elem.init();
             });
         } else {
-            return hint.error('layui.laydlt 没有找到id为' + options.ln + '的元素');
+            return hint.error('laydlt 没有找到id为' + options.ln + '的元素');
         }
     };
     var laydlt = new Laydlt();

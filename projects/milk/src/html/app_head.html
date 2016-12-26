@@ -1,14 +1,7 @@
-<ul class="layui-nav">
-    {{# layui.each(d.service, function(index, item){ }}
-    <li class="layui-nav-item">
-        <a href="{{ item.serviceid || '' }}">{{ item.name }}</a>
-        {{# if(item.child){ }}
-        <dl class="layui-nav-child">
-            {{# layui.each(item.child, function(index, child){ }}
-            <dd><a href="{{ child.serviceid || '' }}">{{ child.name }}</a></dd>
-            {{# }); }}
-        </dl>
-        {{# } }}
+<ul class="layui-nav" lay-filter="top-menu">
+    {{# layui.each(d.results, function(index, item){ }}
+    <li id="{{ item.id }}" class="layui-nav-item">
+        <a href="javascript:;">{{ item.text }}</a>
     </li>
     {{# }); }}
 </ul>
