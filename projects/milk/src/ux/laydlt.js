@@ -34,6 +34,7 @@ layui.define(['jquery', 'laytpl'], function (exports) {
          * @param tsn   模板临时存放位置(Temporary storage node)：dom节点id
          * @param ln   模板加载位置(loading node)：dom节点id
          * @param asyn  默认异步
+         * @param method html添加方式
          * }
          */
         options = options || {};
@@ -43,21 +44,23 @@ layui.define(['jquery', 'laytpl'], function (exports) {
         // 加载位置必须定义
         var LN, TSN;
         // LN为选择器选择第一个符合的dom节点
-        options.ln && typeof options.ln === 'string' && (LN = $('#' + options.ln)[0]);
+        options.ln && typeof options.ln === 'string' && (LN = $('#' + options.ln));
         options.tsn && typeof options.tsn === 'string' && (TSN = $('#' + options.tsn) || LN);
         if (LN && TSN) {
             TSN.load(options.url, function (template) {
                 var tpl = laytpl(template);
+                if(!options.method)
+                    options.method='replace'
                 // 异步加载
                 if (options.asyn === undefined || options.asyn === true) {
                     tpl.render(options.data || {}, function (html) {
-                        LN.innerHTML = html;
+                        renderHtml[options.method].call(this, options.ln, html);
                     });
                 }
                 // 同步加载
                 else {
                     var html = tpl.render(options.data || {});
-                    LN.innerHTML = html;
+                    renderHtml[options.method].call(this, options.ln, html);
                 }
                 // 这样element对动态生成的元素才会重新有效
                 conf.elem.init();
@@ -66,6 +69,20 @@ layui.define(['jquery', 'laytpl'], function (exports) {
             return hint.error('laydlt 没有找到id为' + options.ln + '的元素');
         }
     };
+
+    var renderHtml = {
+        before: function (ln, html) {
+            $('#' + ln).before(html);
+        }
+        , after: function (ln, html) {
+            $('#' + ln).append(html);
+
+        }
+        , replace: function (ln, html) {
+            $('#' + ln)[0].innerHTML = html;
+        }
+    };
+
     var laydlt = new Laydlt();
     exports('laydlt', laydlt);
 });

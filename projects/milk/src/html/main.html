@@ -9,23 +9,29 @@
 <body>
 <div class="layui-layout-admin">
     <!--主页面头部-->
-    <div id="app_top" class="layui-header app-header"></div>
+    <div id="app_top" class="layui-header header header-milk"></div>
     <!--主页面菜单-->
     <div class="layui-side layui-bg-black">
         <!--可滚动-->
         <div id="app_left" class="layui-side-scroll"></div>
     </div>
     <!--主页面工作空间-->
-    <div id="app_mid"></div>
+    <div id="app_mid" class="layui-tab layui-tab-card" lay-allowclose="true" lay-filter="milkTasks">
+        <ul id="app_task_title" class="layui-tab-title site-milk-title">
+            <li class="layui-this">首页</li>
+        </ul>
+        <div id="app_task_content" class="layui-body layui-tab-content site-milk site-milk-body" style="height: 150px;">
+            <div class="layui-tab-item layui-show">
+                1. 我个人比较喜欢卡片风格的，所以你发现又是以卡片的风格举例<br/>
+                2. 删除功能适用于所有风格
+            </div>
+        </div>
+    </div>
 </div>
 <!--临时存放模板文件-->
 <script id="app_template" type="text/html"></script>
 <!--加载必要js-->
 <script src="/layui_dev/layui.js"></script>
 <script src="/js/main.js"></script>
-<script>
-    function select(child) {
-        alert(child)
-    }
-</script>
+</body>
 </html>
