@@ -13,3 +13,10 @@ function formatGenger(value) {
         return value;
     }
 }
+
+//改变列颜色自定义renderner方法
+function renderMotif(data, cell, record, rowIndex, columnIndex, store){
+    var value = record.get('name');
+    cell.style="background-color:"+value;
+    return data;
+}

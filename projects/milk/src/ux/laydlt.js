@@ -25,7 +25,7 @@ layui.define(['jquery', 'laytpl'], function (exports) {
      * @param options
      * @param fn
      */
-    Laydlt.prototype.read = function (options, fn) {
+    Laydlt.prototype.render = function (options, callback) {
         var conf = this.config;
         /**
          * @type options {
@@ -64,7 +64,36 @@ layui.define(['jquery', 'laytpl'], function (exports) {
                 }
                 // 这样element对动态生成的元素才会重新有效
                 conf.elem.init();
+                // 回调函数
+                if (typeof callback === "function"){
+                    callback();
+                }
             });
+
+
+            // if (!options.method)
+            //     options.method = 'replace';
+            // // 异步加载
+            // if (options.asyn === undefined || options.asyn === true) {
+            //     TSN.load(options.url, function (template) {
+            //         laytpl(template).render(options.data || {}, function (html) {
+            //             renderHtml[options.method].call(this, options.ln, html);
+            //             // 这样element对动态生成的元素才会重新有效
+            //             conf.elem.init();
+            //         });
+            //     });
+            // }
+            // // 同步加载
+            // else {
+            //     TSN.load(options.url, function (template) {
+            //         var tpl = laytpl(template);
+            //         var html = tpl.render(options.data || {});
+            //         renderHtml[options.method].call(this, options.ln, html);
+            //         // 这样element对动态生成的元素才会重新有效
+            //         conf.elem.init();
+            //     });
+            // }
+
         } else {
             return hint.error('laydlt 没有找到id为' + options.ln + '的元素');
         }

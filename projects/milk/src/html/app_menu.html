@@ -1,17 +1,19 @@
 <!-- 侧边导航: <ul class="layui-nav layui-nav-tree layui-nav-side"> -->
 <ul class="layui-nav layui-nav-tree site-milk-nav" lay-filter="left-nav">
     {{# layui.each(d, function(index, item){ }}
+    {{# if(item.children){ }}
     <li class="layui-nav-item">
-        {{# if(item.children){ }}
         <a href="javascript:;">{{ item.text }}</a>
         <dl class="layui-nav-child">
             {{# layui.each(item.children, function(index, child){ }}
-            <dd id="{{ child.id }}"><a href="javascript:;">{{ child.text }}</a></dd>
+            <dd id="{{ child.id }}" value="{{ item.url }}"><a href="javascript:;">{{ child.text }}</a></dd>
             {{# }); }}
         </dl>
-        {{# } else { }}
-        <a id="{{ item.id }}" href="javascript:;">{{ item.text }}</a>
-        {{# } }}
     </li>
+    {{# } else { }}
+    <li id="{{ item.id }}" value="{{ item.url }}" class="layui-nav-item">
+        <a href="javascript:;">{{ item.text }}</a>
+    </li>
+    {{# } }}
     {{# }); }}
 </ul>
